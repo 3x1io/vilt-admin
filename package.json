@@ -1,0 +1,53 @@
+{
+    "private": true,
+    "scripts": {
+        "dev": "npm run development",
+        "development": "mix",
+        "watch": "mix watch",
+        "watch-poll": "mix watch -- --watch-options-poll=1000",
+        "hot": "mix watch --hot",
+        "prod": "npm run production",
+        "production": "mix --production"
+    },
+    "devDependencies": {
+        "@inertiajs/inertia": "^0.10.0",
+        "@inertiajs/inertia-vue3": "^0.5.1",
+        "@inertiajs/progress": "^0.2.6",
+        "@tailwindcss/forms": "^0.4.0",
+        "@tailwindcss/typography": "^0.5.0",
+        "@vue/compiler-sfc": "^3.0.5",
+        "axios": "^0.21",
+        "laravel-mix": "^6.0.6",
+        "lodash": "^4.17.19",
+        "postcss": "^8.1.14",
+        "postcss-import": "^12.0.1",
+        "tailwindcss": "^3.0.0",
+        "tailwindcss-rtl": "^0.9.0",
+        "vue": "^3.0.5",
+        "vue-loader": "^16.1.2"
+    },
+    "dependencies": {
+        "@heroicons/vue": "^1.0.5",
+        "@meforma/vue-toaster": "^1.3.0",
+        "@protonemedia/inertia-vue-modal-poc": "^0.0.1",
+        "@tailwindcss/custom-forms": "^0.2.1",
+        "@vue-hero-icons/outline": "^1.7.2",
+        "autoprefixer": "^10.4.2",
+        "boxicons": "^2.1.1",
+        "color": "^4.2.1",
+        "craftable": "^2.2.0",
+        "cssnano": "^5.0.17",
+        "filepond": "^4.30.3",
+        "filepond-plugin-file-validate-type": "^1.2.7",
+        "filepond-plugin-image-preview": "^4.6.11",
+        "heroicons-css": "^0.1.1",
+        "portal-vue": "^2.1.7",
+        "tailwindcss-multi-theme": "^1.0.4",
+        "vue-filepond": "^7.0.3",
+        "vue-flatpickr-component": "^9.0.6",
+        "vue-html-to-paper": "^1.4.4",
+        "vue-js-modal": "^2.0.1",
+        "vue2-dropzone": "^3.6.0",
+        "vue3-dropzone": "^0.0.7"
+    }
+}
