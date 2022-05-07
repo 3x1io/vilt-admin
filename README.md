@@ -1,4 +1,4 @@
-![Screenshot of VILT](./arts/stack.jpeg)
+![Screenshot of VILT](https://raw.githubusercontent.com/3x1io/vilt-admin/arts/stack.jpeg)
 
 # VILT Admin Panel
 
@@ -6,17 +6,17 @@ VILT stack admin panel
 
 ## Screenshot
 
-![Screenshot of dashboard](./arts/dashboard.png)
-![Screenshot of list](./arts/list.png)
-![Screenshot of profile](./arts/profile.png)
-![Screenshot of 2fa](./arts/2fa.png)
-![Screenshot of create](./arts/create.png)
-![Screenshot of bulk](./arts/bulk.png)
-![Screenshot of edit](./arts/edit.png)
-![Screenshot of delete](./arts/delete.png)
-![Screenshot of pagination](./arts/pagination.png)
-![Screenshot of view](./arts/view.png)
-![Screenshot of login](./arts/login.png)
+![Screenshot of dashboard](https://raw.githubusercontent.com/3x1io/vilt-admin/arts/dashboard.png)
+![Screenshot of list](https://raw.githubusercontent.com/3x1io/vilt-admin/arts/list.png)
+![Screenshot of profile](https://raw.githubusercontent.com/3x1io/vilt-admin/arts/profile.png)
+![Screenshot of 2fa](https://raw.githubusercontent.com/3x1io/vilt-admin/arts/2fa.png)
+![Screenshot of create](https://raw.githubusercontent.com/3x1io/vilt-admin/arts/create.png)
+![Screenshot of bulk](https://raw.githubusercontent.com/3x1io/vilt-admin/arts/bulk.png)
+![Screenshot of edit](https://raw.githubusercontent.com/3x1io/vilt-admin/arts/edit.png)
+![Screenshot of delete](https://raw.githubusercontent.com/3x1io/vilt-admin/arts/delete.png)
+![Screenshot of pagination](https://raw.githubusercontent.com/3x1io/vilt-admin/arts/pagination.png)
+![Screenshot of view](https://raw.githubusercontent.com/3x1io/vilt-admin/arts/view.png)
+![Screenshot of login](https://raw.githubusercontent.com/3x1io/vilt-admin/arts/login.png)
 
 ## Installation
 
