@@ -2,18 +2,12 @@
 
 namespace App\Http\Middleware;
 
-use App\Facades\Vlit;
 use Closure;
 use Inertia\Inertia;
-use App\Helpers\Menu;
 use Inertia\Middleware;
-use App\Helpers\MenuItem;
 use Illuminate\Http\Request;
-use App\Helpers\Menu\Profile;
-use App\Helpers\Menu\Sidebar;
-use App\Helpers\Vlit\Core;
+use App\Helpers\Vilt\Core;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Session;
 
 class HandleInertiaRequests extends Middleware
 {
