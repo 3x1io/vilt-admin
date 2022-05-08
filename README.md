@@ -11,7 +11,7 @@ VILT stack admin panel
 ![Screenshot of profile](https://raw.githubusercontent.com/3x1io/vilt-admin/main/art/profile.png)
 ![Screenshot of 2fa](https://raw.githubusercontent.com/3x1io/vilt-admin/main/art/2fa.png)
 ![Screenshot of create](https://raw.githubusercontent.com/3x1io/vilt-admin/main/art/create.png)
-![Screenshot of bulk](https://raw.githubusercontent.com/3x1io/vilt-admin//ain/art/bulk.png)
+![Screenshot of bulk](https://raw.githubusercontent.com/3x1io/vilt-admin//main/art/bulk.png)
 ![Screenshot of edit](https://raw.githubusercontent.com/3x1io/vilt-admin/main/art/edit.png)
 ![Screenshot of delete](https://raw.githubusercontent.com/3x1io/vilt-admin/main/art/delete.png)
 ![Screenshot of pagination](https://raw.githubusercontent.com/3x1io/vilt-admin/main/art/pagination.png)
