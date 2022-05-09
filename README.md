@@ -75,7 +75,7 @@ php artisan make:vlit-resource customers
 you can easy add new item to the menu with magic class `Menu` to add new Menu you can add it form provider or you can add it to the file path `app\Helpers\Menu\List.php` and add
 
 ```php
-Core::registerDashboardMenuItem(Menu::make('Settings')->icon('bx bxs-cog')->route('settings'), 'Settings');
+Core::registerDashboardMenuItem(Menu::make('Settings')->icon('bx bxs-cog')->route('settings')->can(true), 'Settings');
 ```
 
 it will generate a item on dashboard menu and you can use other method for profile dropdown menu
@@ -111,22 +111,39 @@ after that go to file `resources/js/Pages/{YourModelName}/List.vue` and add the 
     });
 ```
 
+## Vilt Roles
+
+we build a plugin for user ACL build in [spatie/laravel-permission](https://spatie.be/docs/laravel-permission) so you can use full package feature and we build some methods to help you, on every `List.vue` you will get a 6 var
+
+```js
+canView //= view_TABLE on permission table
+canViewAny //= view_any_TABLE on permission table
+canCreate //= create_TABLE on permission table
+canEdit //= update_TABLE on permission table
+canDelete //= delete_TABLE on permission table
+canDeleteAny //= delete_any_TABLE on permission table
+```
+
+so you can use it to handle what end user see when he has a selected permission.
+
+and for menus you can handle permission useing `->can()` with the permission name init
+
 ## Tasks
 
 - JetSteam Auth ✅
 - Admin Panel Design ✅
 - Generator ✅
 - Menu ✅
+- Releationship ✅
+- Select Field ✅
 - spatie/laravel-medialibrary Integration ✅
-- spatie/laravel-permission Integration
+- spatie/laravel-permission Integration ✅
 - spatie/laravel-translatable Integration
 - spatie/laravel-translation-loader Integration
 - spatie/laravel-settings Integration
 - spatie/laravel-sitemap Integration
 - spatie/laravel-backup Integration
 - SpartnerNL/Laravel-Excel for auto export and import generator Integration
-- Releationship
-- Select Field
 - Datepicker Field
 - Colorpicker Field
 - Iconpicker Field
