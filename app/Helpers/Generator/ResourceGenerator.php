@@ -6,6 +6,8 @@ use Illuminate\Support\Str;
 use Doctrine\DBAL\DriverManager;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Laravel\Jetstream\Rules\Role;
+use Spatie\Permission\Models\Permission;
 
 class ResourceGenerator
 {
@@ -69,6 +71,54 @@ class ResourceGenerator
         } else {
             File::put($path, $content);
         }
+    }
+
+    public function generatePermission()
+    {
+        $checkView = Permission::where('name', 'view_' . $this->table)->where('guard_name', 'web')->first();
+        if (!$checkView) {
+            Permission::create(['name' => 'view_' . $this->table, 'guard_name' => 'web']);
+        }
+        $checkViewAny = Permission::where('name', 'view_any_' . $this->table)->where('guard_name', 'web')->first();
+        if (!$checkViewAny) {
+            Permission::create(['name' => 'view_any_' . $this->table, 'guard_name' => 'web']);
+        }
+        $checkCreate = Permission::where('name', 'create_' . $this->table)->where('guard_name', 'web')->first();
+        if (!$checkCreate) {
+            Permission::create(['name' => 'create_' . $this->table, 'guard_name' => 'web']);
+        }
+        $checkUpdate = Permission::where('name', 'update_' . $this->table)->where('guard_name', 'web')->first();
+        if (!$checkUpdate) {
+            Permission::create(['name' => 'update_' . $this->table, 'guard_name' => 'web']);
+        }
+        $checkDelete = Permission::where('name', 'delete_' . $this->table)->where('guard_name', 'web')->first();
+        if (!$checkDelete) {
+            Permission::create(['name' => 'delete_' . $this->table, 'guard_name' => 'web']);
+        }
+        $checkExport = Permission::where('name', 'export_' . $this->table)->where('guard_name', 'web')->first();
+        if (!$checkExport) {
+            Permission::create(['name' => 'export_' . $this->table, 'guard_name' => 'web']);
+        }
+        $checkDeleteAny = Permission::where('name', 'delete_any_' . $this->table)->where('guard_name', 'web')->first();
+        if (!$checkDeleteAny) {
+            Permission::create(['name' => 'delete_any_' . $this->table, 'guard_name' => 'web']);
+        }
+
+        $checkIfAdminIsExist = Role::where('name', 'admin')->where('guard_name', 'web')->first();
+        if (!$checkIfAdminIsExist) {
+            $checkIfAdminIsExist = Role::create([
+                "name" => "admin",
+                "guard_name" => "web"
+            ]);
+        }
+
+        $checkIfAdminIsExist->givePermissionTo('view_' . $this->table);
+        $checkIfAdminIsExist->givePermissionTo('view_any_' . $this->table);
+        $checkIfAdminIsExist->givePermissionTo('create_' . $this->table);
+        $checkIfAdminIsExist->givePermissionTo('update_' . $this->table);
+        $checkIfAdminIsExist->givePermissionTo('delete_' . $this->table);
+        $checkIfAdminIsExist->givePermissionTo('delete_any_' . $this->table);
+        $checkIfAdminIsExist->givePermissionTo('export_' . $this->table);
     }
 
     public function generateModel()
@@ -143,5 +193,6 @@ class ResourceGenerator
         $this->generateView();
         $this->generateRoute();
         $this->generateMenu();
+        $this->generatePermission();
     }
 }
