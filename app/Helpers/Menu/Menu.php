@@ -15,6 +15,7 @@ class Menu
     private ?string $group;
     private ?string $type = "route";
     private ?int $sort = 0;
+    private $can = true;
 
     public function __construct($title)
     {
@@ -30,6 +31,7 @@ class Menu
             "sort" => $this->sort,
             "url" => $this->url,
             "type" => $this->type,
+            "can" => $this->can,
         ];
     }
 
@@ -39,6 +41,13 @@ class Menu
         $static->setUp();
 
         return $static;
+    }
+
+    public function can($can): ?static
+    {
+       
+        $this->can = $can;
+        return $this;
     }
 
     public function icon($icon): ?static

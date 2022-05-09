@@ -27,6 +27,14 @@ class ResourceGenerator
         $this->connection = DriverManager::getConnection($connectionParams);
     }
 
+    public function getTables()
+    {
+        $sm = $this->connection->getSchemaManager();
+        $tables = $sm->listSequences();
+
+        return $tables;
+    }
+
     public function getFileds()
     {
         $rows = [];

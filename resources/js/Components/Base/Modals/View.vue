@@ -18,6 +18,14 @@
                                 class="object-cover w-20 h-20 mx-auto rounded-full"
                             />
                         </div>
+                         <div v-else-if="field.type === 'relation'" class="flex justify-between my-4 ">
+                            <div>
+                                <p class="font-bold">{{ field.label }}</p>
+                            </div>
+                            <div class="space-y-2 gird gird-col-3">
+                                <div class="inline-flex mx-2 items-center justify-center space-x-1 min-h-6 px-2 py-0.5 text-sm font-medium tracking-tight rounded-xl whitespace-normal text-primary-700 bg-primary-500/10 dark:text-primary-500" v-for="(rel, relIndex) in item[field.field]" :key="relIndex">{{rel[field.track_by_name]}}</div>
+                            </div>
+                        </div>
                         <div v-else class="flex justify-between my-4">
                             <div>
                                 <p class="font-bold">{{ field.label }}</p>

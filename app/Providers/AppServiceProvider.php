@@ -2,10 +2,8 @@
 
 namespace App\Providers;
 
-use App\Heplers\Menu\Menu;
-use App\Heplers\Vlit\Core;
-use App\Heplers\Menu\Sidebar;
-use App\Heplers\Menu\MenuItem;
+use App\Helpers\Menu\Menu;
+use App\Helpers\Vilt\Core;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 

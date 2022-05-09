@@ -18,6 +18,8 @@ class {{ $model }}Controller extends Controller
 {
     use Handler;
 
+    public $url = {{ $table }}
+
     public function schema()
     {
         return [
@@ -59,6 +61,11 @@ class {{ $model }}Controller extends Controller
      */
     public function index(Request $request)
     {
+        $this->roles($this->url);
+        if(!$this->canView){
+            return inertia('403');
+        }
+
         // create and AdminListing instance for a specific model and
         $data = AdminListing::create({{ $model }}::class)
             ->processRequestAndGet(
@@ -73,37 +80,10 @@ class {{ $model }}Controller extends Controller
 
             );
 
-        $rows = $this->schema();
         $this->loadMedia($data);
         $this->loadFilters($request);
 
-        if ($request->ajax()) {
-            return inertia('{{ $model }}/List', [
-                "success" => true,
-                "message" => "{{ $model }} Created Success",
-                "collection" => $data,
-                "rows" => $rows,
-                "url" => "{{ $table }}",
-                "search" => $this->search,
-                "per_page" => $this->per_page,
-                "orderBy" => $this->orderBy,
-                "desc" => $this->desc,
-                "filters" => $this->filters,
-                "create" => $this->create,
-            ]);
-        } else {
-            return Inertia::render('{{ $model }}/List', [
-                "collection" => $data,
-                "rows" => $rows,
-                "url" => "{{ $table }}",
-                "search" => $this->search,
-                "per_page" => $this->per_page,
-                "orderBy" => $this->orderBy,
-                "desc" => $this->desc,
-                "filters" => $this->filters,
-                "create" => $this->create,
-            ]);
-        }
+        return inertia('{{ $model }}/List',$this->response($data, $this->url));
     }
 
     /**
@@ -114,6 +94,11 @@ class {{ $model }}Controller extends Controller
      */
     public function store(Request $request)
     {
+        $this->roles($this->url);
+        if(!$this->canCreate){
+            return inertia('403');
+        }
+
         $rules = [
         @foreach($cols as $col)
         @if($col['name'] === 'id')
@@ -143,15 +128,8 @@ class {{ $model }}Controller extends Controller
 
             $this->processCreateMedia($request, $record);
 
-            $data = {{ $model }}::paginate(10);
-
-            return inertia('{{ $model }}/List', [
-                "success" => true,
-                "message" => "{{ $model }} Created Success",
-                "collection" => $data,
-                "rows" => $this->schema(),
-                "url" => "{{ $table }}",
-            ]);
+            session(["message" => "{{ $model }} Created Success"]);
+            return back();
         }
     }
 
@@ -164,6 +142,11 @@ class {{ $model }}Controller extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->roles($this->url);
+        if(!$this->canEdit){
+            return inertia('403');
+        }
+
         $record = {{ $model }}::find($id);
 
         $rules = [
@@ -193,18 +176,10 @@ class {{ $model }}Controller extends Controller
         if (!$validator->fails()) {
 
             $record->update($request->all());
-
-            $data = {{ $model }}::paginate(10);
-
             $this->processUpdateMedia($request, $record);
 
-            return inertia('{{ $model }}/List', [
-                "success" => true,
-                "message" => "{{ $model }} Updated Success",
-                "collection" => $data,
-                "rows" => $this->schema(),
-                "url" => "{{ $table }}",
-            ]);
+            session(["message" => "{{ $model }} Updated Success"]);
+            return back();
         }
     }
 
@@ -216,37 +191,20 @@ class {{ $model }}Controller extends Controller
      */
     public function destroy($id)
     {
+        $this->roles($this->url);
+        if(!$this->canDelete){
+            return inertia('403');
+        }
+
         $record = {{ $model }}::find($id);
         if ($record) {
             $record->delete();
 
-            $data = {{ $model }}::paginate(10);
-
-            return inertia('{{ $model }}/List', [
-                "success" => true,
-                "message" => "{{ $model }} Deleted Success",
-                "collection" => $data,
-                "rows" => $this->schema(),
-                "url" => "{{ $table }}",
-            ]);
+            session(["message" => "{{ $model }} Deleted Success"]);
+            return back();
         }
     }
 
-    public function bulkSelect()
-    {
-        $select = {{ $model }}::all()->lists('id')->toArray();
-
-        $data = {{ $model }}::paginate(10);
-
-        return inertia('{{ $model }}/List', [
-            "success" => true,
-            "message" => "{{ $model }} Deleted Success",
-            "collection" => $data,
-            "select" => $select,
-            "rows" => $this->schema(),
-            "url" => "{{ $table }}",
-        ]);
-    }
 
     public function bulk(Request $request)
     {
@@ -260,6 +218,11 @@ class {{ $model }}Controller extends Controller
 
         if (!$validator->fails()) {
             foreach ($request->get('ids') as $key => $value) {
+                $this->roles($this->url);
+                if(!$this->canDeleteAny){
+                    return inertia('403');
+                }
+
                 $record = {{ $model }}::find($key);
                 if ($record) {
                     if ($request->action === 'delete') {
@@ -267,15 +230,9 @@ class {{ $model }}Controller extends Controller
                     }
                 }
             }
-            $data = {{ $model }}::paginate(10);
 
-            return inertia('{{ $model }}/List', [
-                "success" => true,
-                "message" => "{{ $model }} Bulk Action Success",
-                "collection" => $data,
-                "rows" => $this->schema(),
-                "url" => "{{ $table }}",
-            ]);
+            session(["message" => "{{ $model }} Bulk Action Success"]);
+            return back();
         }
     }
 }

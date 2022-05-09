@@ -11,6 +11,10 @@ class Row
     private ?string $label;
     private ?string $field;
     private ?string $type = "text";
+    private ?string $track_by_name = "name";
+    private ?string $track_by_id = "id";
+    private ?array $options = [];
+    private ?bool $multi = false;
     private ?bool $sorting = true;
     private ?bool $create = true;
     private ?bool $edit = true;
@@ -28,6 +32,10 @@ class Row
             "label" => $this->label,
             "field" => $this->field,
             "type" => $this->type,
+            "track_by_name" => $this->track_by_name,
+            "track_by_id" => $this->track_by_id,
+            "options" => $this->options,
+            "multi" => $this->multi,
             "sorting" => $this->sorting,
             "create" => $this->create,
             "edit" => $this->edit,
@@ -42,6 +50,30 @@ class Row
         $static->setUp();
 
         return $static;
+    }
+
+    public function multi($multi): ?static
+    {
+        $this->multi = $multi;
+        return $this;
+    }
+
+    public function options($options): ?static
+    {
+        $this->options = $options;
+        return $this;
+    }
+
+    public function track_by_id($track_by_id): ?static
+    {
+        $this->track_by_id = $track_by_id;
+        return $this;
+    }
+
+    public function track_by_name($track_by_name): ?static
+    {
+        $this->track_by_name = $track_by_name;
+        return $this;
     }
 
     public function label($label): ?static

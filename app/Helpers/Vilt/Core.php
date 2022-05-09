@@ -26,11 +26,20 @@ class Core
     public static function loadDashboardMenu()
     {
         foreach (self::$dashboardMenuItems as $key => $item) {
+            foreach ($item as $index => $menu) {
+                if (is_string($menu['can'])) {
+                    if (!auth()->user()->can($menu['can'])) {
+                        unset($item[$index]);
+                    }
+                }
+            }
+
             array_push(self::$dashboardMenuItemsFull, [
                 "name" => $key,
                 "menu" => $item
             ]);
         }
+
         return self::$dashboardMenuItemsFull;
     }
 

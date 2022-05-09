@@ -1020,6 +1020,11 @@
   resolved "https://registry.yarnpkg.com/@protonemedia/inertia-vue-modal-poc/-/inertia-vue-modal-poc-0.0.1.tgz#d60dcd3e17a4328fadb1dd8b8952bf5fa52ca942"
   integrity sha512-W94z/79hDCMjUpk6Xtct4/ts8LoB1/H2xnKCaAQ/FYeuEe7E4luT+efL+o1te2rQ1P8An2/OxFEbamAUGCCaBA==
 
+"@suadelabs/vue3-multiselect@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@suadelabs/vue3-multiselect/-/vue3-multiselect-1.0.2.tgz#ba9bdb1a47c76ce47b30bb9025d9647ddc8dcaf9"
+  integrity sha512-bRe5SOAkY/egKC4yMQ1lXg3BTlnulA+0CXbl9yM0X7oMh8oavJUlSgb7WV7EXyOzIH2Ot0k28hdF3/K6D/YEFA==
+
 "@tailwindcss/custom-forms@^0.2.1":
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/@tailwindcss/custom-forms/-/custom-forms-0.2.1.tgz#40e5ed1fff6d29d8ed1c508a0b2aaf8da96962e0"
@@ -1382,6 +1387,11 @@
   version "3.2.31"
   resolved "https://registry.yarnpkg.com/@vue/shared/-/shared-3.2.31.tgz#c90de7126d833dcd3a4c7534d534be2fb41faa4e"
   integrity sha512-ymN2pj6zEjiKJZbrf98UM2pfDd6F2H7ksKw7NDt/ZZ1fh5Ei39X5tABugtT03ZRlWd9imccoK0hE8hpjpU7irQ==
+
+"@vueform/multiselect@^2.3.3":
+  version "2.3.3"
+  resolved "https://registry.yarnpkg.com/@vueform/multiselect/-/multiselect-2.3.3.tgz#13c0acadf04e798d65ccfff6e38d518c382ef1d8"
+  integrity sha512-CLhtUZJwRGLyPqcgwuRrODOjT3Yqu6KNs5vV1O12kNOR/8c8ecX5vJyTcD0Mv1SJvnrslZgENmvYRRPpb5Cnjg==
 
 "@webassemblyjs/ast@1.11.1":
   version "1.11.1"

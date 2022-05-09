@@ -40,7 +40,7 @@
                 </div>
             </div>
         </div>
-        <div class="relative inline-block filament-tables-filters shrink-0">
+        <div class="relative inline-block filament-tables-filters shrink-0" v-if="showFilter">
             <button
                 @click.prevent="showFilter = !showFilter"
                 type="button"
@@ -145,6 +145,7 @@ export default defineComponent({
     },
     props: {
         setSearch: String,
+        showFilter: Boolean
     },
     watch: {
         setSearch(newValue, oldValue){

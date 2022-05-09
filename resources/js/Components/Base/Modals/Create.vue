@@ -23,13 +23,15 @@
                                     :value="field.label"
                                 />
                                 <!-- Current Profile Photo -->
-                                <div class="mt-2" v-if="photoPreview[field.field]">
+                                <div
+                                    class="mt-2"
+                                    v-if="photoPreview[field.field]"
+                                >
                                     <img
                                         :src="photoPreview[field.field]"
                                         class="object-cover w-20 h-20 rounded-full"
                                     />
                                 </div>
-
                                 <div class="mt-2" v-else>
                                     <div v-if="form[field.field]">
                                         <img
@@ -61,6 +63,34 @@
                                 />
                             </div>
                         </div>
+                    </div>
+                    <div
+                        class="mt-2"
+                        v-else-if="field.type === 'relation' && field.create"
+                    >
+                        <multiselect
+                            v-model="form[field.field]"
+                            :selectAll="true"
+                            :searchable="true"
+                            :options="field.options"
+                            :multiple="field.multi"
+                            :track-by="field.track_by_id"
+                            :label="field.track_by_name"
+                        ></multiselect>
+                    </div>
+                    <div
+                        class="mt-2"
+                        v-else-if="field.type === 'select' && field.create"
+                    >
+                        <multiselect
+                            v-model="form[field.field]"
+                            :selectAll="true"
+                            :searchable="true"
+                            :options="field.options"
+                            :multiple="field.multi"
+                            :track-by="field.track_by_id"
+                            :label="field.track_by_name"
+                        ></multiselect>
                     </div>
                     <div v-else>
                         <div class="py-2" v-if="field.create">
@@ -97,7 +127,10 @@
                                     :value="field.label"
                                 />
                                 <!-- Current Profile Photo -->
-                                <div class="mt-2" v-if="photoPreview[field.field]">
+                                <div
+                                    class="mt-2"
+                                    v-if="photoPreview[field.field]"
+                                >
                                     <img
                                         :src="photoPreview[field.field]"
                                         class="object-cover w-20 h-20 rounded-full"
@@ -135,6 +168,44 @@
                                 />
                             </div>
                         </div>
+                    </div>
+                    <div
+                        class="mt-2"
+                        v-else-if="field.type === 'relation' && field.edit"
+                    >
+                        <JetLabel :for="field.field" :value="field.label" />
+                        <multiselect
+                            v-model="form[field.field]"
+                            :selectAll="true"
+                            :searchable="true"
+                            :options="field.options"
+                            :multiple="field.multi"
+                            :track-by="field.track_by_id"
+                            :label="field.track_by_name"
+                        ></multiselect>
+                        <JetInputError
+                            :message="errors[field.field]"
+                            class="mt-2"
+                        />
+                    </div>
+                    <div
+                        class="mt-2"
+                        v-else-if="field.type === 'select' && field.edit"
+                    >
+                        <JetLabel :for="field.field" :value="field.label" />
+                        <multiselect
+                            v-model="form[field.field]"
+                            :selectAll="true"
+                            :searchable="true"
+                            :options="field.options"
+                            :multiple="field.multi"
+                            :track-by="field.track_by_id"
+                            :label="field.track_by_name"
+                        ></multiselect>
+                        <JetInputError
+                            :message="errors[field.field]"
+                            class="mt-2"
+                        />
                     </div>
                     <div v-else>
                         <div class="py-2" v-if="field.edit">
@@ -185,6 +256,7 @@ import JetButton from "@/Jetstream/Button.vue";
 import JetInput from "@/Jetstream/Input.vue";
 import JetInputError from "@/Jetstream/InputError.vue";
 import JetLabel from "@/Jetstream/Label.vue";
+import Multiselect from "@suadelabs/vue3-multiselect";
 
 export default defineComponent({
     components: {
@@ -195,6 +267,7 @@ export default defineComponent({
         JetInput,
         JetInputError,
         JetLabel,
+        Multiselect,
     },
     props: {
         show: Boolean,
