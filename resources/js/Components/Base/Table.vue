@@ -1,6 +1,6 @@
 <template>
     <table
-        class="w-full text-left divide-y table-auto rtl:text-right filament-tables-table"
+        class="w-full text-left divide-y table-auto rtl:text-right filament-tables-table "
         v-if="collection.total"
     >
         <thead>
@@ -94,8 +94,15 @@
                     />
                 </th>
                 <td class="filament-tables-cell" v-for="(field, index) in listRows" :key="index">
-                    <div v-if="field.type === 'relation'" class="grid space-y-2 grid-col-3">
+                    <div v-if="field.type === 'relation'" class="grid grid-cols-3 gap-2">
                         <div class="inline-flex mx-2 items-center justify-center space-x-1 min-h-6 px-2 py-0.5 text-sm font-medium tracking-tight rounded-xl whitespace-normal text-primary-700 bg-primary-500/10 dark:text-primary-500" v-for="(rel, relIndex) in item[field.field]" :key="relIndex">{{rel[field.track_by_name]}}</div>
+                    </div>
+                    <div v-else-if="field.type === 'schema'" class="grid grid-cols-3 gap-2">
+                        <div v-for="(rel, relIndex) in field.options" :key="relIndex">
+                            <div v-if="item[field.field][rel.field]" class="inline-flex mx-2 items-center justify-center space-x-1 min-h-6 px-2 py-0.5 text-sm font-medium tracking-tight rounded-xl whitespace-normal text-primary-700 bg-primary-500/10 dark:text-primary-500" >
+                                <span>{{item[field.field][rel.field]}}</span>
+                            </div>
+                        </div>
                     </div>
                     <div v-else>
                         {{ item[field.field] }}

@@ -26,9 +26,9 @@
                             ></path>
                         </svg>
                     </span>
-                    <form>
+                    <form @submit.prevent="searchFilter()">
                         <input
-                            @input.prevent="searchFilter()"
+                            @change.prevent="searchFilter()"
                             v-model="search"
                             id="tableSearchQueryInput"
                             placeholder="Search By ID"
@@ -149,7 +149,7 @@ export default defineComponent({
     },
     watch: {
         setSearch(newValue, oldValue){
-            this.search = newValue;
+             this.search = newValue;
         }
     },
     data() {
@@ -161,7 +161,8 @@ export default defineComponent({
     },
     methods: {
         searchFilter() {
-            this.$emit("search", this.search);
+            let search =  this.search;
+            this.$emit("getSearch", search);
         },
         resetFilter() {
             this.$emit("reset");

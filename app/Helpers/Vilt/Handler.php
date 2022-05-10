@@ -16,6 +16,7 @@ trait Handler
     public $canCreate = true;
     public $canDelete = true;
     public $canDeleteAny = true;
+    public $trans = [];
 
 
     public function select($data, $trackBy, $id)
@@ -41,6 +42,10 @@ trait Handler
         $this->canDeleteAny = auth('web')->user()->can('delete_any_' . $table);
     }
 
+    public function getTrans()
+    {
+        return array_merge(Core::loadLanguage(), $this->trans);
+    }
 
     public function response($data, $url, $extra = [])
     {
@@ -60,7 +65,8 @@ trait Handler
             "canEdit" => $this->canEdit,
             "canCreate" => $this->canCreate,
             "canDelete" => $this->canDelete,
-            "canDeleteAny" => $this->canDeleteAny
+            "canDeleteAny" => $this->canDeleteAny,
+            "langs" => $this->getTrans()
         ];
         return array_merge($response, $extra);
     }
@@ -97,7 +103,7 @@ trait Handler
         if ($request->has('create')) {
             $this->create = true;
         }
-        if ($request->has('search')) {
+        if ($request->has('search') && !empty($request->has('search'))) {
             $this->search = $request->get('search');
         }
         if ($request->has('per_page')) {

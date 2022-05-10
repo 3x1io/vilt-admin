@@ -1,5 +1,5 @@
 <template>
-    <JetDialogModal :show="showModal" @close="showModal = !showModal">
+    <JetDialogModal :show="showModal" @close="close()">
         <template #content>
             <h1 class="py-4 text-3xl text-center text-red-500"></h1>
             <div class="text-center">
@@ -7,7 +7,7 @@
                     {{ title }}
                 </h1>
                 <h3 claass=" text-gray-400 text-center">
-                    Do You When To Run This Bulk Action?
+                    {{ trans('global.bulk.message') }}
                 </h3>
             </div>
         </template>
@@ -19,7 +19,7 @@
             >
                 Run
             </JetButton>
-            <JetSecondaryButton @click="showModal = !showModal">
+            <JetSecondaryButton @click="close()">
                 Close
             </JetSecondaryButton>
         </template>
@@ -64,6 +64,9 @@ export default defineComponent({
         };
     },
     methods: {
+        trans(key){
+            return this.$attrs.langs[key];
+        },
         close() {
             this.$emit("close", this.showModal);
         },

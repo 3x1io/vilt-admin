@@ -5,8 +5,8 @@ namespace App\Helpers\Generator;
 use Illuminate\Support\Str;
 use Doctrine\DBAL\DriverManager;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\File;
-use Laravel\Jetstream\Rules\Role;
 use Spatie\Permission\Models\Permission;
 
 class ResourceGenerator

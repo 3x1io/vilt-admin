@@ -65,6 +65,24 @@
                         </div>
                     </div>
                     <div
+                        v-else-if="field.type === 'schema' && field.create"
+                    >
+                        <div v-for="(input, index) in field.options" :key="index" class="mt-2">
+                            <JetLabel :for="input.field" :value="input.label" />
+                            <JetInput
+                                :id="input.field"
+                                v-model="form[field.field][input.field]"
+                                :type="input.type"
+                                class="block w-full mt-1"
+                                autofocus
+                            />
+                        </div>
+                        <JetInputError
+                            :message="errors[field.field]"
+                            class="mt-2"
+                        />
+                    </div>
+                    <div
                         class="mt-2"
                         v-else-if="field.type === 'relation' && field.create"
                     >
@@ -169,6 +187,24 @@
                             </div>
                         </div>
                     </div>
+                     <div
+                        v-else-if="field.type === 'schema' && field.edit"
+                    >
+                        <div v-for="(input, index) in field.options" :key="index" class="mt-2">
+                            <JetLabel :for="input.field" :value="input.label" />
+                            <JetInput
+                                :id="input.field"
+                                v-model="form[field.field][input.field]"
+                                :type="input.type"
+                                class="block w-full mt-1"
+                                autofocus
+                            />
+                        </div>
+                        <JetInputError
+                            :message="errors[field.field]"
+                            class="mt-2"
+                        />
+                    </div>
                     <div
                         class="mt-2"
                         v-else-if="field.type === 'relation' && field.edit"
@@ -231,14 +267,15 @@
             <button
                 v-if="!edit"
                 @click.prevent="saveRecord()"
-                class="inline-flex items-center justify-center px-4 mr-2 font-medium tracking-tight text-white transition-colors border border-transparent rounded-lg shadow focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset filament-button dark:focus:ring-offset-0 h-9 focus:ring-white bg-primary-600 hover:bg-primary-500 focus:bg-primary-700 focus:ring-offset-primary-700 filament-page-button-action"
+                class="inline-flex items-center justify-center px-4 mr-2 font-medium tracking-tight text-white transition-colors border border-transparent rounded-lg shadow rtl:ml-2 focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset filament-button dark:focus:ring-offset-0 h-9 focus:ring-white bg-primary-600 hover:bg-primary-500 focus:bg-primary-700 focus:ring-offset-primary-700 filament-page-button-action"
             >
+
                 Save
             </button>
             <button
                 v-else
                 @click.prevent="updateRecord(form.id)"
-                class="inline-flex items-center justify-center px-4 mr-2 font-medium tracking-tight text-white transition-colors border border-transparent rounded-lg shadow focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset filament-button dark:focus:ring-offset-0 h-9 focus:ring-white bg-primary-600 hover:bg-primary-500 focus:bg-primary-700 focus:ring-offset-primary-700 filament-page-button-action"
+                class="inline-flex items-center justify-center px-4 mr-2 font-medium tracking-tight text-white transition-colors border border-transparent rounded-lg shadow rtl:ml-2 focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset filament-button dark:focus:ring-offset-0 h-9 focus:ring-white bg-primary-600 hover:bg-primary-500 focus:bg-primary-700 focus:ring-offset-primary-700 filament-page-button-action"
             >
                 Update
             </button>

@@ -72,8 +72,9 @@ export default defineComponent({
         this.createModal = this.$attrs.create;
     },
     methods: {
-        subItem(item) {
-            console.log(item);
+        trans(key){
+            console.log(key)
+            // return this.$attrs.trans[key];
         },
         searchFilter(search) {
             this.search = search;

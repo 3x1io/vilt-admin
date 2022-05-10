@@ -16,7 +16,9 @@ createInertiaApp({
         return createApp({ render: () => h(app, props) })
             .use(plugin)
             .use(Toaster)
-            .mixin({ methods: { route } })
+            .mixin({ methods: {
+                route
+            } })
             .mount(el);
     },
 });

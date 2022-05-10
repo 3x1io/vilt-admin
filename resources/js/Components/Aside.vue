@@ -48,11 +48,11 @@
                         :active="route().current(menu.route)"
                     >
                         <i :class="'bx ' + menu.icon + ' bx-xs'"></i>
-                        <span class="ml-2">{{ menu.title }}</span>
+                        <span class="ml-2 rtl:mr-2">{{ menu.title }}</span>
                     </Link>
                     <a  v-else :href="menu.url" target="_blank">
                         <i :class="'bx ' + menu.icon + ' bx-xs'"></i>
-                        <span class="ml-2">{{ menu.title }}</span>
+                        <span class="ml-2 rtl:mr-2">{{ menu.title }}</span>
                     </a>
                 </li>
                 <div

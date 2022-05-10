@@ -27,7 +27,7 @@
                 <div
                         class="relative w-full max-w-xl mr-6 focus-within:text-primary-500"
                 >
-                    <div class="absolute inset-y-0 flex items-center pl-2">
+                    <div class="absolute inset-y-0 flex items-center pl-2 rtl:pr-2">
                         <svg
                                 class="w-4 h-4"
                                 aria-hidden="true"
@@ -42,16 +42,17 @@
                         </svg>
                     </div>
                     <input
-                            class="w-full pl-8 pr-2 text-sm text-gray-700 placeholder-gray-600 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-white focus:border-primary-300 focus:outline-none focus:shadow-outline-primary form-input"
+                            class="w-full pl-8 pr-2 text-gray-700 placeholder-gray-600 bg-gray-100 border-0 rounded-md rtl:pl-2 rtl:pr-8 rtext-sm dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-white focus:border-primary-300 focus:outline-none focus:shadow-outline-primary form-input"
                             type="text"
                             placeholder="Search for projects"
                             aria-label="Search"
+
                     />
                 </div>
             </div>
             <ul class="flex items-center flex-shrink-0 space-x-6">
                 <!-- Theme toggler -->
-                <li class="flex">
+                <li class="flex rtl:ml-4">
                     <button
                             class="rounded-md focus:outline-none focus:shadow-outline-primary"
                             @click="toggleTheme"

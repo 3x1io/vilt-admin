@@ -70,7 +70,7 @@
                             </button>
                         </li>
                         <li
-                            v-for="(page, key) in collection.last_page"
+                            v-for="(page, key) in  getNumbers(start_page, last_page)"
                             :key="key"
                         >
                             <button
@@ -92,7 +92,6 @@
                                 <span>{{ page }}</span>
                             </button>
                         </li>
-
                         <li>
                             <button
                                 @click.prevent="next()"
@@ -144,14 +143,35 @@ export default defineComponent({
     watch: {
         per_page(newValue, oldValue) {
             this.setPerPage = newValue;
-        },
+        }
     },
     data() {
         return {
             setPerPage: 10,
+            start_page: 0,
+            last_page: 1
         };
     },
+    mounted(){
+        this.start_page = this.collection.current_page;
+
+        if(this.collection.last_page == this.start_page){
+            this.last_page = this.start_page+1
+        }
+        else if((this.start_page +10) <= this.collection.last_page){
+            this.last_page = this.start_page + 10;
+        }
+        else {
+            let get_last = this.collection.last_page - this.start_page;
+            this.last_page = this.start_page + get_last +1;
+        }
+
+
+    },
     methods: {
+        getNumbers(start,stop){
+            return new Array(stop-start).fill(start).map((n,i)=>n+i);
+        },
         reload(page, type) {
             let url = "/" + this.url + "?";
             url += "page=" + page;

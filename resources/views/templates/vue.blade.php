@@ -55,6 +55,8 @@
                 </div>
             </div>
         </div>
+        <br>
+        <br>
         <CreateModal :url="url" title="{{ $model }}" :show="createModal" :edit="edit" :errors="errors" :item="form"
             :rows="rows" @close="createModal = !createModal" @success="success" />
         <ViewModal title="View {{ $model }}" :show="viewModal" :item="form" :rows="rows"
