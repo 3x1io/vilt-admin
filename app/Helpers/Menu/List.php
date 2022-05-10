@@ -2,8 +2,18 @@
 
 use App\Helpers\Menu\Menu;
 use App\Helpers\Vilt\Core;
+use App\Helpers\Vilt\Trans;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Cookie;
+
+
+
+$local = explode('|', Crypt::decrypt(Cookie::get('lang'), false))[1];
+app()->setLocale($local);
 
 Core::registerDashboardMenuItem(Menu::make('Dashboard')->icon('bx bxs-home')->route('dashboard'));
 Core::registerDashboardMenuItem(Menu::make('Settings')->icon('bx bxs-cog')->route('settings'), 'Settings');
 Core::registerProfileMenuItem(Menu::make('Profile')->icon('bxs-user')->route('profile.show'));
 Core::registerProfileMenuItem(Menu::make('API Tokens')->icon('bxs-check-shield')->route('api-tokens.index'));
+Core::registerGlobalTranslation(Trans::make('roles.sidebar')->value(__('roles.sidebar')));
+Core::registerGlobalTranslation(Trans::make('users.sidebar')->value(__('users.sidebar')));

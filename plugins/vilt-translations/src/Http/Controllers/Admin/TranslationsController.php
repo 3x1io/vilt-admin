@@ -10,6 +10,7 @@ use App\Helpers\Vilt\Handler;
 use App\Helpers\Vilt\AdminListing;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Validator;
 use io3x1\ViltTranslations\Services\SaveScan;
 use io3x1\ViltTranslations\Models\Translation;
@@ -106,13 +107,11 @@ class TranslationsController extends Controller
         $validator->validate();
 
         if (!$validator->fails()) {
-            session('lang', $request->get('language')['id']);
-            $user = User::find(auth()->user()->id);
+            Cookie::queue('lang',  $request->get('language')['id']);
 
-            $langArray = config('vilt-translations.switcher');
-
-            $user->lang = $request->get('language')['id'];
-            $user->save();
+            // $user = User::find(auth()->user()->id);
+            // $user->lang = $request->get('language')['id'];
+            // $user->save();
 
             session(['message' => __('translation.notification')]);
             return back();

@@ -21,6 +21,7 @@ module.exports = {
             },
             fontFamily: {
                 sans: ['DM Sans', ...defaultTheme.fontFamily.sans],
+                main: ["Cairo", "sans"],
             },
         },
     },

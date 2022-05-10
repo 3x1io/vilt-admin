@@ -3,12 +3,14 @@
 namespace App\Helpers\Vilt;
 
 use App\Helpers\Menu\Menu;
+use PhpParser\Node\Expr\FuncCall;
 
 class Core
 {
     private static ?array $dashboardMenuItems = [];
     private static ?array $dashboardMenuItemsFull = [];
     private static ?array $profileMenuItems = [];
+    private static ?array $trans = [];
 
     public static function registerDashboardMenuItem(Menu $item, $group = 0)
     {
@@ -21,6 +23,12 @@ class Core
     public static function registerProfileMenuItem(Menu $item)
     {
         array_push(self::$profileMenuItems, $item->get());
+    }
+
+    public static function registerGlobalTranslation(Trans $item)
+    {
+        $key = array_keys($item->get())[0];
+        self::$trans[$key] = $item->get()[$key];
     }
 
     public static function loadDashboardMenu()
@@ -54,7 +62,7 @@ class Core
 
     public static function loadLanguage()
     {
-        return [
+        $global = [
             "global.dashboard" => __('global.dashboard'),
             "global.settings" => __('global.settings'),
             "global.view" => __('global.view'),
@@ -69,5 +77,6 @@ class Core
             "global.pagination.per_page" => __('global.pagination.per_page'),
             "global.bulk.message" => __('global.bulk.message'),
         ];
+        return array_merge($global, self::$trans);
     }
 }

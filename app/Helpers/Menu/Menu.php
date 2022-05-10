@@ -3,6 +3,7 @@
 namespace App\Helpers\Menu;
 
 use App\Helpers\Traits\Configure;
+use Illuminate\Support\Facades\Cookie;
 
 class Menu
 {
@@ -10,6 +11,7 @@ class Menu
 
     private ?string $title;
     private ?string $icon;
+    private ?string $lang = null;
     private ?string $route = null;
     private ?string $url = null;
     private ?string $group;
@@ -32,6 +34,7 @@ class Menu
             "url" => $this->url,
             "type" => $this->type,
             "can" => $this->can,
+            "lang" => $this->lang,
         ];
     }
 
@@ -43,9 +46,15 @@ class Menu
         return $static;
     }
 
+
+    public function lang($lang): ?static
+    {
+        $this->lang = $lang;
+        return $this;
+    }
+
     public function can($can): ?static
     {
-       
         $this->can = $can;
         return $this;
     }

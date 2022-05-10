@@ -48,11 +48,13 @@
                         :active="route().current(menu.route)"
                     >
                         <i :class="'bx ' + menu.icon + ' bx-xs'"></i>
-                        <span class="ml-2 rtl:mr-2">{{ menu.title }}</span>
+                        <span class="ml-2 rtl:mr-2" v-if="!menu.lang">{{ menu.title }}</span>
+                        <span class="ml-2 rtl:mr-2" v-else>{{ trans(menu.lang) }}</span>
                     </Link>
                     <a  v-else :href="menu.url" target="_blank">
                         <i :class="'bx ' + menu.icon + ' bx-xs'"></i>
-                        <span class="ml-2 rtl:mr-2">{{ menu.title }}</span>
+                        <span class="ml-2 rtl:mr-2" v-if="!menu.lang">{{ menu.title }}</span>
+                        <span class="ml-2 rtl:mr-2" v-else>{{ trans(menu.lang) }}</span>
                     </a>
                 </li>
                 <div
@@ -68,6 +70,7 @@
 import { defineComponent } from "vue";
 import { Link } from "@inertiajs/inertia-vue3";
 import { HomeIcon, UserIcon } from "@heroicons/vue/outline";
+import { usePage } from '@inertiajs/inertia-vue3'
 
 export default defineComponent({
     components: {
@@ -81,7 +84,15 @@ export default defineComponent({
             isPagesMenuOpen: false,
         };
     },
+    computed: {
+        langs(){
+             return this.$page.props.trans
+        }
+    },
     methods: {
+        trans(key){
+           return this.langs[key];
+        },
         togglePagesMenu() {
             if (this.isPagesMenuOpen) {
                 this.isPagesMenuOpen = false;

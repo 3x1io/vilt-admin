@@ -5,6 +5,8 @@ namespace io3x1\ViltRoles\Http\Controllers\Admin;
 use App\Models\User;
 use Inertia\Inertia;
 use App\Helpers\Vilt\Row;
+use App\Helpers\Vilt\Core;
+use App\Helpers\Vilt\Trans;
 use Illuminate\Http\Request;
 use App\Helpers\Vilt\Handler;
 use App\Helpers\Vilt\AdminListing;

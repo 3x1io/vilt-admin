@@ -34,7 +34,7 @@ class ViltRolesProvider extends PackageServiceProvider
             GeneratePermission::class
         ]);
 
-        Core::registerDashboardMenuItem(Menu::make(trans('vilt-roles::roles.resource.title.home'))->icon('bx bxs-user')->route('users.index')->can('view_any_users'), 'ALC');
-        Core::registerDashboardMenuItem(Menu::make('Roles')->icon('bx bxs-lock-alt')->route('roles.index')->can('view_any_roles'), 'ALC');
+        Core::registerDashboardMenuItem(Menu::make('Users')->lang('users.sidebar')->icon('bx bxs-user')->route('users.index')->can('view_any_users'), 'ALC');
+        Core::registerDashboardMenuItem(Menu::make('Roles')->lang('roles.sidebar')->icon('bx bxs-lock-alt')->route('roles.index')->can('view_any_roles'), 'ALC');
     }
 }

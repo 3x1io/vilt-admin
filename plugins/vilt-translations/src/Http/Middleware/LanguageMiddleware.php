@@ -4,6 +4,7 @@ namespace io3x1\ViltTranslations\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
 
 
 class LanguageMiddleware
@@ -18,10 +19,8 @@ class LanguageMiddleware
     public function handle(Request $request, Closure $next)
     {
         if ($request->user()) {
-            if (!empty($request->user()->lang)) {
-                app()->setLocale($request->user()->lang);
-            } else if (session()->get('lang')) {
-                app()->setLocale(session()->get('lang'));
+            if (Cookie::get('lang')) {
+                app()->setLocale(Cookie::get('lang'));
             } else {
                 app()->setLocale('en');
             }

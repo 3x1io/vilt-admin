@@ -2,15 +2,17 @@
 
 namespace io3x1\ViltRoles\Http\Controllers\Admin;
 
+use App\Models\User;
 use Inertia\Inertia;
 use App\Helpers\Vilt\Row;
+use App\Helpers\Vilt\Core;
+use App\Helpers\Vilt\Trans;
 use Illuminate\Http\Request;
 use App\Helpers\Vilt\Handler;
 use App\Helpers\Vilt\AdminListing;
-use App\Http\Controllers\Controller;
-use App\Models\User;
-use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Models\Role;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -57,10 +59,11 @@ class UserController extends Controller
 
         $this->loadMedia($data);
         $this->loadFilters($request);
+
         foreach ($data as $item) {
             $item->load('roles');
         }
-
+        
         return inertia('User/List', $this->response($data, $this->url));
     }
 

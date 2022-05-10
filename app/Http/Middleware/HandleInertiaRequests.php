@@ -61,7 +61,8 @@ class HandleInertiaRequests extends Middleware
             'nav' => [],
             'dropdown' => Core::loadProfileMenu(),
             'menu' => Core::loadDashboardMenu(),
-            'message' => fn () => $request->session()->get('message')
+            'message' => fn () => $request->session()->get('message'),
+            'trans' => Core::loadLanguage(),
         ]);
     }
 }
