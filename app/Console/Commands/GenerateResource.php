@@ -47,7 +47,7 @@ class GenerateResource extends Command
             $this->info('The Permission Has Been Generated');
             $this->info('Please Run npm i & npm run dev to compate assets of vuejs');
         } catch (Exception $e) {
-            $this->error('Sorry Table Not exits!');
+            $this->error($e);
         }
 
         return Command::SUCCESS;

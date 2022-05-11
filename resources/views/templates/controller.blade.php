@@ -184,7 +184,7 @@ class {{ $model }}Controller extends Controller
             $unique = "";
         }
         @endphp
-        @elseif($col['name'] === 'password')
+        @if($col['name'] === 'password')
         "password" => "sometimes|string|min:8|confirmed",
         @elseif($col['name'] === 'email')
         "email" => "sometimes|string|email{{ $unique }}",
