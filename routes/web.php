@@ -42,12 +42,3 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/admin/plugins', [DashboardController::class, 'plugins'])->name('plugins');
     Route::get('/admin/settings', [DashboardController::class, 'settings'])->name('settings');
 });
-
-
-Route::middleware(['auth:sanctum', 'verified'])->prefix('customers')->name('customers.')->group(function () {
-    Route::get('/', [App\Http\Controllers\Admin\CustomerController::class, 'index'])->name('index');
-    Route::post('/', [App\Http\Controllers\Admin\CustomerController::class, 'store'])->name('store');
-    Route::post('{id}/update', [App\Http\Controllers\Admin\CustomerController::class, 'update'])->name('update');
-    Route::delete('{id}/delete', [App\Http\Controllers\Admin\CustomerController::class, 'destroy'])->name('destory');
-    Route::post('bulk', [App\Http\Controllers\Admin\CustomerController::class, 'bulk'])->name('bulk');
-});

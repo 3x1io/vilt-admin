@@ -5,15 +5,15 @@
 import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Link } from "@inertiajs/inertia-vue3";
-import Filters from "../../Components/Base/Filters.vue";
-import Header from "../../Components/Base/Header.vue";
-import Bulk from "../../Components/Base/Bulk.vue";
-import List from "../../Components/Base/Table.vue";
-import Pagination from "../../Components/Base/Pagination.vue";
-import CreateModal from "../../Components/Base/Modals/Create.vue";
-import ViewModal from "../../Components/Base/Modals/View.vue";
-import DeleteModal from "../../Components/Base/Modals/Delete.vue";
-import BulkModal from "../../Components/Base/Modals/Bulk.vue";
+import Filters from "@/Components/Base/Filters.vue";
+import Header from "@/Components/Base/Header.vue";
+import Bulk from "@/Components/Base/Bulk.vue";
+import List from "@/Components/Base/Table.vue";
+import Pagination from "@/Components/Base/Pagination.vue";
+import CreateModal from "@/Components/Base/Modals/Create.vue";
+import ViewModal from "@/Components/Base/Modals/View.vue";
+import DeleteModal from "@/Components/Base/Modals/Delete.vue";
+import BulkModal from "@/Components/Base/Modals/Bulk.vue";
 
 export default defineComponent({
     components: {

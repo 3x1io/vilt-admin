@@ -15,9 +15,9 @@
 
 <script>
     import { defineComponent } from 'vue'
-    import Aside from '@/components/Aside.vue'
-    import MobileSide from '@/components/MobileSide.vue'
-    import Header from '@/components/Header.vue'
+    import Aside from '@/Components/Aside.vue'
+    import MobileSide from '@/Components/MobileSide.vue'
+    import Header from '@/Components/Header.vue'
     import { Head, Link } from '@inertiajs/inertia-vue3';
 
     export default defineComponent({
