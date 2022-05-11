@@ -138,8 +138,8 @@ and for menus you can handle permission useing `->can()` with the permission nam
 - Select Field ✅
 - spatie/laravel-medialibrary Integration ✅
 - spatie/laravel-permission Integration ✅
-- spatie/laravel-translatable Integration
-- spatie/laravel-translation-loader Integration
+- spatie/laravel-translatable Integration ✅
+- spatie/laravel-translation-loader Integration ✅
 - spatie/laravel-settings Integration
 - spatie/laravel-sitemap Integration
 - spatie/laravel-backup Integration
@@ -152,6 +152,9 @@ and for menus you can handle permission useing `->can()` with the permission nam
 - Form Builder
 - Table Builder
 - Media Library Browser
+- Hide/Show Cols Form Table
+- Vaildation By Generator Full Version
+- Use First String as a main search key
 
 ## Changelog
 

@@ -30,7 +30,7 @@ class RolesController extends Controller
             Row::make('id')->label('ID')->edit(false)->create(false)->get(),
             Row::make('name')->label('Name')->get(),
             Row::make('guard_name')->label('Guard Name')->get(),
-            Row::make('permissions')->label('Permissions')->type('relation')->list(false)->options(Permission::all()->toArray())->multi('tags')->get(),
+            Row::make('permissions')->label('Permissions')->type('relation')->list(false)->options(Permission::all()->toArray())->multi(true)->get(),
         ];
     }
 

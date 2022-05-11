@@ -32,13 +32,7 @@ class {{ $model }} extends Model implements HasMedia
      */
     protected $casts = [
     @foreach($cols as $col)
-        @if($col['type'] === 'bigint')
-        '{{ $col['name'] }}' => 'integer',
-        @elseif($col['type'] === 'text')
-        '{{ $col['name'] }}' => 'string',
-        @else
         '{{ $col['name'] }}' => '{{ $col['type'] }}',
-        @endif
     @endforeach
     ];
 }

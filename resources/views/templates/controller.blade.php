@@ -18,33 +18,31 @@ class {{ $model }}Controller extends Controller
 {
     use Handler;
 
-    public $url = {{ $table }}
+    public $url = "{{ $table }}";
 
     public function schema()
     {
         return [
         @foreach($cols as $col)
-        @if($col['name'] === 'id')
-        Row::make('{{ $col['name'] }}')->label('ID')->edit(false)->create(false)->get(),
-        @elseif($col['name'] === 'password')
+        @if($col['type'] === 'password')
         Row::make('{{ $col['name'] }}')->label('{{ $col['name'] }}')->type('password')->list(false)->view(false)->get(),
         Row::make('password_confirmation')->label("Password Confirmation")->type('password')->list(false)->view(false)->get(),
-        @elseif($col['name'] === 'email')
+        @elseif($col['type'] === 'email')
         Row::make('{{ $col['name'] }}')->label('{{ $col['name'] }}')->type('email')->get(),
-        @elseif($col['name'] === 'created_at')
-        Row::make('{{ $col['name'] }}')->label('{{ $col['name'] }}')->create(false)->edit(false)->type('datetime')->get(),
-        @elseif($col['name'] === 'updated_at')
-        Row::make('{{ $col['name'] }}')->label('{{ $col['name'] }}')->create(false)->edit(false)->type('datetime')->get(),
-        @elseif($col['name'] === 'deleted_at')
-        Row::make('{{ $col['name'] }}')->label('{{ $col['name'] }}')->create(false)->edit(false)->type('datetime')->get(),
-        @elseif($col['name'] === 'phone')
+        @elseif($col['type'] === 'tel')
         Row::make('{{ $col['name'] }}')->label('{{ $col['name'] }}')->type('tel')->get(),
         @else
-        @if($col['type'] === 'float' || $col['type'] === 'bigint')
+        @if($col['type'] === 'integer')
         Row::make('{{ $col['name'] }}')->label('{{ $col['name'] }}')->type('number')->get(),
+        @elseif($col['type'] === 'string')
+        Row::make('{{ $col['name'] }}')->label('{{ $col['name'] }}')->type('text')->get(),
+        @elseif($col['type'] === 'textarea')
+        Row::make('{{ $col['name'] }}')->label('{{ $col['name'] }}')->type('textarea')->get(),
+        @elseif(isset($col['relation']))
+        Row::make('{{ $col['name'] }}')->label('{{ str_replace('_id', '', $col['name']) }}')->type('relation')->list(false)->options({{ $col['relation']['model'] }}::all()->toArray())->multi('tags')->get(),
         @elseif($col['type'] === 'boolean')
         Row::make('{{ $col['name'] }}')->label('{{ $col['name'] }}')->type('switch')->get(),
-        @elseif($col['type'] === 'datetime')
+        @elseif($col['type'] === 'datetime' || $col['type'] === 'date')
         Row::make('{{ $col['name'] }}')->label('{{ $col['name'] }}')->type('datetime')->get(),
         @else
         Row::make('{{ $col['name'] }}')->label('{{ $col['name'] }}')->get(),
@@ -75,8 +73,17 @@ class {{ $model }}Controller extends Controller
                 // set columns to query
                 $this->schemaFileds(),
 
+                @php
+                    $searching= "id";
+                    foreach ($cols as $col) {
+                        if($col['type'] === "string"){
+                            $searching = $col['name'];
+                            break;
+                        }
+                    }
+                @endphp
                 // set columns to searchIn
-                ['id'],
+                ['{{ $searching }}'],
 
             );
 
@@ -101,22 +108,34 @@ class {{ $model }}Controller extends Controller
 
         $rules = [
         @foreach($cols as $col)
-        @if($col['name'] === 'id')
-        @elseif($col['name'] === 'created_at')
-        @elseif($col['name'] === 'updated_at')
-        @elseif($col['name'] === 'password')
-        "password" => "required|string|min:8|confirmed",
+        @php
+            if($col['required']){
+                $required = "required|";
+            }
+            else {
+                $required = "";
+            }
+            if($col['unique']){
+                $unique = "|unique:".$table.",".$col['name'];
+            }
+            else {
+                $unique = "";
+            }
+            if($col['maxLength']){
+                $max = "max:" . $col['maxLength'];
+            }
+            else {
+                $max = "";
+            }
+        @endphp
+        @if($col['name'] === 'password')
+        "password" => "{{ $required }}{{ $max }}|string|min:8|confirmed",
         @elseif($col['name'] === 'email')
-        "email" => "required|string|email",
+        "email" => "{{ $required }}{{ $max }}|string|email{{ $unique }}",
+        @elseif($col['name'] === 'tel')
+        "{{ $col['name'] }}" => "{{ $required }}{{ $max }}|string{{ $unique }}",
         @else
-        @if($col['type'] === 'float')
-        "{{ $col['name'] }}" => "required|integer",
-        @elseif($col['type'] === 'boolean')
-        "{{ $col['name'] }}" => "required|boolean",
-        @elseif($col['type'] === 'datetime')
-        "{{ $col['name'] }}" => "required|date",
-        @endif
-        "{{ $col['name'] }}" => "required|string",
+        "{{ $col['name'] }}" => "{{ $required }}{{ $max }}|{{ $col['type'] }}{{ $unique }}",
         @endif
         @endforeach
         ];
@@ -151,22 +170,33 @@ class {{ $model }}Controller extends Controller
 
         $rules = [
         @foreach($cols as $col)
-        @if($col['name'] === 'id')
-        @elseif($col['name'] === 'created_at')
-        @elseif($col['name'] === 'updated_at')
+        @php
+        if($col['maxLength']){
+            $max = "max:" . $col['maxLength'];
+        }
+        else {
+            $max = "";
+        }
+        if($col['unique']){
+            $unique = "|unique:".$table.",".$col['name'].',.$id';
+        }
+        else {
+            $unique = "";
+        }
+        @endphp
         @elseif($col['name'] === 'password')
         "password" => "sometimes|string|min:8|confirmed",
         @elseif($col['name'] === 'email')
-        "email" => "sometimes|string|email",
+        "email" => "sometimes|string|email{{ $unique }}",
         @else
-        @if($col['type'] === 'float')
-        "{{ $col['name'] }}" => "sometimes|integer",
+        @if($col['type'] === 'integer')
+        "{{ $col['name'] }}" => "sometimes|integer{{ $unique }}",
         @elseif($col['type'] === 'boolean')
-        "{{ $col['name'] }}" => "sometimes|boolean",
+        "{{ $col['name'] }}" => "sometimes|boolean{{ $unique }}",
         @elseif($col['type'] === 'datetime')
-        "{{ $col['name'] }}" => "sometimes|date",
+        "{{ $col['name'] }}" => "sometimes|date{{ $unique }}",
         @endif
-        "{{ $col['name'] }}" => "sometimes|string",
+        "{{ $col['name'] }}" => "sometimes|string{{ $unique }}",
         @endif
         @endforeach
         ];

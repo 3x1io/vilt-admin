@@ -4,6 +4,7 @@ namespace App\Helpers\Generator;
 
 use Illuminate\Support\Str;
 use Doctrine\DBAL\DriverManager;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\File;
@@ -39,17 +40,90 @@ class ResourceGenerator
 
     public function getFileds()
     {
-        $rows = [];
+        $components = [];
 
         $sm = $this->connection->getSchemaManager();
-        $columns = $sm->listTableColumns($this->table);
-        foreach ($columns as $column) {
-            array_push($rows, [
-                "name" => $column->getName(),
-                "type" => DB::getSchemaBuilder()->getColumnType($this->table, $column->getName())
-            ]);
+        $columns = $sm->listTableDetails($this->table);
+
+        foreach ($columns->getColumns() as $column) {
+
+            if ($column->getAutoincrement()) {
+                continue;
+            }
+
+            if (Str::of($column->getName())->endsWith([
+                '_at',
+                '_token',
+            ])) {
+                continue;
+            }
+
+            $componentData = [];
+
+            $componentData['name'] = $column->getName();
+            $unqieName = $this->table . '_' . $column->getName() . '_unique';
+            if ($columns->hasIndex($unqieName)) {
+                $componentData['unique'] = true;
+            } else {
+                $componentData['unique'] = false;
+            }
+
+            if (Str::of($column->getName())->endsWith([
+                '_id'
+            ])) {
+                if ($columns->hasForeignKey($this->table . '_' . $column->getName() . '_foreign')) {
+                    $getKey = $columns->getForeignKey($this->table . '_' . $column->getName() . '_foreign');
+                    $model = 'App\\Models\\' . Str::studly(Str::singular($getKey->getForeignTableName()));
+                    $componentData['relation'] = [
+                        "table" => $getKey->getForeignTableName(),
+                        "field" => $getKey->getForeignColumns()[0],
+                        "model" => $model
+                    ];
+                }
+            }
+
+            $componentData['type'] = $type = match ($column->getType()::class) {
+                Types\BooleanType::class => "boolean",
+                Types\DateType::class => "date",
+                Types\DateTimeType::class => "datetime",
+                Types\TextType::class => "textarea",
+                Types\FloatType::class => "integer",
+                Types\DecimalType::class => "integer",
+                Types\DecimalType::class => "integer",
+                default => "string",
+            };
+
+            if ($type === Forms\Components\TextInput::class) {
+                if (Str::of($column->getName())->contains(['email'])) {
+                    $componentData['type'] = "email";
+                }
+
+                if (Str::of($column->getName())->contains(['password'])) {
+                    $componentData['type'] = "password";
+                }
+
+                if (Str::of($column->getName())->contains(['phone', 'tel'])) {
+                    $componentData['tel'] = "tel";
+                }
+            }
+
+            if ($column->getNotnull()) {
+                $componentData['required'] = true;
+            } else {
+                $componentData['required'] = false;
+            }
+
+            if ($length = $column->getLength()) {
+                $componentData['maxLength'] = $length;
+            } else {
+                $componentData['maxLength'] = false;
+            }
+
+            array_push($components, $componentData);
         }
-        return $rows;
+
+        dd($components);
+        return $components;
     }
 
     public function render($view, $path, $append = false)

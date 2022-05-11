@@ -1,7 +1,7 @@
 <template>
-    <app-layout title="@php echo " {{" @endphp $title }}">
+    <app-layout title=" {{ $title }}">
         <div class="container grid px-6 mx-auto">
-            <Header :canCreate="$attrs.canCreate" title="{{ $model }}" button="Create {{ $model }}"
+            <Header :canCreate="$attrs.canCreate" title="Customer" button="Create Customer"
                 @buttonAction="create">
             </Header>
             <div class="flex-1 w-full mx-autofilament-main-content max-w-7xl">
@@ -57,13 +57,13 @@
         </div>
         <br>
         <br>
-        <CreateModal :url="url" title="{{ $model }}" :show="createModal" :edit="edit" :errors="errors" :item="form"
+        <CreateModal :url="url" title="Customer" :show="createModal" :edit="edit" :errors="errors" :item="form"
             :rows="rows" @close="createModal = !createModal" @success="success" />
-        <ViewModal title="View {{ $model }}" :show="viewModal" :item="form" :rows="rows"
+        <ViewModal title="View Customer" :show="viewModal" :item="form" :rows="rows"
             @close="viewModal = !viewModal" />
-        <DeleteModal :url="url" title="Delete {{ $model }}" :show="deleteModal" :item="form"
+        <DeleteModal :url="url" title="Delete Customer" :show="deleteModal" :item="form"
             @close="deleteModal = !deleteModal" @success="success" />
-        <BulkModal :url="url" title="Bulk Action On {{ $model }}" :action="bulkActionTitle" :bulk="bulk"
+        <BulkModal :url="url" title="Bulk Action On Customer" :action="bulkActionTitle" :bulk="bulk"
             :show="bulkModal" @close="bulkModal = !bulkModal" @success="success" />
     </app-layout>
 </template>
@@ -73,44 +73,31 @@
     import { defineComponent } from "vue"
 import MixinVue from "../../Components/Base/Mixin.vue";
 
-@php
-    $form = "";
-    foreach($cols as $col){
-        if($col['name'] === 'id'){
 
-        }
-        elseif($col['name'] === 'created_at'){
-
-        }
-        elseif($col['name'] === 'updated_at'){
-
-        }
-        elseif($col['name'] === 'deleted_at'){
-
-        }
-        else {
-            $form .=$col['name'] . ':"",'."\n";
-        }
-    }
-    echo '
     export default defineComponent({
     mixins: [MixinVue],
     data() {
         return {
             form: this.$inertia.form({
-            '.$form.'
+            name:"",
+email:"",
+phone:"",
+address:"",
+
             }),
         }
     },
     methods: {
         create() {
             this.form = this.$inertia.form({
-            '.$form.'
+            name:"",
+email:"",
+phone:"",
+address:"",
+
             });
             this.edit = false;
             this.createModal = true;
         },
     },
-});'
-@endphp
-</script>
+});</script>
