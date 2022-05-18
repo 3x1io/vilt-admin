@@ -31,6 +31,8 @@ jobs:
         DB_CONNECTION: sqlite
         DB_DATABASE: database/database.sqlite
       run: php artisan config:cache
+    - name: Run Migrate
+      run: php artisan migrate
     - name: Generate key
       run: php artisan key:generate
     - name: Clear Cashe
