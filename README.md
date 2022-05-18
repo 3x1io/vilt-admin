@@ -4,6 +4,10 @@
 
 VILT stack admin panel
 
+## Support
+
+you can join our discord server to get support [VILT Admin](https://discord.gg/mTWWNgtr)
+
 ## Wiki
 
 looking for wiki to get docs & for projects to get new tasks and upcomming features
