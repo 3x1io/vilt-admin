@@ -33,6 +33,7 @@ jobs:
       run: vendor/bin/phpunit
     - name: Generate key
       run: php artisan key:generate
+    - name: Clear Cashe
       run: php artisan config:cache
       
 
