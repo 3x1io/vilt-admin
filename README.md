@@ -6,7 +6,7 @@ VILT stack admin panel
 
 ## Support
 
-you can join our discord server to get support [VILT Admin](https://discord.gg/mTWWNgtr)
+you can join our discord server to get support [VILT Admin](https://discord.gg/HUNYbgKDdx)
 
 ## Wiki
 
@@ -23,3 +23,4 @@ Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed re
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+
