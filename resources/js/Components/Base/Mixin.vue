@@ -1,6 +1,4 @@
-<template>
-
-</template>
+<template></template>
 <script>
 import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
@@ -72,8 +70,8 @@ export default defineComponent({
         this.createModal = this.$attrs.create;
     },
     methods: {
-        trans(key){
-            console.log(key)
+        trans(key) {
+            console.log(key);
             // return this.$attrs.trans[key];
         },
         searchFilter(search) {
@@ -84,8 +82,10 @@ export default defineComponent({
             this.reload(1);
         },
         filter(filterBy, filterValue) {
-            let url = "/" + this.url + "?" + filterBy + "=" + filterValue;
-            this.$inertia.get(url);
+            let filter = {};
+            filter[filterBy] = filterValue;
+
+            this.$inertia.get(route(this.url + ".index"), filter);
         },
         viewItem(item) {
             this.form = this.$inertia.form(item);
@@ -101,7 +101,7 @@ export default defineComponent({
             this.deleteModal = true;
         },
         reloadList(url) {
-            this.$inertia.get(url);
+            this.$inertia.get(route(this.url + ".index"), url);
         },
         bulkAction(action) {
             this.bulkActionTitle = action;
@@ -134,28 +134,25 @@ export default defineComponent({
             this.reload(1, "orderBy", "id", "desc");
         },
         reload(index = 1, type = "main", orderBy = null, dir = false) {
-            let url = "/" + this.url + "?";
-            url += "page=" + index;
-            if (type === "search") {
-                url += "&search=" + this.search;
-            }
-            if (type === "per_page") {
-                url += "&per_page=" + this.per_page;
-            }
-            if (type === "orderBy") {
-                url += "&orderBy=" + orderBy;
-                if (dir) {
-                    url += "&orderDirection=" + dir;
+            let getDir = "";
+            if (dir) {
+                getDir = dir;
+            } else {
+                if (this.desc) {
+                    getDir = "desc";
                 } else {
-                    if (this.desc) {
-                        url += "&orderDirection=desc";
-                    } else {
-                        url += "&orderDirection=asc";
-                    }
+                    getDir = "asc";
                 }
             }
 
-            this.$inertia.get(url);
+            let url = {};
+            url.page = index;
+            this.search ? (url.search = this.search) : "";
+            url.per_page = this.per_page;
+            orderBy ? (url.orderBy = orderBy) : "";
+            url.orderDirection = getDir;
+
+            this.$inertia.get(route(this.url + ".index"), url);
         },
     },
 });

@@ -177,8 +177,6 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\FortifyServiceProvider::class,
         App\Providers\JetstreamServiceProvider::class,
-        \io3x1\ViltRoles\ViltRolesProvider::class,
-        \io3x1\ViltTranslations\ViltTranslationsProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
 
     ],

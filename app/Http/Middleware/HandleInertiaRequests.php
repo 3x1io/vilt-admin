@@ -6,7 +6,7 @@ use Closure;
 use Inertia\Inertia;
 use Inertia\Middleware;
 use Illuminate\Http\Request;
-use App\Helpers\Vilt\Core;
+use Modules\Base\Helpers\Vilt\Core;
 use Illuminate\Http\RedirectResponse;
 
 class HandleInertiaRequests extends Middleware

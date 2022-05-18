@@ -3,7 +3,7 @@
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
-use App\Helpers\Generator\ResourceGenerator;
+use Modules\Base\Helpers\Generator\ResourceGenerator;
 use App\Http\Controllers\Admin\UploadController;
 use App\Http\Controllers\Admin\DriversController;
 use App\Http\Controllers\Admin\CustomerController;
@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\DashboardController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [

@@ -93,9 +93,22 @@
                         type="checkbox"
                     />
                 </th>
-                <td class="filament-tables-cell" v-for="(field, index) in listRows" :key="index">
+                <td class="p-2 filament-tables-cell" v-for="(field, index) in listRows" :key="index">
                     <div v-if="field.type === 'relation'" class="grid grid-cols-3 gap-2">
                         <div class="inline-flex mx-2 items-center justify-center space-x-1 min-h-6 px-2 py-0.5 text-sm font-medium tracking-tight rounded-xl whitespace-normal text-primary-700 bg-primary-500/10 dark:text-primary-500" v-for="(rel, relIndex) in item[field.field]" :key="relIndex">{{rel[field.track_by_name]}}</div>
+                    </div>
+                    <div v-else-if="field.type === 'color'">
+                        <div class="w-8 h-8 rounded-full" :style="'background-color: '+item[field.field]"></div>
+                    </div>
+                    <div v-else-if="field.type === 'hasOne'">
+                        <div class="inline-flex mx-2 items-center justify-center space-x-1 min-h-6 px-2 py-0.5 text-sm font-medium tracking-tight rounded-xl whitespace-normal text-primary-700 bg-primary-500/10 dark:text-primary-500">{{item[field.field][field.track_by_name]}}</div>
+                    </div>
+                    <div v-else-if="field.type === 'switch'">
+                        <div class="w-10 h-10 p-2 text-lg text-center text-white bg-green-500 rounded-full" v-if="item[field.field] == true"><i class="bx bx-check"></i></div>
+                        <div class="w-10 h-10 p-2 text-lg text-center text-white rounded-full bg-danger-500" v-else><i class="bx bx-x"></i></div>
+                    </div>
+                    <div v-else-if="field.type === 'icon'">
+                        <div class="text-3xl"><i :class="item[field.field]"></i></div>
                     </div>
                     <div v-else-if="field.type === 'schema'" class="grid grid-cols-3 gap-2">
                         <div v-for="(rel, relIndex) in field.options" :key="relIndex">
@@ -142,7 +155,7 @@
                                         d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
                                     />
                                 </svg>
-                                View
+                                {{ trans('global.view') }}
                             </a>
                         </div>
                         <div>
@@ -169,7 +182,7 @@
                                         d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
                                     ></path>
                                 </svg>
-                                Edit
+                                {{ trans('global.edit') }}
                             </a>
                         </div>
                         <form>
@@ -195,7 +208,7 @@
                                         d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                                     ></path>
                                 </svg>
-                                Delete
+                                {{ trans('global.delete') }}
                             </button>
                         </form>
                     </div>
@@ -273,33 +286,36 @@ export default defineComponent({
             }
 
             return list;
+        },
+        lang() {
+            return this.$page.props.trans
         }
     },
     methods: {
+       trans(key){
+           return this.lang[key];
+        },
         bulkAll() {
             this.$emit("all");
         },
         reload(index = 1, type = "main", orderBy = null, dir = false) {
-            let url = "/" + this.url + "?";
-            url += "page=" + index;
-            if (type === "search") {
-                url += "&search=" + this.search;
-            }
-            if (type === "per_page") {
-                url += "&per_page=" + this.per_page;
-            }
-            if (type === "orderBy") {
-                url += "&orderBy=" + orderBy;
-                if (dir) {
-                    url += "&orderDirection=" + dir;
+            let getDir = "";
+            if (dir) {
+                getDir = dir;
+            } else {
+                if (this.desc) {
+                    getDir = "desc";
                 } else {
-                    if (this.desc) {
-                        url += "&orderDirection=desc";
-                    } else {
-                        url += "&orderDirection=asc";
-                    }
+                    getDir = "asc";
                 }
             }
+
+            let url = {};
+            url.page = index;
+            this.search ? (url.search = this.search) : "";
+            url.per_page = this.per_page;
+            orderBy ? url.orderBy = orderBy : "";
+            url.orderDirection = getDir;
 
             this.$emit("reload", url);
         },

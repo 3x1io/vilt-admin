@@ -173,9 +173,9 @@ export default defineComponent({
             return new Array(stop-start).fill(start).map((n,i)=>n+i);
         },
         reload(page, type) {
-            let url = "/" + this.url + "?";
-            url += "page=" + page;
-            url += "&per_page=" + this.setPerPage;
+            let url = {};
+            url.page = page;
+            url.per_page = this.setPerPage;
             this.$emit("reload", url);
         },
         next() {

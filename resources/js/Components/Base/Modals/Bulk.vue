@@ -7,7 +7,7 @@
                     {{ title }}
                 </h1>
                 <h3 claass=" text-gray-400 text-center">
-                    {{ trans('global.bulk.message') }}
+                    global.bulk.message
                 </h3>
             </div>
         </template>

@@ -9,177 +9,505 @@
             <form action="" v-if="!edit">
                 <div v-for="(field, key) in rows" :key="key">
                     <div v-if="field.type === 'image' && field.create">
-                        <div class="py-2">
-                            <div class="col-span-6 sm:col-span-4">
-                                <!-- Profile Photo File Input -->
-                                <input
-                                    type="file"
-                                    class="hidden"
-                                    :ref="field.field"
-                                    @change="updatePhotoPreview(field.field)"
-                                />
+                        <div v-if="field.reactive">
+                            <div v-if="form[field.row]">
+                                <div class="py-2">
+                                    <div class="col-span-6 sm:col-span-4">
+                                        <!-- Profile Photo File Input -->
+                                        <input
+                                            type="file"
+                                            class="hidden"
+                                            :ref="field.field"
+                                            @change="
+                                                updatePhotoPreview(field.field)
+                                            "
+                                        />
+                                        <JetLabel
+                                            :for="field.field"
+                                            :value="field.label"
+                                        />
+                                        <!-- Current Profile Photo -->
+                                        <div
+                                            class="mt-2"
+                                            v-if="photoPreview[field.field]"
+                                        >
+                                            <img
+                                                :src="photoPreview[field.field]"
+                                                class="object-cover w-20 h-20 rounded-full"
+                                            />
+                                        </div>
+                                        <div class="mt-2" v-else>
+                                            <div v-if="form[field.field]">
+                                                <img
+                                                    :src="form[field.field]"
+                                                    class="object-cover w-20 h-20 rounded-full"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <jet-secondary-button
+                                            class="mt-2 mr-2"
+                                            type="button"
+                                            @click.prevent="
+                                                selectNewPhoto(field.field)
+                                            "
+                                        >
+                                            Select A New Photo
+                                        </jet-secondary-button>
+
+                                        <progress
+                                            v-if="form.progress"
+                                            :value="form.progress.percentage"
+                                            max="100"
+                                        >
+                                            {{ form.progress.percentage }}%
+                                        </progress>
+
+                                        <JetInputError
+                                            :message="errors[field.field]"
+                                            class="mt-2"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-else>
+                            <div class="py-2">
+                                <div class="col-span-6 sm:col-span-4">
+                                    <!-- Profile Photo File Input -->
+                                    <input
+                                        type="file"
+                                        class="hidden"
+                                        :ref="field.field"
+                                        @change="
+                                            updatePhotoPreview(field.field)
+                                        "
+                                    />
+                                    <JetLabel
+                                        :for="field.field"
+                                        :value="field.label"
+                                    />
+                                    <!-- Current Profile Photo -->
+                                    <div
+                                        class="mt-2"
+                                        v-if="photoPreview[field.field]"
+                                    >
+                                        <img
+                                            :src="photoPreview[field.field]"
+                                            class="object-cover w-20 h-20 rounded-full"
+                                        />
+                                    </div>
+                                    <div class="mt-2" v-else>
+                                        <div v-if="form[field.field]">
+                                            <img
+                                                :src="form[field.field]"
+                                                class="object-cover w-20 h-20 rounded-full"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <jet-secondary-button
+                                        class="mt-2 mr-2"
+                                        type="button"
+                                        @click.prevent="
+                                            selectNewPhoto(field.field)
+                                        "
+                                    >
+                                        Select A New Photo
+                                    </jet-secondary-button>
+
+                                    <progress
+                                        v-if="form.progress"
+                                        :value="form.progress.percentage"
+                                        max="100"
+                                    >
+                                        {{ form.progress.percentage }}%
+                                    </progress>
+
+                                    <JetInputError
+                                        :message="errors[field.field]"
+                                        class="mt-2"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        v-else-if="field.type === 'switch' && field.create"
+                        class="mt-2"
+                    >
+                        <div v-if="field.reactive">
+                            <div v-if="form[field.row]">
                                 <JetLabel
                                     :for="field.field"
                                     :value="field.label"
                                 />
-                                <!-- Current Profile Photo -->
-                                <div
-                                    class="mt-2"
-                                    v-if="photoPreview[field.field]"
-                                >
-                                    <img
-                                        :src="photoPreview[field.field]"
-                                        class="object-cover w-20 h-20 rounded-full"
-                                    />
-                                </div>
-                                <div class="mt-2" v-else>
-                                    <div v-if="form[field.field]">
-                                        <img
-                                            :src="form[field.field]"
-                                            class="object-cover w-20 h-20 rounded-full"
-                                        />
-                                    </div>
-                                </div>
-
-                                <jet-secondary-button
-                                    class="mt-2 mr-2"
-                                    type="button"
-                                    @click.prevent="selectNewPhoto(field.field)"
-                                >
-                                    Select A New Photo
-                                </jet-secondary-button>
-
-                                <progress
-                                    v-if="form.progress"
-                                    :value="form.progress.percentage"
-                                    max="100"
-                                >
-                                    {{ form.progress.percentage }}%
-                                </progress>
-
+                                <Toggle
+                                    :name="field.field"
+                                    :id="field.field"
+                                    v-model="form[field.field]"
+                                    class="block w-full mt-1"
+                                />
                                 <JetInputError
                                     :message="errors[field.field]"
                                     class="mt-2"
                                 />
                             </div>
                         </div>
-                    </div>
-                    <div
-                        v-else-if="field.type === 'schema' && field.create"
-                    >
-                        <div v-for="(input, index) in field.options" :key="index" class="mt-2">
-                            <JetLabel :for="input.field" :value="input.label" />
-                            <JetInput
-                                :id="input.field"
-                                v-model="form[field.field][input.field]"
-                                :type="input.type"
+                        <div v-else>
+                            <JetLabel :for="field.field" :value="field.label" />
+                            <Toggle
+                                :name="field.field"
+                                :id="field.field"
+                                v-model="form[field.field]"
                                 class="block w-full mt-1"
-                                autofocus
+                            />
+                            <JetInputError
+                                :message="errors[field.field]"
+                                class="mt-2"
                             />
                         </div>
-                        <JetInputError
-                            :message="errors[field.field]"
-                            class="mt-2"
-                        />
+                    </div>
+                    <div v-else-if="field.type === 'schema' && field.create">
+                        <div v-if="field.reactive">
+                            <div v-if="form[field.row]">
+                                <div
+                                    v-for="(input, index) in field.options"
+                                    :key="index"
+                                    class="mt-2"
+                                >
+                                    <JetLabel
+                                        :for="input.field"
+                                        :value="input.label"
+                                    />
+                                    <JetInput
+                                        :id="input.field"
+                                        v-model="form[field.field][input.field]"
+                                        :type="input.type"
+                                        class="block w-full mt-1"
+                                        autofocus
+                                    />
+                                </div>
+                                <JetInputError
+                                    :message="errors[field.field]"
+                                    class="mt-2"
+                                />
+                            </div>
+                        </div>
+                        <div v-else>
+                            <div
+                                v-for="(input, index) in field.options"
+                                :key="index"
+                                class="mt-2"
+                            >
+                                <JetLabel
+                                    :for="input.field"
+                                    :value="input.label"
+                                />
+                                <JetInput
+                                    :id="input.field"
+                                    v-model="form[field.field][input.field]"
+                                    :type="input.type"
+                                    class="block w-full mt-1"
+                                    autofocus
+                                />
+                            </div>
+                            <JetInputError
+                                :message="errors[field.field]"
+                                class="mt-2"
+                            />
+                        </div>
+                    </div>
+                    <div
+                        v-else-if="
+                            (field.type === 'datetime' ||
+                                field.type === 'time' ||
+                                field.type === 'date') &&
+                            field.create
+                        "
+                    >
+                        <div v-if="field.reactive">
+                            <div v-if="form[field.row]">
+                                <JetLabel
+                                    :for="field.field"
+                                    :value="field.label"
+                                />
+                                <div class="my-2">
+                                    <flat-pickr
+                                        v-if="field.type === 'date'"
+                                        v-model="form[field.field]"
+                                        :config="{
+                                            wrap: true, // set wrap to true only when using 'input-group'
+                                            altInput: true,
+                                            defaultHour: 12,
+                                            locale: Arabic, // locale for this instance only
+                                        }"
+                                        placeholder="Select date"
+                                        class="w-full p-3 pr-12 text-sm border-gray-200 rounded-lg shadow-sm"
+                                    ></flat-pickr>
+                                    <flat-pickr
+                                        v-if="field.type === 'datetime'"
+                                        v-model="form[field.field]"
+                                        :config="{
+                                            wrap: true, // set wrap to true only when using 'input-group'
+                                            altInput: true,
+                                            enableTime: true,
+                                            enableSeconds: true,
+                                            defaultHour: 12,
+                                            locale: Arabic, // locale for this instance only
+                                        }"
+                                        placeholder="Select date and time"
+                                        class="w-full p-3 pr-12 text-sm border-gray-200 rounded-lg shadow-sm"
+                                    ></flat-pickr>
+                                    <flat-pickr
+                                        v-if="field.type === 'time'"
+                                        v-model="form[field.field]"
+                                        :config="{
+                                            noCalendar: true,
+                                            altInput: true,
+                                            enableTime: true,
+                                            enableSeconds: true,
+                                            wrap: true, // set wrap to true only when using 'input-group'
+                                            altInput: true,
+                                            defaultHour: 12,
+                                            locale: Arabic, // locale for this instance only
+                                        }"
+                                        placeholder="Select time"
+                                        class="w-full p-3 pr-12 text-sm border-gray-200 rounded-lg shadow-sm"
+                                    ></flat-pickr>
+                                </div>
+                                <JetInputError
+                                    :message="errors[field.field]"
+                                    class="mt-2"
+                                />
+                            </div>
+                        </div>
+                        <div v-else>
+                            <JetLabel :for="field.field" :value="field.label" />
+                            <div class="my-2">
+                                <flat-pickr
+                                    v-if="field.type === 'date'"
+                                    v-model="form[field.field]"
+                                    :config="{
+                                        wrap: true, // set wrap to true only when using 'input-group'
+                                        altInput: true,
+                                        defaultHour: 12,
+                                        locale: Arabic, // locale for this instance only
+                                    }"
+                                    placeholder="Select date"
+                                    class="w-full p-3 pr-12 text-sm border-gray-200 rounded-lg shadow-sm"
+                                ></flat-pickr>
+                                <flat-pickr
+                                    v-if="field.type === 'datetime'"
+                                    v-model="form[field.field]"
+                                    :config="{
+                                        wrap: true, // set wrap to true only when using 'input-group'
+                                        altInput: true,
+                                        enableTime: true,
+                                        enableSeconds: true,
+                                        defaultHour: 12,
+                                        locale: Arabic, // locale for this instance only
+                                    }"
+                                    placeholder="Select date and time"
+                                    class="w-full p-3 pr-12 text-sm border-gray-200 rounded-lg shadow-sm"
+                                ></flat-pickr>
+                                <flat-pickr
+                                    v-if="field.type === 'time'"
+                                    v-model="form[field.field]"
+                                    :config="{
+                                        noCalendar: true,
+                                        altInput: true,
+                                        enableTime: true,
+                                        enableSeconds: true,
+                                        wrap: true, // set wrap to true only when using 'input-group'
+                                        altInput: true,
+                                        defaultHour: 12,
+                                        locale: Arabic, // locale for this instance only
+                                    }"
+                                    placeholder="Select time"
+                                    class="w-full p-3 pr-12 text-sm border-gray-200 rounded-lg shadow-sm"
+                                ></flat-pickr>
+                            </div>
+                            <JetInputError
+                                :message="errors[field.field]"
+                                class="mt-2"
+                            />
+                        </div>
                     </div>
                     <div
                         class="mt-2"
                         v-else-if="field.type === 'relation' && field.create"
                     >
-                        <multiselect
-                            v-model="form[field.field]"
-                            :selectAll="true"
-                            :searchable="true"
-                            :options="field.options"
-                            :multiple="field.multi"
-                            :track-by="field.track_by_id"
-                            :label="field.track_by_name"
-                        ></multiselect>
-                    </div>
-                    <div
-                        class="mt-2"
-                        v-else-if="field.type === 'select' && field.create"
-                    >
-                        <multiselect
-                            v-model="form[field.field]"
-                            :selectAll="true"
-                            :searchable="true"
-                            :options="field.options"
-                            :multiple="field.multi"
-                            :track-by="field.track_by_id"
-                            :label="field.track_by_name"
-                        ></multiselect>
-                    </div>
-                    <div v-else>
-                        <div class="py-2" v-if="field.create">
+                        <div v-if="field.reactive">
+                            <div v-if="form[field.row]">
+                                <JetLabel
+                                    :for="field.field"
+                                    :value="field.label"
+                                />
+                                <multiselect
+                                    v-model="form[field.field]"
+                                    :selectAll="true"
+                                    :searchable="true"
+                                    :options="field.options"
+                                    :multiple="field.multi"
+                                    :track-by="field.track_by_id"
+                                    :label="field.track_by_name"
+                                ></multiselect>
+                                <JetInputError
+                                    :message="errors[field.field]"
+                                    class="mt-2"
+                                />
+                            </div>
+                        </div>
+                        <div v-else>
                             <JetLabel :for="field.field" :value="field.label" />
-                            <JetInput
-                                :id="field.field"
+                            <multiselect
                                 v-model="form[field.field]"
-                                :type="field.type"
-                                class="block w-full mt-1"
-                                autofocus
-                            />
+                                :selectAll="true"
+                                :searchable="true"
+                                :options="field.options"
+                                :multiple="field.multi"
+                                :track-by="field.track_by_id"
+                                :label="field.track_by_name"
+                            ></multiselect>
                             <JetInputError
                                 :message="errors[field.field]"
                                 class="mt-2"
                             />
                         </div>
                     </div>
-                </div>
-            </form>
-            <form action="" v-else>
-                <div v-for="(field, key) in rows" :key="key">
-                    <div v-if="field.type === 'image' && field.edit">
-                        <div class="py-2">
-                            <div class="col-span-6 sm:col-span-4">
-                                <!-- Profile Photo File Input -->
-                                <input
-                                    type="file"
-                                    class="hidden"
-                                    :ref="field.field"
-                                    @change="updatePhotoPreview(field.field)"
-                                />
+                    <div
+                        class="mt-2"
+                        v-else-if="field.type === 'hasOne' && field.create"
+                    >
+                        <div v-if="field.reactive">
+                            <div v-if="form[field.row]">
                                 <JetLabel
                                     :for="field.field"
                                     :value="field.label"
                                 />
-                                <!-- Current Profile Photo -->
-                                <div
+                                <multiselect
+                                    v-model="form[field.field]"
+                                    :selectAll="true"
+                                    :searchable="true"
+                                    :options="field.options"
+                                    :multiple="field.multi"
+                                    :track-by="field.track_by_id"
+                                    :label="field.track_by_name"
+                                ></multiselect>
+                                <JetInputError
+                                    :message="errors[field.field]"
                                     class="mt-2"
-                                    v-if="photoPreview[field.field]"
-                                >
-                                    <img
-                                        :src="photoPreview[field.field]"
-                                        class="object-cover w-20 h-20 rounded-full"
+                                />
+                            </div>
+                        </div>
+                        <div v-else>
+                            <JetLabel :for="field.field" :value="field.label" />
+                            <multiselect
+                                v-model="form[field.field]"
+                                :selectAll="true"
+                                :searchable="true"
+                                :options="field.options"
+                                :multiple="field.multi"
+                                :track-by="field.track_by_id"
+                                :label="field.track_by_name"
+                            ></multiselect>
+                            <JetInputError
+                                :message="errors[field.field]"
+                                class="mt-2"
+                            />
+                        </div>
+                    </div>
+                    <div
+                        class="mt-2"
+                        v-else-if="field.type === 'select' && field.create"
+                    >
+                        <div v-if="field.reactive">
+                            <div v-if="form[field.row]">
+                                <JetLabel
+                                    :for="field.field"
+                                    :value="field.label"
+                                />
+
+                                <multiselect
+                                    v-if="multi"
+                                    v-model="form[field.field]"
+                                    :selectAll="true"
+                                    :searchable="true"
+                                    :options="field.options"
+                                    :multiple="field.multi"
+                                    :track-by="field.track_by_id"
+                                    :label="field.track_by_name"
+                                ></multiselect>
+                                <multiselect
+                                    v-else
+                                    v-model="form[field.field]"
+                                    :options="field.options"
+                                ></multiselect>
+                                <JetInputError
+                                    :message="errors[field.field]"
+                                    class="mt-2"
+                                />
+                            </div>
+                        </div>
+                        <div v-else>
+                            <JetLabel :for="field.field" :value="field.label" />
+                            <multiselect
+                                v-if="multi"
+                                v-model="form[field.field]"
+                                :selectAll="true"
+                                :searchable="true"
+                                :options="field.options"
+                                :multiple="field.multi"
+                                :track-by="field.track_by_id"
+                                :label="field.track_by_name"
+                            ></multiselect>
+                            <multiselect
+                                v-else
+                                v-model="form[field.field]"
+                                :options="field.options"
+                            ></multiselect>
+                            <JetInputError
+                                :message="errors[field.field]"
+                                class="mt-2"
+                            />
+                        </div>
+                    </div>
+                    <div v-else-if="field.type === 'textarea' && field.create">
+                        <div class="py-2" v-if="field.create">
+                            <div v-if="field.reactive">
+                                <div v-if="form[field.row]">
+                                    <JetLabel
+                                        :for="field.field"
+                                        :value="field.label"
+                                    />
+                                    <textarea
+                                        rows="5"
+                                        :id="field.field"
+                                        :name="field.field"
+                                        v-model="form[field.field]"
+                                        class="w-full p-4 pr-12 text-sm border-gray-200 rounded-lg shadow-sm"
+                                        autofocus
+                                    ></textarea>
+                                    <JetInputError
+                                        :message="errors[field.field]"
+                                        class="mt-2"
                                     />
                                 </div>
-
-                                <div class="mt-2" v-else>
-                                    <div v-if="form[field.field]">
-                                        <img
-                                            :src="form[field.field]"
-                                            class="object-cover w-20 h-20 rounded-full"
-                                        />
-                                    </div>
-                                </div>
-
-                                <jet-secondary-button
-                                    class="mt-2 mr-2"
-                                    type="button"
-                                    @click.prevent="selectNewPhoto(field.field)"
-                                >
-                                    Select A New Photo
-                                </jet-secondary-button>
-
-                                <progress
-                                    v-if="form.progress"
-                                    :value="form.progress.percentage"
-                                    max="100"
-                                >
-                                    {{ form.progress.percentage }}%
-                                </progress>
-
+                            </div>
+                            <div v-else>
+                                <JetLabel
+                                    :for="field.field"
+                                    :value="field.label"
+                                />
+                                <textarea
+                                    rows="5"
+                                    :id="field.field"
+                                    :name="field.field"
+                                    v-model="form[field.field]"
+                                    class="w-full p-4 pr-12 text-sm border-gray-200 rounded-lg shadow-sm"
+                                    autofocus
+                                ></textarea>
                                 <JetInputError
                                     :message="errors[field.field]"
                                     class="mt-2"
@@ -187,71 +515,338 @@
                             </div>
                         </div>
                     </div>
-                     <div
-                        v-else-if="field.type === 'schema' && field.edit"
+                    <div v-else>
+                        <div class="py-2" v-if="field.create">
+                            <div v-if="field.reactive">
+                                <div v-if="form[field.row]">
+                                    <JetLabel
+                                        :for="field.field"
+                                        :value="field.label"
+                                    />
+                                    <JetInput
+                                        v-if="field.type === 'icon'"
+                                        :id="field.field"
+                                        v-model="form[field.field]"
+                                        type="text"
+                                        class="block w-full mt-1"
+                                        autofocus
+                                    />
+                                    <JetInput
+                                        v-else
+                                        :id="field.field"
+                                        v-model="form[field.field]"
+                                        :type="field.type"
+                                        class="block w-full mt-1"
+                                        autofocus
+                                    />
+                                    <JetInputError
+                                        :message="errors[field.field]"
+                                        class="mt-2"
+                                    />
+                                </div>
+                            </div>
+                            <div v-else>
+                                <JetLabel
+                                    :for="field.field"
+                                    :value="field.label"
+                                />
+                                <JetInput
+                                    v-if="field.type === 'icon'"
+                                    :id="field.field"
+                                    v-model="form[field.field]"
+                                    type="text"
+                                    class="block w-full mt-1"
+                                    autofocus
+                                />
+                                <JetInput
+                                    v-else
+                                    :id="field.field"
+                                    v-model="form[field.field]"
+                                    :type="field.type"
+                                    class="block w-full mt-1"
+                                    autofocus
+                                />
+                                <JetInputError
+                                    :message="errors[field.field]"
+                                    class="mt-2"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <slot name="create"></slot>
+            </form>
+            <form action="" v-else>
+                <div v-for="(field, key) in rows" :key="key">
+                    <div v-if="field.type === 'image' && field.edit">
+                        <div v-if="field.reactive">
+                            <div v-if="form[field.row]">
+                                <div class="py-2">
+                                    <div class="col-span-6 sm:col-span-4">
+                                        <!-- Profile Photo File Input -->
+                                        <input
+                                            type="file"
+                                            class="hidden"
+                                            :ref="field.field"
+                                            @change="
+                                                updatePhotoPreview(field.field)
+                                            "
+                                        />
+                                        <JetLabel
+                                            :for="field.field"
+                                            :value="field.label"
+                                        />
+                                        <!-- Current Profile Photo -->
+                                        <div
+                                            class="mt-2"
+                                            v-if="photoPreview[field.field]"
+                                        >
+                                            <img
+                                                :src="photoPreview[field.field]"
+                                                class="object-cover w-20 h-20 rounded-full"
+                                            />
+                                        </div>
+                                        <div class="mt-2" v-else>
+                                            <div v-if="form[field.field]">
+                                                <img
+                                                    :src="form[field.field]"
+                                                    class="object-cover w-20 h-20 rounded-full"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <jet-secondary-button
+                                            class="mt-2 mr-2"
+                                            type="button"
+                                            @click.prevent="
+                                                selectNewPhoto(field.field)
+                                            "
+                                        >
+                                            Select A New Photo
+                                        </jet-secondary-button>
+
+                                        <progress
+                                            v-if="form.progress"
+                                            :value="form.progress.percentage"
+                                            max="100"
+                                        >
+                                            {{ form.progress.percentage }}%
+                                        </progress>
+
+                                        <JetInputError
+                                            :message="errors[field.field]"
+                                            class="mt-2"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-else>
+                            <div class="py-2">
+                                <div class="col-span-6 sm:col-span-4">
+                                    <!-- Profile Photo File Input -->
+                                    <input
+                                        type="file"
+                                        class="hidden"
+                                        :ref="field.field"
+                                        @change="
+                                            updatePhotoPreview(field.field)
+                                        "
+                                    />
+                                    <JetLabel
+                                        :for="field.field"
+                                        :value="field.label"
+                                    />
+                                    <!-- Current Profile Photo -->
+                                    <div
+                                        class="mt-2"
+                                        v-if="photoPreview[field.field]"
+                                    >
+                                        <img
+                                            :src="photoPreview[field.field]"
+                                            class="object-cover w-20 h-20 rounded-full"
+                                        />
+                                    </div>
+                                    <div class="mt-2" v-else>
+                                        <div v-if="form[field.field]">
+                                            <img
+                                                :src="form[field.field]"
+                                                class="object-cover w-20 h-20 rounded-full"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <jet-secondary-button
+                                        class="mt-2 mr-2"
+                                        type="button"
+                                        @click.prevent="
+                                            selectNewPhoto(field.field)
+                                        "
+                                    >
+                                        Select A New Photo
+                                    </jet-secondary-button>
+
+                                    <progress
+                                        v-if="form.progress"
+                                        :value="form.progress.percentage"
+                                        max="100"
+                                    >
+                                        {{ form.progress.percentage }}%
+                                    </progress>
+
+                                    <JetInputError
+                                        :message="errors[field.field]"
+                                        class="mt-2"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        v-else-if="
+                            (field.type === 'datetime' ||
+                                field.type === 'time' ||
+                                field.type === 'date') &&
+                            field.edit
+                        "
                     >
-                        <div v-for="(input, index) in field.options" :key="index" class="mt-2">
-                            <JetLabel :for="input.field" :value="input.label" />
-                            <JetInput
-                                :id="input.field"
-                                v-model="form[field.field][input.field]"
-                                :type="input.type"
-                                class="block w-full mt-1"
-                                autofocus
+                        <div v-if="field.reactive">
+                            <div v-if="form[field.row]">
+                                <JetLabel
+                                    :for="field.field"
+                                    :value="field.label"
+                                />
+                                <div class="my-2">
+                                    <flat-pickr
+                                        v-if="field.type === 'date'"
+                                        v-model="form[field.field]"
+                                        :config="{
+                                            wrap: true, // set wrap to true only when using 'input-group'
+                                            altInput: true,
+                                            defaultHour: 12,
+                                            locale: Arabic, // locale for this instance only
+                                        }"
+                                        placeholder="Select date"
+                                        class="w-full p-3 pr-12 text-sm border-gray-200 rounded-lg shadow-sm"
+                                    ></flat-pickr>
+                                    <flat-pickr
+                                        v-if="field.type === 'datetime'"
+                                        v-model="form[field.field]"
+                                        :config="{
+                                            wrap: true, // set wrap to true only when using 'input-group'
+                                            altInput: true,
+                                            enableTime: true,
+                                            enableSeconds: true,
+                                            defaultHour: 12,
+                                            locale: Arabic, // locale for this instance only
+                                        }"
+                                        placeholder="Select date and time"
+                                        class="w-full p-3 pr-12 text-sm border-gray-200 rounded-lg shadow-sm"
+                                    ></flat-pickr>
+                                    <flat-pickr
+                                        v-if="field.type === 'time'"
+                                        v-model="form[field.field]"
+                                        :config="{
+                                            noCalendar: true,
+                                            altInput: true,
+                                            enableTime: true,
+                                            enableSeconds: true,
+                                            wrap: true, // set wrap to true only when using 'input-group'
+                                            altInput: true,
+                                            defaultHour: 12,
+                                            locale: Arabic, // locale for this instance only
+                                        }"
+                                        placeholder="Select time"
+                                        class="w-full p-3 pr-12 text-sm border-gray-200 rounded-lg shadow-sm"
+                                    ></flat-pickr>
+                                </div>
+                                <JetInputError
+                                    :message="errors[field.field]"
+                                    class="mt-2"
+                                />
+                            </div>
+                        </div>
+                        <div v-else>
+                            <JetLabel :for="field.field" :value="field.label" />
+                            <div class="my-2">
+                                <flat-pickr
+                                    v-if="field.type === 'date'"
+                                    v-model="form[field.field]"
+                                    :config="{
+                                        wrap: true, // set wrap to true only when using 'input-group'
+                                        altInput: true,
+                                        defaultHour: 12,
+                                        locale: Arabic, // locale for this instance only
+                                    }"
+                                    placeholder="Select date"
+                                    class="w-full p-3 pr-12 text-sm border-gray-200 rounded-lg shadow-sm"
+                                ></flat-pickr>
+                                <flat-pickr
+                                    v-if="field.type === 'datetime'"
+                                    v-model="form[field.field]"
+                                    :config="{
+                                        wrap: true, // set wrap to true only when using 'input-group'
+                                        altInput: true,
+                                        enableTime: true,
+                                        enableSeconds: true,
+                                        defaultHour: 12,
+                                        locale: Arabic, // locale for this instance only
+                                    }"
+                                    placeholder="Select date and time"
+                                    class="w-full p-3 pr-12 text-sm border-gray-200 rounded-lg shadow-sm"
+                                ></flat-pickr>
+                                <flat-pickr
+                                    v-if="field.type === 'time'"
+                                    v-model="form[field.field]"
+                                    :config="{
+                                        noCalendar: true,
+                                        altInput: true,
+                                        enableTime: true,
+                                        enableSeconds: true,
+                                        wrap: true, // set wrap to true only when using 'input-group'
+                                        altInput: true,
+                                        defaultHour: 12,
+                                        locale: Arabic, // locale for this instance only
+                                    }"
+                                    placeholder="Select time"
+                                    class="w-full p-3 pr-12 text-sm border-gray-200 rounded-lg shadow-sm"
+                                ></flat-pickr>
+                            </div>
+                            <JetInputError
+                                :message="errors[field.field]"
+                                class="mt-2"
                             />
                         </div>
-                        <JetInputError
-                            :message="errors[field.field]"
-                            class="mt-2"
-                        />
                     </div>
                     <div
+                        v-else-if="field.type === 'switch' && field.edit"
                         class="mt-2"
-                        v-else-if="field.type === 'relation' && field.edit"
                     >
-                        <JetLabel :for="field.field" :value="field.label" />
-                        <multiselect
-                            v-model="form[field.field]"
-                            :selectAll="true"
-                            :searchable="true"
-                            :options="field.options"
-                            :multiple="field.multi"
-                            :track-by="field.track_by_id"
-                            :label="field.track_by_name"
-                        ></multiselect>
-                        <JetInputError
-                            :message="errors[field.field]"
-                            class="mt-2"
-                        />
-                    </div>
-                    <div
-                        class="mt-2"
-                        v-else-if="field.type === 'select' && field.edit"
-                    >
-                        <JetLabel :for="field.field" :value="field.label" />
-                        <multiselect
-                            v-model="form[field.field]"
-                            :selectAll="true"
-                            :searchable="true"
-                            :options="field.options"
-                            :multiple="field.multi"
-                            :track-by="field.track_by_id"
-                            :label="field.track_by_name"
-                        ></multiselect>
-                        <JetInputError
-                            :message="errors[field.field]"
-                            class="mt-2"
-                        />
-                    </div>
-                    <div v-else>
-                        <div class="py-2" v-if="field.edit">
+                        <div v-if="field.reactive">
+                            <div v-if="form[field.row]">
+                                <JetLabel
+                                    :for="field.field"
+                                    :value="field.label"
+                                />
+                                <Toggle
+                                    :name="field.field"
+                                    :id="field.field"
+                                    v-model="form[field.field]"
+                                    class="block w-full mt-1"
+                                />
+                                <JetInputError
+                                    :message="errors[field.field]"
+                                    class="mt-2"
+                                />
+                            </div>
+                        </div>
+                        <div v-else>
                             <JetLabel :for="field.field" :value="field.label" />
-                            <JetInput
+                            <Toggle
+                                :name="field.field"
                                 :id="field.field"
                                 v-model="form[field.field]"
-                                :type="field.type"
                                 class="block w-full mt-1"
-                                autofocus
                             />
                             <JetInputError
                                 :message="errors[field.field]"
@@ -259,7 +854,296 @@
                             />
                         </div>
                     </div>
+                    <div v-else-if="field.type === 'schema' && field.edit">
+                        <div v-if="field.reactive">
+                            <div v-if="form[field.row]">
+                                <div
+                                    v-for="(input, index) in field.options"
+                                    :key="index"
+                                    class="mt-2"
+                                >
+                                    <JetLabel
+                                        :for="input.field"
+                                        :value="input.label"
+                                    />
+                                    <JetInput
+                                        :id="input.field"
+                                        v-model="form[field.field][input.field]"
+                                        :type="input.type"
+                                        class="block w-full mt-1"
+                                        autofocus
+                                    />
+                                </div>
+                                <JetInputError
+                                    :message="errors[field.field]"
+                                    class="mt-2"
+                                />
+                            </div>
+                        </div>
+                        <div v-else>
+                            <div
+                                v-for="(input, index) in field.options"
+                                :key="index"
+                                class="mt-2"
+                            >
+                                <JetLabel
+                                    :for="input.field"
+                                    :value="input.label"
+                                />
+                                <JetInput
+                                    :id="input.field"
+                                    v-model="form[field.field][input.field]"
+                                    :type="input.type"
+                                    class="block w-full mt-1"
+                                    autofocus
+                                />
+                            </div>
+                            <JetInputError
+                                :message="errors[field.field]"
+                                class="mt-2"
+                            />
+                        </div>
+                    </div>
+                    <div
+                        class="mt-2"
+                        v-else-if="field.type === 'relation' && field.edit"
+                    >
+                        <div v-if="field.reactive">
+                            <div v-if="form[field.row]">
+                                <JetLabel
+                                    :for="field.field"
+                                    :value="field.label"
+                                />
+                                <multiselect
+                                    v-model="form[field.field]"
+                                    :selectAll="true"
+                                    :searchable="true"
+                                    :options="field.options"
+                                    :multiple="field.multi"
+                                    :track-by="field.track_by_id"
+                                    :label="field.track_by_name"
+                                ></multiselect>
+                                <JetInputError
+                                    :message="errors[field.field]"
+                                    class="mt-2"
+                                />
+                            </div>
+                        </div>
+                        <div v-else>
+                            <JetLabel :for="field.field" :value="field.label" />
+                            <multiselect
+                                v-model="form[field.field]"
+                                :selectAll="true"
+                                :searchable="true"
+                                :options="field.options"
+                                :multiple="field.multi"
+                                :track-by="field.track_by_id"
+                                :label="field.track_by_name"
+                            ></multiselect>
+                            <JetInputError
+                                :message="errors[field.field]"
+                                class="mt-2"
+                            />
+                        </div>
+                    </div>
+                    <div
+                        class="mt-2"
+                        v-else-if="field.type === 'hasOne' && field.edit"
+                    >
+                        <div v-if="field.reactive">
+                            <div v-if="form[field.row]">
+                                <JetLabel
+                                    :for="field.field"
+                                    :value="field.label"
+                                />
+                                <multiselect
+                                    v-model="form[field.field]"
+                                    :selectAll="true"
+                                    :searchable="true"
+                                    :options="field.options"
+                                    :multiple="field.multi"
+                                    :track-by="field.track_by_id"
+                                    :label="field.track_by_name"
+                                ></multiselect>
+                                <JetInputError
+                                    :message="errors[field.field]"
+                                    class="mt-2"
+                                />
+                            </div>
+                        </div>
+                        <div v-else>
+                            <JetLabel :for="field.field" :value="field.label" />
+                            <multiselect
+                                v-model="form[field.field]"
+                                :selectAll="true"
+                                :searchable="true"
+                                :options="field.options"
+                                :multiple="field.multi"
+                                :track-by="field.track_by_id"
+                                :label="field.track_by_name"
+                            ></multiselect>
+                            <JetInputError
+                                :message="errors[field.field]"
+                                class="mt-2"
+                            />
+                        </div>
+                    </div>
+                    <div
+                        class="mt-2"
+                        v-else-if="field.type === 'select' && field.edit"
+                    >
+                        <div v-if="field.reactive">
+                            <div v-if="form[field.row]">
+                                <JetLabel
+                                    :for="field.field"
+                                    :value="field.label"
+                                />
+                                <multiselect
+                                    v-if="multi"
+                                    v-model="form[field.field]"
+                                    :selectAll="true"
+                                    :searchable="true"
+                                    :options="field.options"
+                                    :multiple="field.multi"
+                                    :track-by="field.track_by_id"
+                                    :label="field.track_by_name"
+                                ></multiselect>
+                                <multiselect
+                                    v-else
+                                    v-model="form[field.field]"
+                                    :options="field.options"
+                                ></multiselect>
+                                <JetInputError
+                                    :message="errors[field.field]"
+                                    class="mt-2"
+                                />
+                            </div>
+                        </div>
+                        <div v-else>
+                            <JetLabel :for="field.field" :value="field.label" />
+                            <multiselect
+                                v-if="multi"
+                                v-model="form[field.field]"
+                                :selectAll="true"
+                                :searchable="true"
+                                :options="field.options"
+                                :multiple="field.multi"
+                                :track-by="field.track_by_id"
+                                :label="field.track_by_name"
+                            ></multiselect>
+                            <multiselect
+                                v-else
+                                v-model="form[field.field]"
+                                :options="field.options"
+                            ></multiselect>
+                            <JetInputError
+                                :message="errors[field.field]"
+                                class="mt-2"
+                            />
+                        </div>
+                    </div>
+                    <div v-else-if="field.type === 'textarea' && field.edit">
+                        <div class="py-2" v-if="field.create">
+                            <div v-if="field.reactive">
+                                <div v-if="form[field.row]">
+                                    <JetLabel
+                                        :for="field.field"
+                                        :value="field.label"
+                                    />
+                                    <textarea
+                                        rows="5"
+                                        :id="field.field"
+                                        :name="field.field"
+                                        v-model="form[field.field]"
+                                        class="w-full p-4 pr-12 text-sm border-gray-200 rounded-lg shadow-sm"
+                                        autofocus
+                                    ></textarea>
+                                    <JetInputError
+                                        :message="errors[field.field]"
+                                        class="mt-2"
+                                    />
+                                </div>
+                            </div>
+                            <div v-else>
+                                <JetLabel
+                                    :for="field.field"
+                                    :value="field.label"
+                                />
+                                <textarea
+                                    rows="5"
+                                    :id="field.field"
+                                    :name="field.field"
+                                    v-model="form[field.field]"
+                                    class="w-full p-4 pr-12 text-sm border-gray-200 rounded-lg shadow-sm"
+                                    autofocus
+                                ></textarea>
+                                <JetInputError
+                                    :message="errors[field.field]"
+                                    class="mt-2"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <div v-else>
+                        <div class="py-2" v-if="field.edit">
+                            <div v-if="field.reactive">
+                                <div v-if="form[field.row]">
+                                    <JetLabel
+                                        :for="field.field"
+                                        :value="field.label"
+                                    />
+                                    <JetInput
+                                        v-if="field.type === 'icon'"
+                                        :id="field.field"
+                                        v-model="form[field.field]"
+                                        type="text"
+                                        class="block w-full mt-1"
+                                        autofocus
+                                    />
+                                    <JetInput
+                                        v-else
+                                        :id="field.field"
+                                        v-model="form[field.field]"
+                                        :type="field.type"
+                                        class="block w-full mt-1"
+                                        autofocus
+                                    />
+                                    <JetInputError
+                                        :message="errors[field.field]"
+                                        class="mt-2"
+                                    />
+                                </div>
+                            </div>
+                            <div v-else>
+                                <JetLabel
+                                    :for="field.field"
+                                    :value="field.label"
+                                />
+                                <JetInput
+                                    v-if="field.type === 'icon'"
+                                    :id="field.field"
+                                    v-model="form[field.field]"
+                                    type="text"
+                                    class="block w-full mt-1"
+                                    autofocus
+                                />
+                                <JetInput
+                                    v-else
+                                    :id="field.field"
+                                    v-model="form[field.field]"
+                                    :type="field.type"
+                                    class="block w-full mt-1"
+                                    autofocus
+                                />
+                                <JetInputError
+                                    :message="errors[field.field]"
+                                    class="mt-2"
+                                />
+                            </div>
+                        </div>
+                    </div>
                 </div>
+                <slot name="edit"></slot>
             </form>
         </template>
 
@@ -269,7 +1153,6 @@
                 @click.prevent="saveRecord()"
                 class="inline-flex items-center justify-center px-4 mr-2 font-medium tracking-tight text-white transition-colors border border-transparent rounded-lg shadow rtl:ml-2 focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset filament-button dark:focus:ring-offset-0 h-9 focus:ring-white bg-primary-600 hover:bg-primary-500 focus:bg-primary-700 focus:ring-offset-primary-700 filament-page-button-action"
             >
-
                 Save
             </button>
             <button
@@ -294,6 +1177,10 @@ import JetInput from "@/Jetstream/Input.vue";
 import JetInputError from "@/Jetstream/InputError.vue";
 import JetLabel from "@/Jetstream/Label.vue";
 import Multiselect from "@suadelabs/vue3-multiselect";
+import Text from "@/Components/Base/Components/Text.vue";
+import Switch from "@/Components/Base/Components/Switch.vue";
+import Toggle from "@vueform/toggle";
+import flatPickr from "vue-flatpickr-component";
 
 export default defineComponent({
     components: {
@@ -305,6 +1192,10 @@ export default defineComponent({
         JetInputError,
         JetLabel,
         Multiselect,
+        Text,
+        Switch,
+        Toggle,
+        flatPickr,
     },
     props: {
         show: Boolean,

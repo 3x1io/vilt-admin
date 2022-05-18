@@ -34,6 +34,7 @@
         "@tailwindcss/custom-forms": "^0.2.1",
         "@vue-hero-icons/outline": "^1.7.2",
         "@vueform/multiselect": "^2.3.3",
+        "@vueform/toggle": "^2.0.2",
         "autoprefixer": "^10.4.2",
         "boxicons": "^2.1.1",
         "color": "^4.2.1",

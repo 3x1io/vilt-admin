@@ -1,0 +1,38 @@
+{
+    "name": "3x1io/vilt-roles",
+    "description": "Full User ALC Plugin For Vilt Admin",
+    "keywords": [
+        "laravel",
+        "user",
+        "cli",
+        "resource",
+        "ui",
+        "vilt-admin",
+        "VILT stack"
+    ],
+    "homepage": "https://3x1.io",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "3x1",
+            "email": "info@3x1.io",
+            "role": "CEO"
+        }
+    ],
+    "require": {
+        "php": "^8.0",
+        "io3x1/vilt-admin": "^1.0",
+        "spatie/laravel-package-tools": "^1.10"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {}
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Roles\\": ""
+        }
+    }
+}

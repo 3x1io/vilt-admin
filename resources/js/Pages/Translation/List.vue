@@ -8,8 +8,24 @@
                 button="Scan Translations"
                 @buttonAction="scan"
             >
-                <button @click="switchLanguagesModel = !switchLanguagesModel" class="inline-flex items-center justify-center px-4 mx-2 font-medium tracking-tight text-white transition-colors border border-transparent rounded-lg shadow focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset filament-button dark:focus:ring-offset-0 h-9 focus:ring-white bg-primary-600 hover:bg-primary-500 focus:bg-primary-700 focus:ring-offset-primary-700 filament-page-button-action">
+                <button
+                    @click="switchLanguagesModel = !switchLanguagesModel"
+                    class="inline-flex items-center justify-center px-4 mx-2 font-medium tracking-tight text-white transition-colors border border-transparent rounded-lg shadow focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset filament-button dark:focus:ring-offset-0 h-9 focus:ring-white bg-primary-600 hover:bg-primary-500 focus:bg-primary-700 focus:ring-offset-primary-700 filament-page-button-action"
+                >
                     Switch Language
+                </button>
+                <a
+                    :href="route('translations.export')"
+                    target="_blank"
+                    class="inline-flex items-center justify-center px-4 mx-1 font-medium tracking-tight text-white transition-colors border border-transparent rounded-lg shadow focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset filament-button dark:focus:ring-offset-0 h-9 focus:ring-white bg-primary-600 hover:bg-primary-500 focus:bg-primary-700 focus:ring-offset-primary-700 filament-page-button-action"
+                >
+                    Export
+                </a>
+                <button
+                    @click="showImport = !showImport"
+                    class="inline-flex items-center justify-center px-4 mx-1 font-medium tracking-tight text-white transition-colors border border-transparent rounded-lg shadow focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset filament-button dark:focus:ring-offset-0 h-9 focus:ring-white bg-primary-600 hover:bg-primary-500 focus:bg-primary-700 focus:ring-offset-primary-700 filament-page-button-action"
+                >
+                    Import
                 </button>
             </Header>
             <div class="flex-1 w-full mx-autofilament-main-content max-w-7xl">
@@ -114,8 +130,8 @@
                 </div>
             </div>
         </div>
-        <br>
-        <br>
+        <br />
+        <br />
         <CreateModal
             :langs="$attrs.langs"
             :url="url"
@@ -155,34 +171,79 @@
             @close="bulkModal = !bulkModal"
             @success="success"
         />
-        <JetDialogModal :show="switchLanguagesModel" @close="switchLanguagesModel = !switchLanguagesModel">
-                <template #title>
-                    Switch Lanaguage
-                    <hr class="my-4" />
-                </template>
+        <JetDialogModal
+            :show="switchLanguagesModel"
+            @close="switchLanguagesModel = !switchLanguagesModel"
+        >
+            <template #title>
+                Switch Lanaguage
+                <hr class="my-4" />
+            </template>
 
-                <template #content>
-                    <div class="mt-2">
-                        <JetLabel for="language" value="Language" />
-                        <multiselect v-model="translation.language" :options="$attrs.locals" :multiple="false" track-by="id" label="name"></multiselect>
-                        <JetInputError
-                            :message="translation.errors.language"
-                            class="mt-2"
-                        />
-                    </div>
-                </template>
+            <template #content>
+                <div class="mt-2">
+                    <JetLabel for="language" value="Language" />
+                    <multiselect
+                        v-model="translation.language"
+                        :options="$attrs.locals"
+                        :multiple="false"
+                        track-by="id"
+                        label="name"
+                    ></multiselect>
+                    <JetInputError
+                        :message="translation.errors.language"
+                        class="mt-2"
+                    />
+                </div>
+            </template>
 
-                <template #footer>
-                    <JetButton @click.prevent="switchLanguages" class="mx-2">Switch</JetButton>
-                    <JetSecondaryButton @click="switchLanguagesModel = !switchLanguagesModel"> Close </JetSecondaryButton>
-                </template>
-            </JetDialogModal>
+            <template #footer>
+                <JetButton @click.prevent="switchLanguages" class="mx-2"
+                    >Switch</JetButton
+                >
+                <JetSecondaryButton
+                    @click="switchLanguagesModel = !switchLanguagesModel"
+                >
+                    Close
+                </JetSecondaryButton>
+            </template>
+        </JetDialogModal>
+        <JetDialogModal :show="showImport" @close="showImport = !showImport">
+            <template #title>
+                Import Languages
+                <hr class="my-4" />
+            </template>
+
+            <template #content>
+                <div class="mt-2">
+                    <Media
+                        v-model="importExcel.excel"
+                        id="excel"
+                        label="Upload Excel File same as download file"
+                        :message="importExcel.errors.excel"
+                        :preview="false"
+                    />
+                </div>
+            </template>
+
+            <template #footer>
+                <JetButton
+                    @click.prevent="importExcelFn"
+                    class="mx-2 bg-main hover:bg-main hover:opacity-75 focus:bg-main hover:transition-all"
+                    >Import</JetButton
+                >
+                <JetSecondaryButton @click="showImport = !showImport">
+                    Close
+                </JetSecondaryButton>
+            </template>
+        </JetDialogModal>
     </app-layout>
 </template>
 
 <script>
 import { defineComponent } from "vue";
 import MixinVue from "../../Components/Base/Mixin.vue";
+import Media from "../../Components/Base/Components/Media.vue";
 import JetDialogModal from "@/Jetstream/DialogModal.vue";
 import JetSecondaryButton from "@/Jetstream/SecondaryButton.vue";
 import JetButton from "@/Jetstream/Button.vue";
@@ -201,9 +262,11 @@ export default defineComponent({
         JetInput,
         JetInputError,
         JetLabel,
+        Media
     },
     data() {
         return {
+            showImport: false,
             switchLanguagesModel: false,
             form: this.$inertia.form({
                 text: {},
@@ -213,29 +276,43 @@ export default defineComponent({
             }),
             translation: this.$inertia.form({
                 language: "",
-            })
+            }),
+            importExcel: this.$inertia.form({
+                excel: null,
+            }),
         };
     },
-    mounted(){
+    mounted() {
         this.translation.language = this.$attrs.local;
     },
     methods: {
-        switchLanguages(){
+        importExcelFn() {
+            this.importExcel.submit("post", this.route(this.url + ".import"), {
+                preserveScroll: true,
+                forceFormData: true,
+                onSuccess: () => {
+                    this.importExcel.reset();
+                    this.showImport = false;
+                    this.$toast.success(this.$attrs.message, {
+                        position: "top",
+                    });
+                },
+            });
+        },
+        switchLanguages() {
             this.translation.submit("post", this.route(this.url + ".switch"), {
                 preserveScroll: true,
                 forceFormData: true,
                 onSuccess: () => {
                     this.translation.reset();
                     this.switchLanguagesModel = false;
-                    if(this.$attrs.local.id === "ar"){
-                        document.dir = "rtl"
-                        this.reload()
+                    if (this.$attrs.local.id === "ar") {
+                        document.dir = "rtl";
+                        this.reload();
+                    } else {
+                        document.dir = "ltr";
+                        this.reload();
                     }
-                    else {
-                        document.dir = "ltr"
-                        this.reload()
-                    }
-
                 },
             });
         },

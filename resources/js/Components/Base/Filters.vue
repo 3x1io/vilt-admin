@@ -168,10 +168,9 @@ export default defineComponent({
             this.$emit("reset");
         },
         filter(filterBy, filterValue) {
-            this.$emit("filter", {
-                filterBy: filterBy,
-                filterValue: filterValue,
-            });
+            let filter = {};
+            filter[filterBy] = filterValue;
+            this.$emit("filter", filter);
         },
     },
 });
