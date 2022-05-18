@@ -25,34 +25,34 @@ class {{ $model }}Controller extends Controller
         @php $hasRel = false; $hasPassword = false; @endphp
         @foreach($cols as $col)
         @if($col['type'] === 'password')
-        Row::make('{{ $col['name'] }}')->label('{{ $col['name'] }}')->type('password')->list(false)->view(false)->get(),
-        Row::make('password_confirmation')->label("Password Confirmation")->type('password')->list(false)->view(false)->get(),
+        Row::make('{{ $col['name'] }}')->label(__('{{ $table }}.{{ $col['name'] }}'))->type('password')->list(false)->view(false)->get(),
+        Row::make('password_confirmation')->label(__('Password Confirmation'))->type('password')->list(false)->view(false)->get(),
         @php $hasPassword = true; @endphp
         @elseif($col['type'] === 'email')
-        Row::make('{{ $col['name'] }}')->label('{{ $col['name'] }}')->type('email')->get(),
+        Row::make('{{ $col['name'] }}')->label(__('{{ $table }}.{{ $col['name'] }}'))->type('email')->get(),
         @elseif($col['type'] === 'time')
-        Row::make('{{ $col['name'] }}')->label('{{ $col['name'] }}')->type('time')->get(),
+        Row::make('{{ $col['name'] }}')->label(__('{{ $table }}.{{ $col['name'] }}'))->type('time')->get(),
         @elseif($col['type'] === 'datetime')
-        Row::make('{{ $col['name'] }}')->label('{{ $col['name'] }}')->type('datetime')->get(),
+        Row::make('{{ $col['name'] }}')->label(__('{{ $table }}.{{ $col['name'] }}'))->type('datetime')->get(),
         @elseif($col['type'] === 'date')
-        Row::make('{{ $col['name'] }}')->label('{{ $col['name'] }}')->type('date')->get(),
+        Row::make('{{ $col['name'] }}')->label(__('{{ $table }}.{{ $col['name'] }}'))->type('date')->get(),
         @elseif($col['type'] === 'tel')
-        Row::make('{{ $col['name'] }}')->label('{{ $col['name'] }}')->type('tel')->get(),
+        Row::make('{{ $col['name'] }}')->label(__('{{ $table }}.{{ $col['name'] }}'))->type('tel')->get(),
         @elseif($col['type'] === 'integer')
-        Row::make('{{ $col['name'] }}')->label('{{ $col['name'] }}')->type('number')->get(),
+        Row::make('{{ $col['name'] }}')->label(__('{{ $table }}.{{ $col['name'] }}'))->type('number')->get(),
         @elseif($col['type'] === 'textarea')
-        Row::make('{{ $col['name'] }}')->label('{{ $col['name'] }}')->type('textarea')->get(),
+        Row::make('{{ $col['name'] }}')->label(__('{{ $table }}.{{ $col['name'] }}'))->type('textarea')->get(),
         @elseif($col['type'] === 'relation')
         Row::make('{{ $col['name'] }}')->label('{{ str_replace('_id', '', $col['name']) }}')->type('hasOne')->list(false)->options({{ $col['relation']['model'] }}::all()->toArray())->get(),
         @php $hasRel = true; @endphp
         @elseif($col['type'] === 'boolean')
-        Row::make('{{ $col['name'] }}')->label('{{ $col['name'] }}')->type('switch')->get(),
+        Row::make('{{ $col['name'] }}')->label(__('{{ $table }}.{{ $col['name'] }}'))->type('switch')->get(),
         @elseif($col['type'] === 'datetime' || $col['type'] === 'date')
-        Row::make('{{ $col['name'] }}')->label('{{ $col['name'] }}')->type('datetime')->get(),
+        Row::make('{{ $col['name'] }}')->label(__('{{ $table }}.{{ $col['name'] }}'))->type('datetime')->get(),
         @elseif($col['name'] === 'id')
-        Row::make('{{ $col['name'] }}')->label('{{ $col['name'] }}')->create(false)->edit(false)->get(),
+        Row::make('{{ $col['name'] }}')->label(__('{{ $table }}.{{ $col['name'] }}'))->create(false)->edit(false)->get(),
         @else
-        Row::make('{{ $col['name'] }}')->label('{{ $col['name'] }}')->get(),
+        Row::make('{{ $col['name'] }}')->label(__('{{ $table }}.{{ $col['name'] }}'))->get(),
         @endif
 
         @endforeach
