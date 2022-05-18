@@ -33,6 +33,7 @@
                         {{ item.label }}
                     </span>
                 </th>
+                <slot name="th"></slot>
 
                 <th class="w-5"></th>
             </tr>
@@ -120,6 +121,7 @@
                     <div v-else>
                         {{ item[field.field] }}
                     </div>
+                    <slot name="td"></slot>
 
                 </td>
 
@@ -127,6 +129,7 @@
                     class="px-4 py-3 whitespace-nowrap filament-tables-actions-cell"
                 >
                     <div class="flex items-center justify-end gap-4 my-4">
+                        <slot name="actions"></slot>
                         <div>
                             <a
                                 v-if="$attrs.canView || $attrs.canViewAny"
