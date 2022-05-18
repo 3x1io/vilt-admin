@@ -13,7 +13,7 @@ class GenerateResource extends Command
      *
      * @var string
      */
-    protected $signature = 'make:vilt-resource {table}';
+    protected $signature = 'make:vilt-resource {table} {--A|api}';
 
     /**
      * The console command description.
@@ -30,11 +30,17 @@ class GenerateResource extends Command
     public function handle()
     {
         $table = $this->argument('table');
+        $api = $this->option('api');
 
         try {
-            $this->info('Do You When To Generate This Table? Please Press Enter');
             $newGenerator = new ResourceGenerator($table);
-            $newGenerator->generateModel();
+            if ($api) {
+                $newGenerator->generateModel(false);
+            } else {
+                $this->info('Do You When To Generate This Table? Please Press Enter');
+                $newGenerator->generateModel();
+            }
+
             $this->info('The Model Has Been Generated');
             $newGenerator->generateController();
             $this->info('The Controller Has Been Generated');

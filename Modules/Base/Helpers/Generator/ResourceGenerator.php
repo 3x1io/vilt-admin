@@ -198,11 +198,21 @@ class ResourceGenerator
         return Str::ucfirst(Str::singular($tableName));
     }
 
-    public function generateModel()
+    public function generateModel($withAPI = true)
     {
-        $model = $this->generateName();
+        if ($withAPI) {
+            $model = $this->generateName();
+            Artisan::call('infyom:api ' . $model . ' --fromTable --tableName=' . $this->table);
+        } else {
+            $model = $this->generateName();
+            $view = view('base::templates.model', [
+                "model" => $model,
+                "table" => $this->table,
+                "cols" => $this->getFileds()
+            ]);
 
-        Artisan::call('infyom:api ' . $model . ' --fromTable --tableName=' . $this->table);
+            $this->render($view, app_path('Models/' . $model . '.php'));
+        }
     }
 
     public function generateController()

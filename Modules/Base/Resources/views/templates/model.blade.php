@@ -24,15 +24,4 @@ class {{ $model }} extends Model implements HasMedia
         '{{ $col['name'] }}',
     @endforeach
     ];
-
-    /**
-     * The attributes that should be casted to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-    @foreach($cols as $col)
-        '{{ $col['name'] }}' => '{{ $col['type'] }}',
-    @endforeach
-    ];
 }
