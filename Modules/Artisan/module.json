@@ -3,7 +3,7 @@
     "alias": "artisan",
     "description": "",
     "keywords": [],
-    "priority": 0,
+    "priority": 4,
     "providers": [
         "Modules\\Artisan\\Providers\\ArtisanServiceProvider"
     ],
