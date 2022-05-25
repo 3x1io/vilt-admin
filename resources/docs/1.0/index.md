@@ -1,0 +1,23 @@
+- ## Get Started
+    - [Overview](/{{route}}/{{version}}/overview)
+    - [Environment](/{{route}}/{{version}}/env)
+    - [Installation](/{{route}}/{{version}}/installation)
+- ## Features
+    - [Generator](/{{route}}/{{version}}/generator)
+    - [Menus](/{{route}}/{{version}}/menus)
+    - [Rows](/{{route}}/{{version}}/rows)
+    - [Media](/{{route}}/{{version}}/media)
+    - [Roles Plugin](/{{route}}/{{version}}/roles-plugin)
+    - [Translations Plugin](/{{route}}/{{version}}/translations-plugin)
+    - [Settings Plugin](/{{route}}/{{version}}/settings-plugin)
+    - [Build Plugins](/{{route}}/{{version}}/build-plugins)
+
+- ## Learning
+    - [Task To Get Start](/{{route}}/{{version}}/task)
+    - [CI/CD](/{{route}}/{{version}}/ci)
+    - [TailwindCSS](/{{route}}/{{version}}/tailwind)
+
+- ## Support
+    - [Map](/{{route}}/{{version}}/map)
+    - [Demo](https://vilt.3x1.io/login)
+    - [Discord](https://discord.gg/mTWWNgtr)
