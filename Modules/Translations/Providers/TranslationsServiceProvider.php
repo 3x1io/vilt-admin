@@ -34,6 +34,11 @@ class TranslationsServiceProvider extends ServiceProvider
 
         Core::registerDashboardMenuItem(Menu::make('Translations')->lang('translation.sidebar')->icon('bx bx-globe')->route('translations.index')->can('view_any_translations'), 'Settings');
         Core::registerGlobalTranslation(Trans::make('translation.sidebar')->value(__('translation.sidebar')));
+        Core::registerGlobalTranslation(Trans::make('translation.scan')->value(__('translation.scan')));
+        Core::registerGlobalTranslation(Trans::make('translation.switch.language')->value(__('translation.switch.language')));
+        Core::registerGlobalTranslation(Trans::make('translation.export')->value(__('translation.export')));
+        Core::registerGlobalTranslation(Trans::make('translation.import')->value(__('translation.import')));
+        Core::registerGlobalTranslation(Trans::make('translation.title')->value(__('translation.title')));
     }
 
     /**

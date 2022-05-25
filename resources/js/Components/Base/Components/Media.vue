@@ -10,7 +10,7 @@
                 @change="updatePhotoPreview()"
                 :multiple="multi"
             />
-            <label v-if="id" :for="id" class="h-40 text-sm font-medium">{{
+            <label v-if="id" :for="id" class="h-40 text-sm font-normal">{{
                 label
             }}</label>
 
@@ -61,7 +61,6 @@
             </button>
         </div>
         <JetInputError :message="message" class="mt-2" />
-
     </div>
 </template>
 

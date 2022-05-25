@@ -21,11 +21,13 @@ class Row
     private ?bool $view = true;
     private ?bool $list = true;
     private ?bool $reactive = false;
-    private ?bool $disabled = false;
+    private ?string $disabled = null;
     private ?string $row = null;
     private ?string $placeholder = null;
     private ?string $className = null;
     private ?bool $preview = false;
+    private ?bool $url = false;
+    private  $default = null;
 
     public function __construct($field)
     {
@@ -52,6 +54,9 @@ class Row
             "disabled" => $this->disabled,
             "placeholder" => $this->placeholder,
             "className" => $this->className,
+            "preview" => $this->preview,
+            "url" => $this->url,
+            "default" => $this->default,
         ];
     }
 
@@ -61,6 +66,18 @@ class Row
         $static->setUp();
 
         return $static;
+    }
+
+    public function default($default): ?static
+    {
+        $this->default = $default;
+        return $this;
+    }
+
+    public function url($url): ?static
+    {
+        $this->url = $url;
+        return $this;
     }
 
     public function className($className): ?static

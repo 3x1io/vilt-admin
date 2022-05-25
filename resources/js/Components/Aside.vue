@@ -1,7 +1,7 @@
 <template>
     <!-- Desktop sidebar -->
     <aside
-        class="fixed inset-y-0 left-0 z-20 flex flex-col h-screen overflow-hidden transition-transform -translate-x-full bg-white shadow-2xl rtl:left-auto rtl:right-0 filament-sidebar lg:border-r w-80 lg:z-0 lg:translate-x-0 dark:bg-gray-800 dark:border-gray-700 rtl:lg:-translate-x-0 rtl:translate-x-full"
+        class="fixed inset-y-0 left-0 z-20 flex flex-col h-screen overflow-y-scroll transition-transform -translate-x-full shadow-2xl bg-main rtl:left-auto rtl:right-0 filament-sidebar lg:border-r w-80 lg:z-0 lg:translate-x-0 dark:bg-main dark:border-white rtl:lg:-translate-x-0 rtl:translate-x-full scrollbar-thin scrollbar-thumb-greenColor2 scrollbar-track-white hover:scrollbar-thumb-primary-700"
     >
         <div class="text-gray-500 dark:text-gray-400">
             <header
@@ -71,7 +71,6 @@ import { defineComponent } from "vue";
 import { Link } from "@inertiajs/inertia-vue3";
 import { HomeIcon, UserIcon } from "@heroicons/vue/outline";
 import { usePage } from '@inertiajs/inertia-vue3'
-
 export default defineComponent({
     components: {
         Link,

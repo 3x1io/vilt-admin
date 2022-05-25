@@ -16,7 +16,7 @@ use Modules\Translations\Http\Controllers\TranslationsController;
 
 Route::middleware(['web', 'auth:sanctum', 'verified'])->prefix('translations')->name('translations.')->group(function () {
     Route::get('/', [TranslationsController::class, 'index'])->name('index');
-    Route::post('/', [ranslationsController::class, 'store'])->name('store');
+    Route::post('/', [TranslationsController::class, 'store'])->name('store');
     Route::post('{id}/update', [TranslationsController::class, 'update'])->name('update');
     Route::delete('{id}/delete', [TranslationsController::class, 'destroy'])->name('destory');
     Route::post('bulk', [TranslationsController::class, 'bulk'])->name('bulk');

@@ -34,7 +34,7 @@
                             placeholder="Search By ID"
                             type="search"
                             autocomplete="off"
-                            class="block w-full placeholder-gray-400 transition duration-75 border-gray-300 rounded-lg shadow-sm dark:text-black h-9 pl-9 focus:border-primary-600 focus:ring-1 focus:ring-inset focus:ring-primary-600"
+                            class="block w-full placeholder-gray-400 transition duration-75 border-gray-300 rounded-lg shadow-sm dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800 h-9 pl-9 focus:border-primary-600 focus:ring-1 focus:ring-inset focus:ring-primary-600"
                         />
                     </form>
                 </div>
@@ -54,7 +54,7 @@
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke-width="2"
-                    stroke="currentColor"
+                    stroke="#3a9251"
                     aria-hidden="true"
                 >
                     <path
@@ -69,9 +69,7 @@
                 class="absolute right-0 z-10 w-screen max-w-sm pl-12 mt-2 transition dark:text-white top-full rtl:right-auto rtl:left-0 rtl:pl-0 rtl:pr-12"
                 v-show="showFilter"
             >
-                <div
-                    class="px-6 py-4 space-y-6 bg-white shadow-xl rounded-xl dark:bg-gray-700"
-                >
+                <div class="px-6 py-4 space-y-6 bg-white shadow-xl rounded-xl dark:bg-gray-700 border border-1">
                     <button
                         @click.prevent="showFilter = false"
                         type="button"
@@ -85,7 +83,7 @@
                             fill="none"
                             viewBox="0 0 24 24"
                             stroke-width="2"
-                            stroke="currentColor"
+                            stroke="#24262d"
                             aria-hidden="true"
                         >
                             <path
@@ -96,21 +94,22 @@
                         </svg>
                     </button>
 
-                    <div
-                        class="grid grid-cols-1 gap-6 filament-forms-component-container lg:grid-cols-1"
-                    >
+                    <div class="grid grid-cols-1 gap-6 filament-forms-component-container lg:grid-cols-1">
                         <div class="col-span-1">
-                            <div
-                                class="grid grid-cols-1 gap-6 filament-forms-component-container"
-                            >
+                            <div class="grid grid-cols-1 gap-6 filament-forms-component-container">
                                 <div class="col-span-1">
                                     <div class="filament-forms-field-wrapper">
                                         <div class="space-y-2">
-                                            <div
-                                                class="flex items-center justify-between space-x-2 rtl:space-x-reverse"
-                                            >
-                                                <div class="w-full py-2">
+                                            <div class="flex items-center justify-between space-x-2 rtl:space-x-reverse">
+                                                <div class="w-full">
                                                     <slot></slot>
+                                                    <button
+                                                        type="button"
+                                                        class="inline-flex items-center justify-center text-sm font-normal hover:underline focus:outline-none focus:underline filament-tables-link text-danger-600 hover:text-danger-500 dark:text-danger-500 dark:hover:text-danger-400"
+                                                        @click.prevent="resetFilter()"
+                                                    >
+                                                        Reset filters
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
@@ -118,16 +117,6 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="text-right">
-                        <button
-                            type="button"
-                            class="inline-flex items-center justify-center text-sm font-medium hover:underline focus:outline-none focus:underline filament-tables-link text-danger-600 hover:text-danger-500 dark:text-danger-500 dark:hover:text-danger-400"
-                            @click.prevent="resetFilter()"
-                        >
-                            Reset filters
-                        </button>
                     </div>
                 </div>
             </div>

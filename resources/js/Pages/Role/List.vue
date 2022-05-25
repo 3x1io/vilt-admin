@@ -1,6 +1,6 @@
 <template>
-    <app-layout title=" {{ $title }}">
-        <div class="container grid px-6 mx-auto">
+    <app-layout title="Roles">
+        <div class="px-6 mx-auto">
             <Header
                 :canCreate="$attrs.canCreate"
                 title="Roles"
@@ -11,7 +11,7 @@
                     Generate Permissions
                 </button>
             </Header>
-            <div class="flex-1 w-full mx-autofilament-main-content max-w-7xl">
+            <div class="flex-1 w-full mx-autofilament-main-content">
                 <div class="filament-page filament-resources-list-records-page">
                     <div class="space-y-6">
                         <div class="filament-tables-component">

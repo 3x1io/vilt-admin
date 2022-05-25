@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Base\Http\Controllers\DashboardController;
 use Modules\Settings\Http\Controllers\SettingsController;
 
 /*
@@ -24,4 +23,5 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/admin/log', [SettingsController::class, 'log'])->name('log');
     Route::get('/admin/plugins', [SettingsController::class, 'plugins'])->name('plugins');
     Route::get('/admin/settings', [SettingsController::class, 'settings'])->name('settings');
+    Route::post('/admin/settings', [SettingsController::class, 'settingsSave'])->name('settings.save');
 });

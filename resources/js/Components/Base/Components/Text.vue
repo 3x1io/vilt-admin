@@ -1,6 +1,6 @@
 <template>
     <div>
-        <label :for="id" class="h-40 text-sm font-medium">{{ label }}</label>
+        <label :for="id" class="h-40 text-sm font-normal">{{ label }}</label>
 
         <div class="relative mt-1">
             <input
@@ -9,14 +9,10 @@
                 :id="id"
                 :value="modelValue"
                 :placeholder="placeholder"
+                :readonly="readonly"
                 @input="$emit('update:modelValue', $event.target.value)"
-                class="w-full h-40 p-4 pr-12 text-sm border-gray-200 rounded-lg shadow-sm"
+                class="w-full h-40 p-4 pr-12 text-sm border-gray-200 rounded-lg shadow-sm focus:border-main focus:ring-0 dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800"
             />
-
-            <span class="absolute inset-y-0 inline-flex items-center right-4">
-                <i v-if="icon" class="text-gray-400 bx-sm" :class="icon"></i>
-                <i v-else class="text-gray-400 bx-sm bx bx-circle"></i>
-            </span>
         </div>
         <JetInputError :message="message" class="mt-2" />
 
@@ -43,6 +39,7 @@ export default defineComponent({
         "placeholder",
         "message",
         "modelValue",
+        "readonly"
     ],
     emits: ["update:modelValue"],
 });

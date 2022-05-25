@@ -1,10 +1,10 @@
 <template>
     <table
-        class="w-full text-left divide-y table-auto rtl:text-right filament-tables-table "
+        class="w-full text-left divide-y table-auto xl:rtl:text-right filament-tables-table "
         v-if="collection.total"
     >
         <thead>
-            <tr class="bg-gray-50 dark:bg-gray-800 dark:text-white">
+            <tr class="bg-tableHead text-main dark:bg-gray-800 dark:text-white">
                 <th
                     class="w-4 px-4 py-4 whitespace-nowrap filament-tables-checkbox-cell"
                 >
@@ -21,7 +21,7 @@
                         :class="{
                             'font-bold': orderBy == item.field,
                         }"
-                        class="flex items-center w-full px-4 py-2 space-x-1 text-sm font-medium text-gray-600 cursor-default dark:text-white whitespace-nowrap rtl:space-x-reverse"
+                        class="flex items-center w-full px-0 py-2 space-x-1 text-sm font-normal cursor-default text-main dark:text-white whitespace-nowrap rtl:space-x-reverse"
                     >
                         <span v-if="orderBy == item.field">
                             <i class="bx bx-sort-a-z" v-if="desc"></i>
@@ -29,13 +29,15 @@
                         </span>
                         {{ item.label }}
                     </button>
-                    <span v-else class="flex items-center w-full px-4 py-2 space-x-1 text-sm font-medium text-gray-600 cursor-default dark:text-white whitespace-nowrap rtl:space-x-reverse">
+                    <span v-else class="flex items-center w-full px-4 py-2 space-x-1 text-sm font-normal cursor-default dark:text-white whitespace-nowrap rtl:space-x-reverse">
                         {{ item.label }}
                     </span>
                 </th>
                 <slot name="th"></slot>
 
-                <th class="w-5"></th>
+                <th class="w-5">
+                    <span class="text-sm font-normal">Actions</span>
+                </th>
             </tr>
         </thead>
         <tbody class="divide-y whitespace-nowrap">
@@ -63,7 +65,7 @@
 
                         <span>
                             <button
-                                class="text-sm font-medium text-primary-600"
+                                class="text-sm font-normal text-primary-600"
                             >
                                 Select all 2.
                             </button>
@@ -71,7 +73,7 @@
 
                         <span>
                             <button
-                                class="text-sm font-medium text-primary-600"
+                                class="text-sm font-normal text-primary-600"
                             >
                                 Deselect all.
                             </button>
@@ -85,7 +87,7 @@
                 :key="key"
             >
                 <th
-                    class="w-4 px-4 whitespace-nowrap filament-tables-checkbox-cell"
+                    class="w-4 px-4 whitespace-nowrap filament-tables-checkbox-cell rtl:text-right"
                 >
                     <input
                         v-model="bulk[item.id]"
@@ -94,26 +96,33 @@
                         type="checkbox"
                     />
                 </th>
-                <td class="p-2 filament-tables-cell" v-for="(field, index) in listRows" :key="index">
+                <td class="px-2 rtl:text-right text-14" v-for="(field, index) in listRows" :key="index">
                     <div v-if="field.type === 'relation'" class="grid grid-cols-3 gap-2">
-                        <div class="inline-flex mx-2 items-center justify-center space-x-1 min-h-6 px-2 py-0.5 text-sm font-medium tracking-tight rounded-xl whitespace-normal text-primary-700 bg-primary-500/10 dark:text-primary-500" v-for="(rel, relIndex) in item[field.field]" :key="relIndex">{{rel[field.track_by_name]}}</div>
+                        <div class="inline-flex mx-2 items-center justify-center space-x-1 min-h-6 px-2 py-0.5 text-sm font-normal tracking-tight rounded-xl whitespace-normal text-primary-700 bg-primary-500/10 dark:text-primary-500" v-for="(rel, relIndex) in item[field.field]" :key="relIndex">{{rel[field.track_by_name]}}</div>
+                    </div>
+                    <div v-else-if="field.url" >
+                        <a :href="item[field.field]" target="_blank" class="inline-flex mx-2 items-center justify-center space-x-1 min-h-6 px-2 py-0.5 text-sm font-normal tracking-tight rounded-xl whitespace-normal text-primary-700 bg-primary-500/10 dark:text-primary-500">
+                            Open URL
+                        </a>
                     </div>
                     <div v-else-if="field.type === 'color'">
                         <div class="w-8 h-8 rounded-full" :style="'background-color: '+item[field.field]"></div>
                     </div>
                     <div v-else-if="field.type === 'hasOne'">
-                        <div class="inline-flex mx-2 items-center justify-center space-x-1 min-h-6 px-2 py-0.5 text-sm font-medium tracking-tight rounded-xl whitespace-normal text-primary-700 bg-primary-500/10 dark:text-primary-500">{{item[field.field][field.track_by_name]}}</div>
+                        <div class="inline-flex mx-2 items-center justify-center space-x-1 min-h-6 px-2 py-0.5 text-sm font-normal tracking-tight rounded-xl whitespace-normal text-primary-700 bg-primary-500/10 dark:text-primary-500">{{item[field.field][field.track_by_name]}}</div>
                     </div>
                     <div v-else-if="field.type === 'switch'">
                         <div class="w-10 h-10 p-2 text-lg text-center text-white bg-green-500 rounded-full" v-if="item[field.field] == true"><i class="bx bx-check"></i></div>
                         <div class="w-10 h-10 p-2 text-lg text-center text-white rounded-full bg-danger-500" v-else><i class="bx bx-x"></i></div>
                     </div>
+                    <ViltDate v-else-if="field.type === 'date' || field.type === 'datetime' || field.type === 'time' " view="table" v-model="item[field.field]" :type="field.type" :label="field.label" />
+
                     <div v-else-if="field.type === 'icon'">
                         <div class="text-3xl"><i :class="item[field.field]"></i></div>
                     </div>
                     <div v-else-if="field.type === 'schema'" class="grid grid-cols-3 gap-2">
                         <div v-for="(rel, relIndex) in field.options" :key="relIndex">
-                            <div v-if="item[field.field][rel.field]" class="inline-flex mx-2 items-center justify-center space-x-1 min-h-6 px-2 py-0.5 text-sm font-medium tracking-tight rounded-xl whitespace-normal text-primary-700 bg-primary-500/10 dark:text-primary-500" >
+                            <div v-if="item[field.field][rel.field]" class="inline-flex mx-2 items-center justify-center space-x-1 min-h-6 px-2 py-0.5 text-sm font-normal tracking-tight rounded-xl whitespace-normal text-primary-700 bg-primary-500/10 dark:text-primary-500" >
                                 <span>{{item[field.field][rel.field]}}</span>
                             </div>
                         </div>
@@ -134,7 +143,7 @@
                             <a
                                 v-if="$attrs.canView || $attrs.canViewAny"
                                 @click.prevent="viewItem(item)"
-                                class="inline-flex items-center justify-center text-sm font-medium hover:underline focus:outline-none focus:underline filament-tables-link text-primary-600 hover:text-primary-500 filament-tables-link-action"
+                                class="inline-flex items-center justify-center text-sm font-normal filament-tables-link text-main hover:text-greenColor3 filament-tables-link-action"
                                 href="#"
                                 title="Edit"
                                 role="button"
@@ -165,7 +174,7 @@
                             <a
                                 v-if="$attrs.canEdit"
                                 @click.prevent="editItem(item)"
-                                class="inline-flex items-center justify-center text-sm font-medium hover:underline focus:outline-none focus:underline filament-tables-link text-primary-600 hover:text-primary-500 filament-tables-link-action"
+                                class="inline-flex items-center justify-center text-sm font-normal hover:underline focus:outline-none focus:underline filament-tables-link text-main hover:text-greenColor3 filament-tables-link-action"
                                 href="#"
                                 title="Edit"
                                 role="button"
@@ -193,7 +202,7 @@
                                 v-if="$attrs.canDelete || $attrs.canDeleteAny"
                                 @click.prevent="deleteItem(item)"
                                 type="submit"
-                                class="inline-flex items-center justify-center text-sm font-medium hover:underline focus:outline-none focus:underline filament-tables-link text-danger-600 hover:text-danger-500 filament-tables-link-action"
+                                class="inline-flex items-center justify-center text-sm font-normal hover:underline focus:outline-none focus:underline filament-tables-link text-danger-600 hover:text-danger-500 filament-tables-link-action"
                                 title="Delete"
                             >
                                 <svg
@@ -222,10 +231,10 @@
     <div class="relative overflow-y-auto" v-else>
         <div class="flex items-center justify-center p-4">
             <div
-                class="flex flex-col items-center justify-center flex-1 p-6 mx-auto space-y-6 text-center bg-white filament-tables-empty-state"
+                class="flex flex-col items-center justify-center flex-1 p-6 mx-auto space-y-6 text-center bg-white filament-tables-empty-state dark:bg-gray-900/70"
             >
                 <div
-                    class="flex items-center justify-center w-16 h-16 rounded-full text-primary-500 bg-primary-50"
+                    class="flex items-center justify-center w-16 h-16 rounded-full text-primary-500 bg-tableHead"
                 >
                     <svg
                         class="w-6 h-6"
@@ -233,7 +242,7 @@
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke-width="2"
-                        stroke="currentColor"
+                        stroke="#3A9252"
                         aria-hidden="true"
                     >
                         <path
@@ -246,13 +255,13 @@
 
                 <div class="max-w-xs space-y-1">
                     <h2
-                        class="text-xl font-bold tracking-tight filament-tables-empty-state-heading"
+                        class="font-normal tracking-tight text-md filament-tables-empty-state-heading"
                     >
                         No records found
                     </h2>
 
                     <p
-                        class="text-sm font-medium text-gray-500 filament-tables-empty-state-description"
+                        class="text-sm font-normal text-gray-500 filament-tables-empty-state-description"
                     ></p>
                 </div>
             </div>
@@ -263,10 +272,12 @@
 <script>
 import { defineComponent } from "vue";
 import { Link } from "@inertiajs/inertia-vue3";
+import ViltDate from "@/Components/Base/Rows/ViltDate.vue";
 
 export default defineComponent({
     components: {
         Link,
+        ViltDate
     },
     props: {
         rows: Array,

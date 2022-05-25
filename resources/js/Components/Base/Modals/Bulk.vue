@@ -1,5 +1,5 @@
 <template>
-    <JetDialogModal :show="showModal" @close="close()">
+    <JetDialogModal :show="showModal" @end="close()">
         <template #content>
             <h1 class="py-4 text-3xl text-center text-red-500"></h1>
             <div class="text-center">

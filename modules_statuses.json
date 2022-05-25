@@ -2,5 +2,7 @@
     "Roles": true,
     "Translations": true,
     "Base": true,
-    "Settings": true
+    "Settings": true,
+    "Browser": true,
+    "Artisan": true
 }

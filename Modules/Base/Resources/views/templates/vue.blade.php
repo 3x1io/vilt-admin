@@ -1,10 +1,10 @@
 <template>
-    <app-layout title="@php echo " {{" @endphp $title }}">
-        <div class="container grid px-6 mx-auto">
+    <app-layout title="{{ $model }}">
+        <div class="px-6 mx-auto">
             <Header :canCreate="$attrs.canCreate" title="{{ $model }}" button="Create {{ $model }}"
                 @buttonAction="create">
             </Header>
-            <div class="flex-1 w-full mx-autofilament-main-content max-w-7xl">
+            <div class="flex-1 w-full mx-autofilament-main-content">
                 <div class="filament-page filament-resources-list-records-page">
                     <div class="space-y-6">
                         <div class="filament-tables-component">
@@ -14,7 +14,7 @@
                                     <Bulk :bulk="bulk" :show="showBluk" :collection="collection"
                                         @close="showBluk= !showBluk">
                                         <button type="button" v-if="$attrs.canDeleteAny"
-                                            class="flex items-center w-full h-8 px-3 text-sm font-medium group whitespace-nowrap focus:outline-none hover:text-white focus:text-white hover:bg-danger-600 focus:bg-danger-700"
+                                            class="flex items-center w-full h-8 px-3 text-sm font-normal group whitespace-nowrap focus:outline-none hover:text-white focus:text-white hover:bg-danger-600 focus:bg-danger-700"
                                             @click="bulkAction('delete')">
                                             <svg class="flex-shrink-0 w-6 h-6 mr-2 -ml-1 rtl:ml-2 rtl:-mr-1 group-hover:text-white group-focus:text-white text-danger-500"
                                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"

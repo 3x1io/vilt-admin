@@ -110,10 +110,6 @@ class TranslationsController extends Controller
         if (!$validator->fails()) {
             Cookie::queue('lang',  $request->get('language')['id']);
 
-            // $user = User::find(auth()->user()->id);
-            // $user->lang = $request->get('language')['id'];
-            // $user->save();
-
             session(['message' => __('translation.notification')]);
             return back();
         }

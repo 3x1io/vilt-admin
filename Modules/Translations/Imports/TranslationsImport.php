@@ -14,7 +14,7 @@ class TranslationsImport implements ToCollection
     {
         unset($rows[0]);
         foreach ($rows as $row) {
-            $trans = Translation::find($row[0]);
+            $trans = Translation::where('key', $row[1])->where('group', '*')->first();
             if ($trans) {
                 $trans->text = ["ar" => $row[2], "en" => $row[3], "my" => $row[4], "pt_BR" => $row[5]];
                 $trans->save();

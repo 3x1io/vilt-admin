@@ -15,6 +15,13 @@ if (!empty(Cookie::get('lang'))) {
 
 app()->setLocale($local);
 
-Core::registerDashboardMenuItem(Menu::make('Dashboard')->icon('bx bxs-home')->route('dashboard'));
+Core::registerDashboardMenuItem(Menu::make('Dashboard')->lang('dashboard.sidebar')->icon('bx bxs-home')->route('dashboard'));
+Core::registerGlobalTranslation(Trans::make('dashboard.sidebar')->value(__('dashboard.sidebar')));
+
 Core::registerProfileMenuItem(Menu::make('Profile')->icon('bxs-user')->route('profile.show'));
 Core::registerProfileMenuItem(Menu::make('API Tokens')->icon('bxs-check-shield')->route('api-tokens.index'));
+
+Core::registerDashboardMenuItem(Menu::make('Loader')->icon('bx bxs-circle')->route('loaders.index')->can('view_any_loaders'));
+Core::registerDashboardMenuItem(Menu::make('Group')->icon('bx bxs-circle')->route('groups.index')->can('view_any_groups'));
+Core::registerDashboardMenuItem(Menu::make('Customer')->icon('bx bxs-circle')->route('customers.index')->can('view_any_customers'));
+Core::registerDashboardMenuItem(Menu::make('CustomersLocation')->icon('bx bxs-circle')->route('customers_locations.index')->can('view_any_customers_locations'));

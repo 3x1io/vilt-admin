@@ -5,10 +5,13 @@ import { createInertiaApp } from '@inertiajs/inertia-vue3';
 import { InertiaProgress } from '@inertiajs/progress';
 import Toaster from "@meforma/vue-toaster";
 import "@suadelabs/vue3-multiselect/dist/vue3-multiselect.css";
-
 require('boxicons/css/boxicons.min.css')
 require('@vueform/toggle/themes/default.css')
 require('flatpickr/dist/flatpickr.css')
+
+import { GlobalCmComponent } from "codemirror-editor-vue3";
+
+
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
 
 createInertiaApp({
@@ -18,6 +21,7 @@ createInertiaApp({
         return createApp({ render: () => h(app, props) })
             .use(plugin)
             .use(Toaster)
+            .use(GlobalCmComponent)
             .mixin({ methods: {
                 route
             } })

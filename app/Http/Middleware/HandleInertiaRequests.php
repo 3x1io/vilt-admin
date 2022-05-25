@@ -8,6 +8,7 @@ use Inertia\Middleware;
 use Illuminate\Http\Request;
 use Modules\Base\Helpers\Vilt\Core;
 use Illuminate\Http\RedirectResponse;
+use Spatie\LaravelSettings\Models\SettingsProperty;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -63,6 +64,7 @@ class HandleInertiaRequests extends Middleware
             'menu' => Core::loadDashboardMenu(),
             'message' => fn () => $request->session()->get('message'),
             'trans' => Core::loadLanguage(),
+            'settings' => SettingsProperty::all('id', 'name', 'payload')
         ]);
     }
 }

@@ -35,7 +35,7 @@ class TranslationsExport implements FromCollection, WithHeadings
     {
 
         $loadLocals = [];
-        $getLocals = config('vilt-translations.locals');
+        $getLocals = config('translations.locals');
         foreach ($getLocals as $key => $value) {
             array_push($loadLocals, $key);
         }

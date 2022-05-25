@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Modules\Base\Helpers\Vilt\Handler;
+use Modules\Base\Helpers\Vilt\Row;
 
 class DashboardController extends Controller
 {
@@ -52,6 +54,11 @@ class DashboardController extends Controller
 
     public function settings()
     {
-        return Inertia::render('Settings/Settings');
+        $form = [
+            Row::make('site_name')->type('text')->get()
+        ];
+        return Inertia::render('Settings/Settings', [
+            "form" => $form
+        ]);
     }
 }

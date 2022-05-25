@@ -1,6 +1,6 @@
 <?php
 
-namespace io3x1\FilamentThemes\Settings;
+namespace Modules\Settings\Settings;
 
 use Spatie\LaravelSettings\Settings;
 

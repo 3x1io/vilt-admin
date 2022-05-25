@@ -76,9 +76,9 @@
                             >
                                 <Link
                                     v-if="menu.type === 'route'"
-                                    class="flex items-center justify-center gap-3 px-3 py-2 font-medium transition rounded-lg hover:bg-gray-500/5 focus:bg-gray-500/5 dark:text-gray-300 dark:hover:bg-gray-700"
+                                    class="flex items-center justify-center gap-3 px-3 py-2 font-normal transition rounded-lg hover:bg-gray-500/5 focus:bg-gray-500/5 dark:text-gray-300 dark:hover:bg-gray-700"
                                     :class="{
-                                        'flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-medium transition bg-primary-500 text-white':
+                                        'flex items-center justify-center gap-3 px-3 py-2 rounded-lg font-normal transition bg-primary-500 text-white':
                                             route().current(menu.route),
                                     }"
                                     :href="route(menu.route)"

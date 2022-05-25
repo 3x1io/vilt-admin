@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Base\Controllers\UploadController;
+use Modules\Base\Http\Controllers\UploadController;
 use Modules\Base\Http\Controllers\DashboardController;
 
 /*

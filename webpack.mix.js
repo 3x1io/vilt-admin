@@ -21,3 +21,18 @@ mix.js('resources/js/app.js', 'public/js').vue()
 if (mix.inProduction()) {
     mix.version();
 }
+
+const domain = 'vilt-admin.test'; // <= EDIT THIS
+const homedir = require('os').homedir();
+
+// The mix script:
+mix.browserSync({
+      proxy: 'https://' + domain,
+      host: domain,
+      open: 'external',
+      https: {
+        key: homedir + '/.valet/Certificates/' + domain + '.key',
+        cert: homedir + '/.valet/Certificates/' + domain + '.crt'
+      },
+      notify: true, //Enable or disable notifications
+  })

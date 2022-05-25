@@ -33,6 +33,11 @@ export default defineComponent({
         collection: Object,
         url: String,
     },
+    computed:{
+        lang(){
+            return this.$page.props.trans;
+        }
+    },
     data() {
         return {
             createModal: false,
@@ -70,9 +75,9 @@ export default defineComponent({
         this.createModal = this.$attrs.create;
     },
     methods: {
-        trans(key) {
-            console.log(key);
-            // return this.$attrs.trans[key];
+        trans(key){
+            let getKey = this.lang[key] ? this.lang[key] : key;
+            return getKey;
         },
         searchFilter(search) {
             this.search = search;

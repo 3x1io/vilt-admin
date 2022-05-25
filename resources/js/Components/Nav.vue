@@ -2,7 +2,7 @@
     <nav class="bg-white border-b border-gray-100">
         <!-- x-data="{ open: false }" -->
         <!-- Primary Navigation Menu -->
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex">
                     <!-- Logo -->
@@ -25,13 +25,13 @@
                     <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                         <!-- <a
                             href="#"
-                            class="inline-flex items-center px-1 pt-1 border-b-2 border-indigo-400 text-sm font-medium leading-5 text-gray-900 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out"
+                            class="inline-flex items-center px-1 pt-1 border-b-2 border-indigo-400 text-sm font-normal leading-5 text-gray-900 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out"
                         >
                             Dashboard
                         </a> -->
                         <a
                             href="#"
-                            class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out"
+                            class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-normal leading-5 text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out"
                         >
                             Dashboard
                         </a>
@@ -46,7 +46,7 @@
                 <div class="hidden sm:flex sm:items-center sm:ml-6">
                     <!-- <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
-                        <button class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
+                        <button class="flex items-center text-sm font-normal text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
                             <div>{{ Auth::user()->name }}</div>
 
                             <div class="ml-1">
@@ -113,8 +113,8 @@
             <!-- Responsive Settings Options -->
             <div class="pt-4 pb-1 border-t border-gray-200">
                 <div class="px-4">
-                    <!-- <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
-                <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div> -->
+                    <!-- <div class="font-normal text-base text-gray-800">{{ Auth::user()->name }}</div>
+                <div class="font-normal text-sm text-gray-500">{{ Auth::user()->email }}</div> -->
                 </div>
 
                 <div class="mt-3 space-y-1">
@@ -145,8 +145,8 @@ export default defineComponent({
     computed: {
         classes() {
             return this.active
-                ? "inline-flex items-center px-1 pt-1 border-b-2 border-indigo-400 text-sm font-medium leading-5 text-gray-900 focus:outline-none focus:border-indigo-700 transition"
-                : "inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition";
+                ? "inline-flex items-center px-1 pt-1 border-b-2 border-indigo-400 text-sm font-normal leading-5 text-gray-900 focus:outline-none focus:border-indigo-700 transition"
+                : "inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-normal leading-5 text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition";
         },
     },
 });

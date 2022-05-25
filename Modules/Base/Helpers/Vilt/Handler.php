@@ -79,13 +79,18 @@ trait Handler
         }
     }
 
-    public function schemaFileds()
+    public function schemaFileds($ex = [])
     {
         $filedsList = [];
         foreach ($this->schema() as $field) {
+
             if (($field['type'] !== 'image') && ($field['type'] !== 'relation') && ($field['field'] !== 'password_confirmation')) {
                 array_push($filedsList, $field['field']);
             }
+        }
+
+        foreach ($ex as $item) {
+            unset($filedsList[array_search($item, $filedsList)]);
         }
 
         return $filedsList;
