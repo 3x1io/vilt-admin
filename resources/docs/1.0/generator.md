@@ -29,34 +29,23 @@ now it's time for building the resource just run this command with the table nam
 ```bash
 php artisan vilt:resource customers Customer
 ```
+
+this command will generate a model form the table and generate a resource for you
+
 <hr>
-<a name="generate-without-apis"></a>
-## [Generate Without APIs](#generate-without-apis)
+<a name="files"></a>
+## [Files](#files)
 
-if you don't need to generate APIs you can use flag `-A`, but use must build your relations inside the model
+the generator will generate 2 files for you
 
-```bash
-php artisan make:vilt-resource customers -A
-```
-<hr>
-<a name="api-generator"></a>
-## [API Generator](#api-generator)
+1- Model File it will be generated inside your module folder `Entities`
 
-we are using Laravel Sanctum to handle API Tokens so you can review the packages before starting using this section.
-
-you can now generate your API by just using this command
-
-```bash
-php artisan infyom:api Customer
-```
-
-when the customer is a Model name
+2- Resource File it will be generated inside your `Resources` Folder
 
 
 
 - [CRUD Generator](#crud-generator)
   - [Create Migration](#create-migration)
   - [Start Generate](#start-generate)
-  - [Generate Without APIs](#generate-without-apis)
-  - [API Generator](#api-generator)
+  - [Files](#files)
 

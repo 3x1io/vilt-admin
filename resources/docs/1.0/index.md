@@ -2,16 +2,28 @@
     - [Overview](/{{route}}/{{version}}/overview)
     - [Environment](/{{route}}/{{version}}/env)
     - [Installation](/{{route}}/{{version}}/installation)
-- ## Features
+- ## Resource
     - [Generator](/{{route}}/{{version}}/generator)
-    - [Menus](/{{route}}/{{version}}/menus)
+    - [Resource](/{{route}}/{{version}}/resource)
     - [Rows](/{{route}}/{{version}}/rows)
+    - [CRUD](/{{route}}/{{version}}/crud)
+    - [Alert](/{{route}}/{{version}}/alert)
+    - [Routes](/{{route}}/{{version}}/routes)
+    - [Lang](/{{route}}/{{version}}/lang)
+    - [Action](/{{route}}/{{version}}/actions)
+    - [Modal](/{{route}}/{{version}}/modal)
+    - [Render](/{{route}}/{{version}}/render)
+    - [Menus](/{{route}}/{{version}}/menus)
+    - [View](/{{route}}/{{version}}/vue)
+- ## Plugins
     - [Media](/{{route}}/{{version}}/media)
     - [Roles Plugin](/{{route}}/{{version}}/roles-plugin)
     - [Translations Plugin](/{{route}}/{{version}}/translations-plugin)
     - [Settings Plugin](/{{route}}/{{version}}/settings-plugin)
+    - [Menus Plugin](/{{route}}/{{version}}/menus-plugin)
+    - [Browser Plugin](/{{route}}/{{version}}/browser-plugin)
+    - [Artisan Plugin](/{{route}}/{{version}}/artisan-plugin)
     - [Build Plugins](/{{route}}/{{version}}/build-plugins)
-
 - ## Learning
     - [Task To Get Start](/{{route}}/{{version}}/task)
     - [CI/CD](/{{route}}/{{version}}/ci)
