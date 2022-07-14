@@ -193,7 +193,7 @@
                             >
                                 <li
                                     class="flex"
-                                    v-for="(item, key) in $page.props.dropdown"
+                                    v-for="(item, key) in $page.props.data.dropdown"
                                     :key="key"
                                 >
                                     <Link

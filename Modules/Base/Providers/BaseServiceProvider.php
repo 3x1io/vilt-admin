@@ -47,8 +47,6 @@ class BaseServiceProvider extends ServiceProvider
         $this->loadViewsFrom(module_path($this->moduleName, 'Resources/views'), 'base');
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
         URL::forceScheme('https');
-
-        Core::registerProfileMenuItem(Menu::make('Profile')->icon('bxs-user')->route('profile.show'));
     }
 
     /**

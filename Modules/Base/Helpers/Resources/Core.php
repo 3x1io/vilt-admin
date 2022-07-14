@@ -96,6 +96,7 @@ class Core
     {
         if (auth()->user()) {
             foreach (self::$dashboardMenuItems as $key => $item) {
+                array_multisort(array_column($item, 'sort'), SORT_DESC, $item);
                 foreach ($item as $index => $menu) {
 
                     if (is_string($menu['can'])) {
@@ -104,7 +105,6 @@ class Core
                         }
                     }
                 }
-
                 array_push(self::$dashboardMenuItemsFull, [
                     "name" => $key,
                     "menu" => $item

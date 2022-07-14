@@ -37,6 +37,10 @@ class MenuServiceProvider extends ServiceProvider
             include(base_path('Modules/Menu/Helpers/List.php'));
         }
 
+        Core::registerDashboardMenuItem(Menu::make('Dashboard')->icon('bx bxs-home')->route('dashboard')->sort(0));
+        Core::registerProfileMenuItem(Menu::make('Profile')->icon('bxs-user')->route('profile.show'));
+
+
         Core::loadResources($this->moduleName);
     }
 
