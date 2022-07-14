@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
+        "binarytorch/larecipe": "^2.5",
         "doctrine/dbal": "^3.3",
         "google/cloud-translate": "^1.12",
         "guzzlehttp/guzzle": "^7.2",

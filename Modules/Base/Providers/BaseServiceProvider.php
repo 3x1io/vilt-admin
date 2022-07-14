@@ -41,7 +41,6 @@ class BaseServiceProvider extends ServiceProvider
 
         $this->commands([
             GenerateResource::class,
-            GenerateModule::class,
         ]);
         $this->registerConfig();
         $this->loadViewsFrom(module_path($this->moduleName, 'Resources/views'), 'base');

@@ -13,6 +13,7 @@ class Router
     private ?string $controller = null;
     private ?array $middleware = ["web"];
     private ?array $custom = null;
+    private ?bool $api = false;
 
     public function __construct($table)
     {
@@ -35,6 +36,7 @@ class Router
             "controller" => $this->controller,
             "middleware" => $this->middleware,
             "custom" => $this->custom,
+            "api" => $this->api
         ];
     }
 
@@ -42,6 +44,12 @@ class Router
     public function controller($controller): ?static
     {
         $this->controller = $controller;
+        return $this;
+    }
+
+    public function api($api): ?static
+    {
+        $this->api = $api;
         return $this;
     }
 

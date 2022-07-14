@@ -1,12 +1,12 @@
 <?php
 
-namespace Modules\Menu\Http\Controllers;
+namespace Modules\Customers\Http\Controllers;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
-class MenuController extends Controller
+class CustomersController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +14,7 @@ class MenuController extends Controller
      */
     public function index()
     {
-        return view('menu::index');
+        return view('customers::index');
     }
 
     /**
@@ -23,7 +23,7 @@ class MenuController extends Controller
      */
     public function create()
     {
-        return view('menu::create');
+        return view('customers::create');
     }
 
     /**
@@ -43,7 +43,7 @@ class MenuController extends Controller
      */
     public function show($id)
     {
-        return view('menu::show');
+        return view('customers::show');
     }
 
     /**
@@ -53,7 +53,7 @@ class MenuController extends Controller
      */
     public function edit($id)
     {
-        return view('menu::edit');
+        return view('customers::edit');
     }
 
     /**

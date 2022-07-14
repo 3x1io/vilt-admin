@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Modules\Translations\Http\Controllers\TranslationsController;
+use Modules\Translations\Resources\TranslationsResource;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,4 +27,4 @@ use Modules\Translations\Http\Controllers\TranslationsController;
 //     Route::post('auto', [TranslationsController::class, 'auto'])->name('auto');
 // });
 
-Route::post('translations/switch', [TranslationsController::class, 'change'])->name('translations.switch');
+Route::post('translations/switch', [TranslationsResource::class, 'change'])->name('translations.switch');

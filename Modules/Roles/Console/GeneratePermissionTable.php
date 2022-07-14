@@ -2,9 +2,9 @@
 
 namespace Modules\Roles\Console;
 
-use Modules\Base\Helpers\Generator\ResourceGenerator;
 use App\Models\User;
 use Illuminate\Console\Command;
+use Modules\Base\Helpers\Resources\Generator;
 
 class GeneratePermissionTable extends Command
 {
@@ -30,7 +30,7 @@ class GeneratePermissionTable extends Command
     public function handle()
     {
         $table = $this->argument('table');
-        $generatorRoles = new ResourceGenerator($table);
+        $generatorRoles = new Generator($table);
         $generatorRoles->generatePermission();
         $user = User::find(1);
         $user->assignRole('admin');

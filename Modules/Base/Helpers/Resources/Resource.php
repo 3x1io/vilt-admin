@@ -93,9 +93,12 @@ class Resource
 
     public function index(Request $request)
     {
-        $this->roles($this->url);
-        if (!$this->canView) {
-            return inertia('403');
+        $isAPI = str_contains($request->route()->getPrefix(), 'api');
+        if (!$isAPI) {
+            $this->roles($this->url);
+            if (!$this->canView) {
+                return inertia('403');
+            }
         }
 
         $rows = $this->schema();
@@ -125,8 +128,15 @@ class Resource
         $data = $this->loadTranslations($data);
         $data = $this->afterLoad($data);
 
-
-        return inertia($this->view, $this->response($data, app($this->model)->getTable()));
+        if ($isAPI && $this->api) {
+            return response()->json([
+                "success" => true,
+                "message" => __($this->generateName(true, true) . ' Loaded Success'),
+                "data" => $data
+            ]);
+        } else {
+            return inertia($this->view, $this->response($data, app($this->model)->getTable()));
+        }
     }
 
     public function beforeStore(Request $request)
@@ -151,10 +161,16 @@ class Resource
 
     public function store(Request $request)
     {
-        $this->roles($this->url);
-        if (!$this->canCreate) {
-            return inertia('403');
+
+        $isAPI = str_contains($request->route()->getPrefix(), 'api');
+
+        if (!$isAPI) {
+            $this->roles($this->url);
+            if (!$this->canCreate) {
+                return inertia('403');
+            }
         }
+
 
         $validator = $this->validStore($request);
 
@@ -168,7 +184,15 @@ class Resource
             $this->processCreateMedia($request, $record);
             $this->afterStore($request, $record);
 
-            return Alert::make(__($this->generateName(true, true) . " Created Success"))->fire();
+            if ($isAPI && $this->api) {
+                return response()->json([
+                    "success" => true,
+                    "message" => __($this->generateName(true, true) . " Created Success"),
+                    "data" => $record
+                ]);
+            } else {
+                return Alert::make(__($this->generateName(true, true) . " Created Success"))->fire();
+            }
         }
     }
 
@@ -197,9 +221,13 @@ class Resource
 
     public function update(Request $request, $id)
     {
-        $this->roles($this->url);
-        if (!$this->canEdit) {
-            return inertia('403');
+
+        $isAPI = str_contains($request->route()->getPrefix(), 'api');
+        if (!$isAPI) {
+            $this->roles($this->url);
+            if (!$this->canEdit) {
+                return inertia('403');
+            }
         }
 
         $validator = $this->validUpdate($request, $id);
@@ -213,7 +241,15 @@ class Resource
             $this->processUpdateMedia($request, $record);
             $this->afterUpdate($request, $record);
 
-            return Alert::make(__($this->generateName(true, true) . " Updated Success"))->fire();
+            if ($isAPI && $this->api) {
+                return response()->json([
+                    "success" => true,
+                    "message" => __($this->generateName(true, true) . " Updated Success"),
+                    "data" => $record
+                ]);
+            } else {
+                return Alert::make(__($this->generateName(true, true) . " Updated Success"))->fire();
+            }
         }
     }
 
@@ -227,11 +263,14 @@ class Resource
         return $record;
     }
 
-    public function destory($id)
+    public function destory(Request $request, $id)
     {
-        $this->roles($this->url);
-        if (!$this->canDelete) {
-            return inertia('403');
+        $isAPI = str_contains($request->route()->getPrefix(), 'api');
+        if (!$isAPI) {
+            $this->roles($this->url);
+            if (!$this->canDelete) {
+                return inertia('403');
+            }
         }
 
         $record = $this->model::find($id);
@@ -240,7 +279,27 @@ class Resource
             $record->delete();
             $this->afterDestory($record);
 
-            return Alert::make(__(Str::ucfirst(Str::singular($this->table)) . " Deleted Success"))->fire();
+            $message = __(Str::ucfirst(Str::singular($this->table)) . " Deleted Success");
+            if ($isAPI && $this->api) {
+                return response()->json([
+                    "success" => true,
+                    "message" => $message,
+                    "data" => []
+                ]);
+            } else {
+                return Alert::make($message)->fire();
+            }
+        } else {
+            $message = __("Sorry Record Not Found");
+            if ($isAPI && $this->api) {
+                return response()->json([
+                    "success" => false,
+                    "message" => $message,
+                    "data" => []
+                ], 404);
+            } else {
+                return Alert::make($message)->type("error")->fire();
+            }
         }
     }
 
@@ -255,6 +314,8 @@ class Resource
 
     public function bulk(Request $request)
     {
+        $isAPI = str_contains($request->route()->getPrefix(), 'api');
+
         $rules = [
             "action" => "required",
             "ids" => "required|array",
@@ -268,9 +329,11 @@ class Resource
                 $record = $this->model::find($key);
                 if ($record) {
                     if ($data['action'] === 'delete') {
-                        $this->roles($this->url);
-                        if (!$this->canDeleteAny) {
-                            return inertia('403');
+                        if (!$isAPI) {
+                            $this->roles($this->url);
+                            if (!$this->canDeleteAny) {
+                                return inertia('403');
+                            }
                         }
                         $record->delete();
                         $this->afterBulk($request, $record);
@@ -278,7 +341,16 @@ class Resource
                 }
             }
 
-            return Alert::make(__(Str::ucfirst(Str::singular($this->table)) . " Bulk Action Success"))->fire();
+            $message = __(Str::ucfirst(Str::singular($this->table)) . " Bulk Action Success");
+            if ($isAPI && $this->api) {
+                return response()->json([
+                    "success" => true,
+                    "message" => $message,
+                    "data" => []
+                ]);
+            } else {
+                return Alert::make($message)->fire();
+            }
         }
     }
 
@@ -297,7 +369,7 @@ class Resource
 
     public function routes()
     {
-        return Router::make($this->table)->controller(static::class)->custom($this->route())->get();
+        return Router::make($this->table)->controller(static::class)->custom($this->route())->api($this->api)->get();
     }
 
     public function menus()

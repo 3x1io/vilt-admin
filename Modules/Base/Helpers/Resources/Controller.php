@@ -27,6 +27,7 @@ trait Controller
     public $group = 0;
     public $icon = "bx bxs-circle";
     public $resourceTitle = null;
+    public $api = false;
 
     public function loadTranslations($data)
     {
@@ -70,22 +71,26 @@ trait Controller
         foreach ($rows as $row) {
             if ($row['type'] === 'trans') {
                 if ($record) {
-                    $text = $data[$row['field']];
-                    $data[$row['field']] = $record[$row['field']];
-                    foreach ($locals as $key => $local) {
-                        if ($key === app()->getLocale()) {
-                            $data[$row['field']][$key] = $text;
-                        }
-                    }
-                } else {
-                    if (!is_array($data[$row['field']])) {
+                    if (isset($data[$row['field']]) && !empty($data[$row['field']])) {
                         $text = $data[$row['field']];
-                        $data[$row['field']] = [];
+                        $data[$row['field']] = $record[$row['field']];
                         foreach ($locals as $key => $local) {
                             if ($key === app()->getLocale()) {
                                 $data[$row['field']][$key] = $text;
-                            } else {
-                                $data[$row['field']][$key] = "";
+                            }
+                        }
+                    }
+                } else {
+                    if (isset($data[$row['field']]) && !is_array($data[$row['field']])) {
+                        if (isset($data[$row['field']]) && !empty($data[$row['field']])) {
+                            $text = $data[$row['field']];
+                            $data[$row['field']] = [];
+                            foreach ($locals as $key => $local) {
+                                if ($key === app()->getLocale()) {
+                                    $data[$row['field']][$key] = $text;
+                                } else {
+                                    $data[$row['field']][$key] = "";
+                                }
                             }
                         }
                     }

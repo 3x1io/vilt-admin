@@ -2,9 +2,10 @@
 
 namespace Modules\Roles\Console;
 
-use Modules\Base\Helpers\Generator\ResourceGenerator;
 use App\Models\User;
 use Illuminate\Console\Command;
+use Modules\Base\Helpers\Resources\Generator;
+use Modules\Base\Helpers\Generator\ResourceGenerator;
 
 class GeneratePermission extends Command
 {
@@ -29,11 +30,11 @@ class GeneratePermission extends Command
      */
     public function handle()
     {
-        $generatorRoles = new ResourceGenerator('roles');
+        $generatorRoles = new Generator('roles');
         $generatorRoles->generatePermission();
-        $generatorUsers = new ResourceGenerator('users');
+        $generatorUsers = new Generator('users');
         $generatorUsers->generatePermission();
-        $generatorUsers = new ResourceGenerator('translations');
+        $generatorUsers = new Generator('translations');
         $generatorUsers->generatePermission();
         $user = User::find(1);
         if (!$user) {

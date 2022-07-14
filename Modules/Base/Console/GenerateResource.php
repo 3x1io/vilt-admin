@@ -2,9 +2,12 @@
 
 namespace Modules\Base\Console;
 
-use Modules\Base\Helpers\Generator\ResourceGenerator;
 use Exception;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Artisan;
+use Nwidart\Modules\Facades\Module;
+use Modules\Base\Helpers\Resources\Generator;
+use Modules\Base\Helpers\Generator\ResourceGenerator;
 
 class GenerateResource extends Command
 {
@@ -13,7 +16,7 @@ class GenerateResource extends Command
      *
      * @var string
      */
-    protected $signature = 'make:vilt-resource {table} {--A|api}';
+    protected $signature = 'vilt:resource {table} {module}';
 
     /**
      * The console command description.
@@ -30,31 +33,25 @@ class GenerateResource extends Command
     public function handle()
     {
         $table = $this->argument('table');
-        $api = $this->option('api');
+        $module = $this->argument('module');
+
+        $check = Module::find($module);
+
+        if (!$check) {
+            $this->info('Module not exists we will create it for you');
+            Artisan::call('module:make ' . $module);
+            $this->info('Module Created Success');
+        }
 
         try {
-            $newGenerator = new ResourceGenerator($table);
-            if ($api) {
-                $newGenerator->generateModel(false);
-            } else {
-                $this->info('Do You When To Generate This Table? Please Press Enter');
-                $newGenerator->generateModel();
-            }
-
+            $newGenerator = new Generator($table, $module);
+            $newGenerator->generateModel();
             $this->info('The Model Has Been Generated');
-            $newGenerator->generateController();
-            $this->info('The Controller Has Been Generated');
-            $newGenerator->generateView();
-            $this->info('The .Vue Has Been Generated');
-            $newGenerator->generateRoute();
-            $this->info('The Routes Has Been Generated');
-            $newGenerator->generateMenu();
-            $this->info('The Menu Has Been Generated');
-            $newGenerator->generateLanguages();
-            $this->info('The Languages Has Been Generated');
+            $newGenerator->generateResource();
+            $this->info('The Resource Has Been Generated');
             $newGenerator->generatePermission();
             $this->info('The Permission Has Been Generated');
-            $this->info('Please Run npm i & npm run dev to compate assets of vuejs');
+            $this->info('Please Run yarn i & yarn dev to compate assets of vuejs');
         } catch (Exception $e) {
             $this->error($e);
         }

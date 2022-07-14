@@ -33,6 +33,7 @@ class {{ $model }}Resource extends Resource
     public $model = {{ $model }}::class;
     public $icon = "bx bxs-circle";
     public $group = "Content";
+    public $api = false;
 
     public function rows()
     {

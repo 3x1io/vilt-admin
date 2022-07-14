@@ -3,19 +3,21 @@
 namespace Modules\Translations\Resources;
 
 use Exception;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Modules\Menu\Entities\Menus;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Cookie;
 use Modules\Base\Helpers\Resources\Row;
 use Illuminate\Support\Facades\Validator;
 use Modules\Base\Helpers\Resources\Alert;
+use Modules\Base\Helpers\Resources\Modal;
 use Modules\Base\Helpers\Resources\Action;
 use Modules\Translations\Services\SaveScan;
 use Modules\Base\Helpers\Resources\AddRoute;
 use Modules\Base\Helpers\Resources\Resource;
 use Google\Cloud\Translate\V2\TranslateClient;
-use Modules\Base\Helpers\Resources\Modal;
 use Modules\Translations\Entities\Translation;
 use Modules\Translations\Exports\TranslationsExport;
 use Modules\Translations\Imports\TranslationsImport;
@@ -145,5 +147,19 @@ class TranslationsResource extends Resource
         $scan->save();
 
         return Alert::make(__('Your Languages Has Been Scan Success'))->fire();
+    }
+
+    public function change(Request $request)
+    {
+        $rules = [
+            "language" => "required|array",
+        ];
+        $validator = Validator::make($request->all(), $rules);
+        $validator->validate();
+
+        if (!$validator->fails()) {
+            Cookie::queue('lang',  $request->get('language')['id']);
+            return Alert::make(__('Language has been change'))->fire();
+        }
     }
 }
