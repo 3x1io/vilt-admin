@@ -33,9 +33,7 @@ class MenuServiceProvider extends ServiceProvider
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
 
-        if (config('menu.provider')) {
-            include(base_path('Modules/Base/Helpers/Menu/List.php'));
-        } else if (config('menu.database')) {
+        if (config('menu.database')) {
             include(base_path('Modules/Menu/Helpers/List.php'));
         }
 
