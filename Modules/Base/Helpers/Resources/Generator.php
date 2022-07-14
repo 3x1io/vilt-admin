@@ -142,57 +142,12 @@ class Generator
         }
     }
 
-
-
     public function generatePermission()
     {
-        $checkView = Permission::where('name', 'view_' . $this->table)->where('guard_name', 'web')->first();
-        if (!$checkView) {
-            Permission::create(['name' => 'view_' . $this->table, 'guard_name' => 'web']);
-        }
-        $checkViewAny = Permission::where('name', 'view_any_' . $this->table)->where('guard_name', 'web')->first();
-        if (!$checkViewAny) {
-            Permission::create(['name' => 'view_any_' . $this->table, 'guard_name' => 'web']);
-        }
-        $checkCreate = Permission::where('name', 'create_' . $this->table)->where('guard_name', 'web')->first();
-        if (!$checkCreate) {
-            Permission::create(['name' => 'create_' . $this->table, 'guard_name' => 'web']);
-        }
-        $checkUpdate = Permission::where('name', 'update_' . $this->table)->where('guard_name', 'web')->first();
-        if (!$checkUpdate) {
-            Permission::create(['name' => 'update_' . $this->table, 'guard_name' => 'web']);
-        }
-        $checkDelete = Permission::where('name', 'delete_' . $this->table)->where('guard_name', 'web')->first();
-        if (!$checkDelete) {
-            Permission::create(['name' => 'delete_' . $this->table, 'guard_name' => 'web']);
-        }
-        $checkExport = Permission::where('name', 'export_' . $this->table)->where('guard_name', 'web')->first();
-        if (!$checkExport) {
-            Permission::create(['name' => 'export_' . $this->table, 'guard_name' => 'web']);
-        }
-        $checkDeleteAny = Permission::where('name', 'delete_any_' . $this->table)->where('guard_name', 'web')->first();
-        if (!$checkDeleteAny) {
-            Permission::create(['name' => 'delete_any_' . $this->table, 'guard_name' => 'web']);
-        }
-
-        $checkIfAdminIsExist = Role::where('name', 'admin')->where('guard_name', 'web')->first();
-        if (!$checkIfAdminIsExist) {
-            $checkIfAdminIsExist = Role::create([
-                "name" => "admin",
-                "guard_name" => "web"
-            ]);
-        }
-
-        $checkIfAdminIsExist->givePermissionTo('view_' . $this->table);
-        $checkIfAdminIsExist->givePermissionTo('view_any_' . $this->table);
-        $checkIfAdminIsExist->givePermissionTo('create_' . $this->table);
-        $checkIfAdminIsExist->givePermissionTo('update_' . $this->table);
-        $checkIfAdminIsExist->givePermissionTo('delete_' . $this->table);
-        $checkIfAdminIsExist->givePermissionTo('delete_any_' . $this->table);
-        $checkIfAdminIsExist->givePermissionTo('export_' . $this->table);
+        Artisan::call('roles:generate ' . $this->table);
     }
 
-    public function generateName($sp = false, $sg = false)
+    public function generateName($sp = false, $sg = false, $hasSpace = true)
     {
         $expload = explode('_', $this->table);
         $tableName = "";
@@ -204,12 +159,22 @@ class Generator
                         $item = Str::singular(Str::ucfirst($item));
                         $tableName .= $item;
                     } else {
-                        $item = Str::ucfirst($item) . " ";
+                        if ($hasSpace) {
+                            $item = Str::ucfirst($item) . " ";
+                        } else {
+                            $item = Str::ucfirst($item);
+                        }
+
                         $tableName .= $item;
                     }
                     $x++;
                 } else {
-                    $item = Str::ucfirst($item) . " ";
+                    if ($hasSpace) {
+                        $item = Str::ucfirst($item) . " ";
+                    } else {
+                        $item = Str::ucfirst($item);
+                    }
+
                     $tableName .= $item;
                 }
             } else {
@@ -223,136 +188,33 @@ class Generator
 
     public function generateModel($withAPI = true)
     {
-        if ($withAPI && !$this->module) {
-            $model = $this->generateName();
-            Artisan::call('infyom:api ' . $model . ' --fromTable --tableName=' . $this->table);
-        } else {
-            if ($this->module) {
-                $model = $this->generateName();
-                $view = view('base::templates.modules.model', [
-                    "model" => $model,
-                    "table" => $this->table,
-                    "module" => $this->module,
-                    "cols" => $this->getFileds()
-                ]);
-
-                $this->render($view, module_path($this->module) . '/Entities/' . $model . '.php');
-            } else {
-                $model = $this->generateName();
-                $view = view('base::templates.model', [
-                    "model" => $model,
-                    "table" => $this->table,
-                    "cols" => $this->getFileds()
-                ]);
-
-                $this->render($view, app_path('Models/' . $model . '.php'));
-            }
-        }
+        $model = $this->generateName(true, true, false);
+        $command = 'krlove:generate:model ' . $model . ' --table-name=' . $this->table . ' --output-path=' . module_path($this->module) . '/Entities' . ' --namespace=' . "Modules" . "\\\\" . $this->module . "\\\\" . "Entities";
+        Artisan::call($command);
     }
 
-    public function generateController()
+    public function generateResource()
     {
         $sg = $this->generateName(true, true);
         $sp = $this->generateName(true);
-        $model = $this->generateName();
-        if ($this->module) {
-            $view = view('base::templates.modules.controller', [
-                "sg" => $sg,
-                "sp" => $sp,
-                "model" => $model,
-                "table" => $this->table,
-                "module" => $this->module,
-                "cols" => $this->getFileds()
-            ]);
-
-            $this->render($view, module_path($this->module) .  '/Http/Controllers/' . $model . 'Controller.php');
-        } else {
-            $view = view('base::templates.controller', [
-                "sg" => $sg,
-                "sp" => $sp,
-                "model" => $model,
-                "table" => $this->table,
-                "cols" => $this->getFileds()
-            ]);
-
-            $this->render($view, app_path('Http/Controllers/Admin/' . $model . 'Controller.php'));
-        }
-    }
-
-    public function generateView()
-    {
-        $model = $this->generateName();
-
-        $view = view('base::templates.vue', [
-            "model" => $model,
-            "table" => $this->table,
-            "cols" => $this->getFileds()
-        ]);
-
-        $checkVueFolder = File::exists(resource_path('js/Pages/' . $model));
-        if (!$checkVueFolder) {
-            File::makeDirectory(resource_path('js/Pages/' . $model));
-        }
-
-        $this->render($view, resource_path('js/Pages/' . $model . '/' . 'List.vue'));
-    }
-
-    public function generateMenu()
-    {
-        $model = $this->generateName();
-        $view = view('base::templates.menu', [
-            "model" => $model,
-            "table" => $this->table,
-            "cols" => $this->getFileds()
-        ]);
-
-        $this->render($view, base_path('Modules/Base/Helpers/Menu/List.php'), true);
-    }
-
-    public function generateLanguages()
-    {
-        $sg = $this->generateName(true, true);
-        $sp = $this->generateName(true);
-        $view = view('base::templates.lang', [
+        $model = $this->generateName(true, true, false);
+        $view = view('base::templates.resource', [
             "sg" => $sg,
             "sp" => $sp,
+            "model" => $model,
             "table" => $this->table,
+            "module" => $this->module,
             "cols" => $this->getFileds()
         ]);
 
-        $this->render($view, base_path('Modules/Base/Helpers/Menu/Lang.php'), true);
+        $this->render($view, module_path($this->module) .  '/Resources/' . $model . 'Resource.php');
     }
 
-    public function generateRoute()
-    {
-        $model = $this->generateName();
-        if ($this->module) {
-            $view = view('base::templates.modules.route', [
-                "model" => $model,
-                "table" => $this->table,
-                "module" => $this->module,
-                "cols" => $this->getFileds()
-            ]);
-
-            $this->render($view, module_path($this->module) . '/Routes/web.php', true);
-        } else {
-            $view = view('base::templates.route', [
-                "model" => $model,
-                "table" => $this->table,
-                "cols" => $this->getFileds()
-            ]);
-
-            $this->render($view, base_path('routes/web.php'), true);
-        }
-    }
 
     public function generate()
     {
         $this->generateModel();
-        $this->generateController();
-        $this->generateView();
-        $this->generateRoute();
-        $this->generateMenu();
+        $this->generateResource();
         $this->generatePermission();
     }
 }

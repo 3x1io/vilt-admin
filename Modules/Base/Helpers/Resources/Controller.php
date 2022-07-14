@@ -4,6 +4,7 @@ namespace Modules\Base\Helpers\Resources;
 
 
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Cookie;
 
@@ -62,20 +63,30 @@ trait Controller
         }
     }
 
-    public function processTranslations($data)
+    public function processTranslations($data, $record = null)
     {
         $rows = $this->schema();
         $locals = config('translations.locals');
         foreach ($rows as $row) {
             if ($row['type'] === 'trans') {
-                if (!is_array($data[$row['field']])) {
+                if ($record) {
                     $text = $data[$row['field']];
-                    $data[$row['field']] = [];
+                    $data[$row['field']] = $record[$row['field']];
                     foreach ($locals as $key => $local) {
                         if ($key === app()->getLocale()) {
-                            $data[$row['field']][app()->getLocale()] = $text;
-                        } else {
-                            $data[$row['field']][$local] = "";
+                            $data[$row['field']][$key] = $text;
+                        }
+                    }
+                } else {
+                    if (!is_array($data[$row['field']])) {
+                        $text = $data[$row['field']];
+                        $data[$row['field']] = [];
+                        foreach ($locals as $key => $local) {
+                            if ($key === app()->getLocale()) {
+                                $data[$row['field']][$key] = $text;
+                            } else {
+                                $data[$row['field']][$key] = "";
+                            }
                         }
                     }
                 }
@@ -132,7 +143,7 @@ trait Controller
         return $options;
     }
 
-    public function getVaild($cr = true)
+    public function getVaild(Request $request, $id = null)
     {
         $create = [];
         $edit = [];
@@ -140,13 +151,19 @@ trait Controller
             if ($item['validation']) {
                 $create[$item['field']] = $item['validation'];
                 $edit[$item['field']] = str_replace('required', 'sometimes', $item['validation']);
+                if ($item['unique']) {
+                    $create[$item['field']] .= "|unique:" . $this->table . "," . $item['field'];
+                    if ($id) {
+                        $edit[$item['field']] .= "|unique:" . $this->table . "," . $item['field'] . "," . $id;
+                    }
+                }
             }
         }
 
-        if ($cr) {
-            return $create;
-        } else {
+        if ($id) {
             return $edit;
+        } else {
+            return $create;
         }
     }
 

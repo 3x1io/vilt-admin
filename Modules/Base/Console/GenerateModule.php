@@ -2,9 +2,10 @@
 
 namespace Modules\Base\Console;
 
-use Modules\Base\Helpers\Generator\ResourceGenerator;
 use Exception;
 use Illuminate\Console\Command;
+use Modules\Base\Helpers\Resources\Generator;
+use Modules\Base\Helpers\Generator\ResourceGenerator;
 
 class GenerateModule extends Command
 {
@@ -13,7 +14,7 @@ class GenerateModule extends Command
      *
      * @var string
      */
-    protected $signature = 'make:vilt-module {table} {module}';
+    protected $signature = 'vilt:resource {table} {module}';
 
     /**
      * The console command description.
@@ -33,19 +34,11 @@ class GenerateModule extends Command
         $module = $this->argument('module');
 
         try {
-            $newGenerator = new ResourceGenerator($table, $module);
-            $newGenerator->generateModel(false);
+            $newGenerator = new Generator($table, $module);
+            $newGenerator->generateModel();
             $this->info('The Model Has Been Generated');
-            $newGenerator->generateController();
-            $this->info('The Controller Has Been Generated');
-            $newGenerator->generateView();
-            $this->info('The .Vue Has Been Generated');
-            $newGenerator->generateRoute();
-            $this->info('The Routes Has Been Generated');
-            $newGenerator->generateMenu();
-            $this->info('The Menu Has Been Generated');
-            $newGenerator->generateLanguages();
-            $this->info('The Languages Has Been Generated');
+            $newGenerator->generateResource();
+            $this->info('The Resource Has Been Generated');
             $newGenerator->generatePermission();
             $this->info('The Permission Has Been Generated');
             $this->info('Please Run npm i & npm run dev to compate assets of vuejs');

@@ -1,24 +1,22 @@
 <?php
 
-namespace Modules\Artisan\Providers;
+namespace Modules\Customers\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Modules\Base\Helpers\Resources\Core;
-use Modules\Base\Helpers\Resources\Lang;
-use Modules\Base\Helpers\Resources\Menu;
 use Illuminate\Database\Eloquent\Factory;
+use Modules\Base\Helpers\Resources\Core;
 
-class ArtisanServiceProvider extends ServiceProvider
+class CustomersServiceProvider extends ServiceProvider
 {
     /**
      * @var string $moduleName
      */
-    protected $moduleName = 'Artisan';
+    protected $moduleName = 'Customers';
 
     /**
      * @var string $moduleNameLower
      */
-    protected $moduleNameLower = 'artisan';
+    protected $moduleNameLower = 'customers';
 
     /**
      * Boot the application events.
@@ -31,9 +29,7 @@ class ArtisanServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
-
-        Core::registerDashboardMenuItem(Menu::make('Artisan')->lang('artisan.sidebar')->icon('bx bxs-terminal')->route('artisan'), 'Settings');
-        Core::registerGlobalTranslation(Lang::make('artisan.sidebar')->value(__('Artisan Terminal')));
+        Core::loadResources($this->moduleName);
     }
 
     /**

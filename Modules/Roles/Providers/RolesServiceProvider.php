@@ -3,6 +3,7 @@
 namespace Modules\Roles\Providers;
 
 use Inertia\Inertia;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\ServiceProvider;
@@ -10,10 +11,10 @@ use Modules\Base\Helpers\Resources\Core;
 use Modules\Base\Helpers\Resources\Lang;
 use Modules\Base\Helpers\Resources\Menu;
 use Illuminate\Database\Eloquent\Factory;
+use Modules\Roles\Resources\UserResource;
+use Modules\Roles\Resources\RolesResource;
 use Modules\Roles\Console\GeneratePermission;
 use Modules\Roles\Console\GeneratePermissionTable;
-use Modules\Roles\Resources\RolesResource;
-use Modules\Roles\Resources\UserResource;
 
 class RolesServiceProvider extends ServiceProvider
 {
@@ -34,9 +35,6 @@ class RolesServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Core::registerResource(UserResource::class);
-        Core::registerResource(RolesResource::class);
-
         $this->registerConfig();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
 
@@ -44,6 +42,7 @@ class RolesServiceProvider extends ServiceProvider
             GeneratePermission::class,
             GeneratePermissionTable::class,
         ]);
+        Core::loadResources($this->moduleName);
     }
 
     /**

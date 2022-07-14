@@ -5,7 +5,7 @@
             <flat-pickr
                 v-if="type === 'date'"
                 v-model="value"
-                @on-close="$emit('update:modelValue', value)"
+                @on-change="$emit('update:modelValue', value)"
                 :config="date"
                 :placeholder="placeholder"
                 class="w-full p-3 pr-12 text-sm border-gray-200 rounded-lg shadow-sm"
@@ -15,7 +15,7 @@
             <flat-pickr
                 v-if="type === 'datetime'"
                 v-model="value"
-                @on-close="$emit('update:modelValue', value)"
+                @on-change="$emit('update:modelValue', value)"
                 :config="datetime"
                 :placeholder="placeholder"
                 class="w-full p-3 pr-12 text-sm border-gray-200 rounded-lg shadow-sm"
@@ -25,7 +25,7 @@
             <flat-pickr
                 v-if="type === 'time'"
                 v-model="value"
-                @on-close="$emit('update:modelValue', value)"
+                @on-change="$emit('update:modelValue', value)"
                 :config="time"
                 :placeholder="placeholder"
                 class="w-full p-3 pr-12 text-sm border-gray-200 rounded-lg shadow-sm"
@@ -113,12 +113,14 @@ export default defineComponent({
             },
         };
     },
+    beforeUpdate(){
+        if(this.modelValue){
+            this.value = this.modelValue
+        }
+    },
     mounted(){
         if(this.default){
             this.value = this.default
-        }
-        if(this.modelValue){
-            this.value = this.modelValue
         }
     },
     props: {

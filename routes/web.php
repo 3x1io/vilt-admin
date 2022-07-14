@@ -5,6 +5,7 @@ use App\Vilt\Base\Core;
 use App\Services\Rows\Text;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
+use Modules\Base\Helpers\Resources\Generator;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,7 +28,6 @@ Route::get('/', function () {
 });
 
 Route::get('/test', function () {
-    return response()->json([
-        "row" => Text::make('title')
-    ]);
+    $generator = new Generator("customers", "Customers");
+    return $generator->getFileds();
 });

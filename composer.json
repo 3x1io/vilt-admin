@@ -10,6 +10,7 @@
         "google/cloud-translate": "^1.12",
         "guzzlehttp/guzzle": "^7.2",
         "inertiajs/inertia-laravel": "^0.5.2",
+        "infyomlabs/laravel-generator": "^4.2",
         "laravel/framework": "^9.19",
         "laravel/jetstream": "^2.9",
         "laravel/sanctum": "^2.14.1",
@@ -26,6 +27,7 @@
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
+        "krlove/eloquent-model-generator": "^2.0",
         "laravel/sail": "^1.0.1",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^6.1",

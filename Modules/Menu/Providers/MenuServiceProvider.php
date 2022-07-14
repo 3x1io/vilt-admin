@@ -28,7 +28,6 @@ class MenuServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-
         $this->registerTranslations();
         $this->registerConfig();
         $this->registerViews();
@@ -40,8 +39,7 @@ class MenuServiceProvider extends ServiceProvider
             include(base_path('Modules/Menu/Helpers/List.php'));
         }
 
-        Core::registerResource(MenuResource::class);
-        Core::registerResource(MenuGroupsResource::class);
+        Core::loadResources($this->moduleName);
     }
 
     /**

@@ -33,6 +33,7 @@ class Row
     private ?bool $over = false;
     private  $default = null;
     private ?bool $search = false;
+    private ?bool $unique = false;
 
     public function __construct($field)
     {
@@ -131,6 +132,12 @@ class Row
         return $this;
     }
 
+    public function unique($unique): ?static
+    {
+        $this->unique = $unique;
+        return $this;
+    }
+
     public function label($label): ?static
     {
         $this->label = $label;
@@ -211,6 +218,7 @@ class Row
             "over" => $this->over,
             "search" => $this->search,
             "validation" => $this->validation,
+            "unique" => $this->unique,
         ];
     }
 }

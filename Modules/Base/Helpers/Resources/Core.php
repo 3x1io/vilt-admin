@@ -2,10 +2,11 @@
 
 namespace Modules\Base\Helpers\Resources;
 
+use PhpParser\Node\Expr\FuncCall;
+use Illuminate\Support\Facades\File;
 use Modules\Base\Helpers\Resources\Lang;
 use Modules\Base\Helpers\Resources\Menu;
 use Modules\Base\Helpers\Resources\Share;
-use PhpParser\Node\Expr\FuncCall;
 
 class Core
 {
@@ -29,6 +30,20 @@ class Core
         $share = self::loadShareData();
 
         return array_merge($data, $share);
+    }
+
+    public static function loadResources($module)
+    {
+        $files = File::files(module_path($module) . '/Resources');
+        foreach ($files as $file) {
+            $fileName = $file->getRelativePathname();
+            if (strpos($fileName, "Resource.php")) {
+                $path = $file->getPath();
+                $filterPath = str_replace(base_path() . '/', "", $path);
+                $className = str_replace("/", "\\", $filterPath . '/' . str_replace(".php", "", $fileName));
+                self::registerResource($className);
+            }
+        }
     }
 
     public static function registerDashboardMenuItem($item, $group = 0)

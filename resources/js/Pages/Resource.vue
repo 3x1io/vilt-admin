@@ -251,6 +251,15 @@ export default defineComponent({
             this.edit = false;
             this.createModal = true;
         },
+        editItem(item) {
+            for(let i=0; i<this.rows.length; i++){
+                if(item[this.rows[i].field]){
+                    this.form[this.rows[i].field] = item[this.rows[i].field];
+                }
+            }
+            this.createModal = true;
+            this.edit = true;
+        },
     },
 });
 </script>

@@ -134,14 +134,11 @@ class Resource
         return $request->all();
     }
 
-    public function store(Request $request)
-    {
-        $this->roles($this->url);
-        if (!$this->canCreate) {
-            return inertia('403');
-        }
 
-        $rules = $this->getVaild();
+    public function validStore(Request $request)
+    {
+
+        $rules = $this->getVaild($request);
 
         $validator = Validator::make($request->all(), $rules)->after(function ($validator) use ($request) {
             //$validator->errors()->add('current_password', __('The provided password does not match your current password.'));
@@ -149,12 +146,24 @@ class Resource
 
         $validator->validate();
 
+        return $validator;
+    }
+
+    public function store(Request $request)
+    {
+        $this->roles($this->url);
+        if (!$this->canCreate) {
+            return inertia('403');
+        }
+
+        $validator = $this->validStore($request);
+
         if (!$validator->fails()) {
             $request = $this->proccessSelect($request);
             $getData = $this->beforeStore($request);
             $data = $this->processTranslations($getData);
-
             $record = $this->model::create($data);
+
 
             $this->processCreateMedia($request, $record);
             $this->afterStore($request, $record);
@@ -172,14 +181,10 @@ class Resource
         return $request->all();
     }
 
-    public function update(Request $request, $id)
+    public function validUpdate(Request $request, $id)
     {
-        $this->roles($this->url);
-        if (!$this->canEdit) {
-            return inertia('403');
-        }
 
-        $rules = $this->getVaild(false);
+        $rules = $this->getVaild($request, $id);
 
         $validator = Validator::make($request->all(), $rules)->after(function ($validator) use ($request) {
             //$validator->errors()->add('current_password', __('The provided password does not match your current password.'));
@@ -187,11 +192,23 @@ class Resource
 
         $validator->validate();
 
+        return $validator;
+    }
+
+    public function update(Request $request, $id)
+    {
+        $this->roles($this->url);
+        if (!$this->canEdit) {
+            return inertia('403');
+        }
+
+        $validator = $this->validUpdate($request, $id);
+
         if (!$validator->fails()) {
             $record = $this->model::find($id);
             $request = $this->proccessSelect($request);
             $getData = $this->beforeStore($request);
-            $data = $this->processTranslations($getData);
+            $data = $this->processTranslations($getData, $record);
             $record->update($data);
             $this->processUpdateMedia($request, $record);
             $this->afterUpdate($request, $record);
