@@ -1,0 +1,13 @@
+{
+    "name": "Base",
+    "alias": "base",
+    "description": "",
+    "keywords": [],
+    "priority": 455,
+    "providers": [
+        "Modules\\Base\\Providers\\BaseServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

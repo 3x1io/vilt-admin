@@ -1,0 +1,11 @@
+{
+    "Roles": true,
+    "Translations": true,
+    "Base": true,
+    "Settings": true,
+    "Browser": true,
+    "Artisan": true,
+    "Notifications": true,
+    "Payment": false,
+    "Menu": true
+}

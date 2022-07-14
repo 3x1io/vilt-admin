@@ -1,0 +1,13 @@
+{
+    "name": "Translations",
+    "alias": "translations",
+    "description": "",
+    "keywords": [],
+    "priority": 1,
+    "providers": [
+        "Modules\\Translations\\Providers\\TranslationsServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

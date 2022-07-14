@@ -1,0 +1,13 @@
+{
+    "name": "Backup",
+    "alias": "backup",
+    "description": "",
+    "keywords": [],
+    "priority": 1,
+    "providers": [
+        "Modules\\Backup\\Providers\\BackupServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}
