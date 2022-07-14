@@ -52,7 +52,6 @@ export default defineComponent({
     created() {
         let isDark = localStorage.getItem("dark");
         if (isDark) {
-            console.log(isDark);
             if (isDark === "true") {
                 this.dark = true;
                 document.querySelector("html").classList.add("dark");
@@ -64,7 +63,7 @@ export default defineComponent({
     },
     computed:{
         lang(){
-            return this.$page.props.trans;
+            return this.$page.props.data.trans;
         }
     },
     methods: {

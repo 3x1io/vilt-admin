@@ -15,17 +15,31 @@ const appName = window.document.getElementsByTagName('title')[0]?.innerText || '
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
-    resolve: (name) => {
-        if(name.includes('Modules')){
-            return import(`${name}.vue`)
+    resolve: async (name) => {
+        let page = ""
+       if(name.includes('@')){
+            const matched = /@(.*)::/.exec(name);
+            const module = matched[1];
+            const pageName = name.replace(matched[0], "");
+            page = resolvePageComponent(
+                `./../../Modules/${module}/Resources/views/${pageName}.vue`,
+                import.meta.glob("./../../Modules/**/**/**/**/*.vue")
+            );
         }
         else {
-            return resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue'))
+            page = resolvePageComponent(
+                `./Pages/${name}.vue`,
+                import.meta.glob("./Pages/**/*.vue")
+            );
         }
-
+        page.then((module) => {
+            module.default.layout = module.default.layout;
+        });
+        return page;
     },
     setup({ el, app, props, plugin }) {
-        return createApp({ render: () => h(app, props) })
+        return createApp(
+            { render: () => h(app, props) })
             .use(plugin)
             .use(Toaster)
             .use(ZiggyVue, Ziggy)

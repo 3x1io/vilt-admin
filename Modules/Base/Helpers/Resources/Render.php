@@ -40,6 +40,6 @@ class Render
 
     public function render()
     {
-        return Inertia::render(module_path($this->module) . '/Resources/views/' . $this->path, $this->data);
+        return Inertia::render('@' . $this->module . '::' . $this->path, $this->data);
     }
 }

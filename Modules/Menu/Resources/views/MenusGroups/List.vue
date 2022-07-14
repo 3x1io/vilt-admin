@@ -1,6 +1,6 @@
 <template>
     <app-layout :title="trans('menus_groups.title')">
-        <div class="px-6 mx-auto pt-6">
+        <div class="px-6 pt-6 mx-auto">
             <Header
                 :canCreate="$attrs.canCreate"
                 :title="trans('menus_groups.title')"
@@ -13,7 +13,7 @@
                     <div class="space-y-6">
                         <div class="filament-tables-component">
                             <div
-                                class="bg-white border border-gray-300 shadow-sm p-6 pb-0 dark:bg-gray-700 dark:text-white dark:border-gray-800 filament-tables-container"
+                                class="p-6 pb-0 bg-white border border-gray-300 shadow-sm dark:bg-gray-700 dark:text-white dark:border-gray-800 filament-tables-container"
                             >
                                 <div
                                     class="flex items-center justify-between py-2 h-14"
@@ -149,7 +149,7 @@
 
 <script>
 import { defineComponent } from "vue";
-import MixinVue from "../../Components/Base/Mixin.vue";
+import MixinVue from "@/Components/Base/Mixin.vue";
 
 export default defineComponent({
     mixins: [MixinVue],

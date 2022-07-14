@@ -156,8 +156,8 @@
 
 <script>
 import { defineComponent } from "vue";
-import MixinVue from "../../Components/Base/Mixin.vue";
-import ViltSelect from "../../Components/Base/Rows/ViltSelect.vue";
+import MixinVue from "@/Components/Base/Mixin.vue";
+import ViltSelect from "@/Components/Base/Rows/ViltSelect.vue";
 
 export default defineComponent({
     mixins: [MixinVue],
