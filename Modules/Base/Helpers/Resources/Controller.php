@@ -73,10 +73,19 @@ trait Controller
                 if ($record) {
                     if (isset($data[$row['field']]) && !empty($data[$row['field']])) {
                         $text = $data[$row['field']];
-                        $data[$row['field']] = $record[$row['field']];
-                        foreach ($locals as $key => $local) {
-                            if ($key === app()->getLocale()) {
-                                $data[$row['field']][$key] = $text;
+                        if (is_array($record[$row['field']])) {
+                            $data[$row['field']] = $record[$row['field']];
+                            foreach ($locals as $key => $local) {
+                                if ($key === app()->getLocale()) {
+                                    $data[$row['field']][$key] = $text;
+                                }
+                            }
+                        } else {
+                            $data[$row['field']] = [];
+                            foreach ($locals as $key => $local) {
+                                if ($key === app()->getLocale()) {
+                                    $data[$row['field']][$key] = $text;
+                                }
                             }
                         }
                     }
@@ -258,7 +267,7 @@ trait Controller
         $filedsList = [];
         foreach ($this->schema() as $field) {
 
-            if (($field['type'] !== 'image') && ($field['type'] !== 'relation') && ($field['field'] !== 'password_confirmation')) {
+            if ((!$field['over']) && ($field['type'] !== 'image') && ($field['type'] !== 'relation') && ($field['field'] !== 'password_confirmation')) {
                 array_push($filedsList, $field['field']);
             }
         }
