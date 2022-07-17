@@ -22,7 +22,6 @@ class SitesSettings extends Settings
     public string $site_language;
     public array $site_social;
     public array $site_menu;
-    public bool $sap_functionality;
 
     public static function group(): string
     {

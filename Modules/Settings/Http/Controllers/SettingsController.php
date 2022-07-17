@@ -37,7 +37,6 @@ class SettingsController extends Controller
             Row::make('site_address')->label(__('Site Address'))->default($settings->site_address)->type('textarea')->get(),
             Row::make('site_email')->label(__('Site Email'))->default($settings->site_email)->type('email')->get(),
             Row::make('site_phone')->label(__('Site Phone'))->default($settings->site_phone)->type('tel')->get(),
-            Row::make('sap_functionality')->label(__('Sap functionality'))->default($settings->sap_functionality)->type('switch')->get(),
             Row::make('site_phone_code')->default($settings->site_phone_code)->label(_('Site Phone Code'))->type('text')->get(),
             Row::make('site_location')->default($settings->site_location)->label(__('Site Location'))->type('text')->get(),
             Row::make('site_currency')->default($settings->site_currency)->label(__('Site Currency'))->type('text')->get(),

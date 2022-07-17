@@ -9,9 +9,10 @@ let host = 'vilt-v2.test'
 
 export default defineConfig({
     plugins: [
-        laravel({
-            input: 'resources/js/app.js',
-        }),
+        laravel([
+            'resources/js/app.js',
+            'resources/css/app.css'
+        ]),
         vue({
             template: {
                 transformAssetUrls: {
@@ -21,6 +22,14 @@ export default defineConfig({
             },
         }),
     ],
+    css: {
+        postCss: {
+            plugins: {
+                tailwindcss: {},
+                autoprefixer: {},
+              },
+        },
+    },
     server: detectServerConfig(host),
 });
 
