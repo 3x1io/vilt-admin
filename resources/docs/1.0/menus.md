@@ -3,14 +3,23 @@
 - [Profile Dropdown](#profile-dropdown)
 
 <a name="menus"></a>
-## [Menus](#menus)
+## [Create Menu Item](#menus)
 
-you can easily add a new item to the menu with the magic class `Menu` to add a new Menu you can add it from the provider or you can add it to the file path `Modules\Base\Helpers\Menu\List.php` and add
+you can easily add a new item to the menu with the magic class `Menu::class` to add a new Menu you can add it from the provider or you can add it to the resource on the `menus()` method
 
+```php 
+public function menus()
+{
+    $menus = [
+        $this->group => Menu::make(Str::ucfirst($this->table))->lang($this->table . '.sidebar')->icon($this->icon)->route($this->table . '.index')->can('view_any_' . $this->table)
+    ];
+    return array_merge($menus, $this->menu());
+}
+```
 <hr>
 
 <a name="dashboard-menu"></a>
-## [Dashboard Menu](#dashboard-menu)
+## [Register Provider Dashboard Menu](#dashboard-menu)
 
 ```php
 Core::registerDashboardMenuItem(Menu::make('Settings')->icon('bx bxs-cog')->route('settings')->can(true), 'Settings');
@@ -21,7 +30,7 @@ it will generate an item on the dashboard menu and you can use another method fo
 <hr>
 
 <a name="profile-dropdow"></a>
-## [Profile Dropdown](#profile-dropdow)
+## [Register Provider Profile Dropdown](#profile-dropdow)
 
 ```php
 Core::registerProfileMenuItem(Menu::make('Profile')->icon('bxs-user')->route('profile.show'));

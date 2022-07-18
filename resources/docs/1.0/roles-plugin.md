@@ -32,7 +32,7 @@ and for menus you can handle permission using `->can()` with the permission name
 you can generate permission for a selected table if not exists and append it to the main admin role using this command
 
 ```bash
-php artisan vilt-roles:generate table
+php artisan roles:generate table
 ```
 
 where `table` is the name of the table you when to use it

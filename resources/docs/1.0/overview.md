@@ -12,7 +12,7 @@ we build the admin panel to support VILT Stack Community please before you use t
  > {success} Become a <b><a href="https://3x1.io" target="_blank">platinum sponsor</a></b> with a monthly donation of <b>$10</b> and get <b>1 hours of premium support</b> and your logo on our README.md on Github & all of vilt admin.
 
 <larecipe-card>
-    <a href="https://www.queentechsolutions.net/" target="_blank"><img src="https://camo.githubusercontent.com/17e7e2cafa2dcda55fea0ac8c00928709b2b4c783735ce84a9b621511ab7be7d/68747470733a2f2f6c68352e676f6f676c6575736572636f6e74656e742e636f6d2f702f4146315169704f585533446f767656584539576f574c752d526573674f58627745634469522d39576f7169513d773230332d683230332d6b2d6e6f" width="10%" /></a>
+    <a href="https://www.queentechsolutions.net/" target="_blank"><img src="https://www.queentechsolutions.net/wp-content/uploads/2021/07/logofooter.png" width="10%" /></a>
 </larecipe-card>
 
 <hr>
@@ -31,17 +31,10 @@ we build the admin panel to support VILT Stack Community please before you use t
 ## [Screenshot](#screenshot)
 
 
-![Screenshot of dashboard](https://raw.githubusercontent.com/3x1io/vilt-admin/main/art/dashboard.png)
-![Screenshot of list](https://raw.githubusercontent.com/3x1io/vilt-admin/main/art/list.png)
-![Screenshot of profile](https://raw.githubusercontent.com/3x1io/vilt-admin/main/art/profile.png)
-![Screenshot of 2fa](https://raw.githubusercontent.com/3x1io/vilt-admin/main/art/2fa.png)
-![Screenshot of create](https://raw.githubusercontent.com/3x1io/vilt-admin/main/art/create.png)
-![Screenshot of bulk](https://raw.githubusercontent.com/3x1io/vilt-admin//main/art/bulk.png)
-![Screenshot of edit](https://raw.githubusercontent.com/3x1io/vilt-admin/main/art/edit.png)
-![Screenshot of delete](https://raw.githubusercontent.com/3x1io/vilt-admin/main/art/delete.png)
-![Screenshot of pagination](https://raw.githubusercontent.com/3x1io/vilt-admin/main/art/pagination.png)
-![Screenshot of view](https://raw.githubusercontent.com/3x1io/vilt-admin/main/art/view.png)
-![Screenshot of login](https://raw.githubusercontent.com/3x1io/vilt-admin/main/art/login.png)
+![Screenshot](https://raw.githubusercontent.com/3x1io/vilt-admin/master/arts/1.png)
+![Screenshot](https://raw.githubusercontent.com/3x1io/vilt-admin/master/arts/2.png)
+![Screenshot](https://raw.githubusercontent.com/3x1io/vilt-admin/master/arts/3.png)
+![Screenshot](https://raw.githubusercontent.com/3x1io/vilt-admin/master/arts/4.png)
 
 <hr/>
 
