@@ -14,7 +14,6 @@ return [
         app_path(),
         resource_path('views'),
         base_path('Modules'),
-        base_path('vendor')
     ],
 
     /*

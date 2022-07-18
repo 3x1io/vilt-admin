@@ -78,7 +78,7 @@ class UserResource extends Resource
     {
         if ($request->has('roles')) {
             foreach ($request->get('roles') as $role) {
-                $record->assignRole($role['name']);
+                $record->syncRoles($role['name']);
             }
         }
     }

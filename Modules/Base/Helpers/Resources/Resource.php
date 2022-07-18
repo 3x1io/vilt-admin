@@ -149,11 +149,7 @@ class Resource
     {
 
         $rules = $this->getVaild($request);
-
-        $validator = Validator::make($request->all(), $rules)->after(function ($validator) use ($request) {
-            //$validator->errors()->add('current_password', __('The provided password does not match your current password.'));
-        });
-
+        $validator = Validator::make($request->all(), $rules);
         $validator->validate();
 
         return $validator;

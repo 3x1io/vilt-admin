@@ -265,12 +265,10 @@ class Query
             return $this->parseFullColumnName($column);
         });
 
-        // FIXME there is an issue, if you pass primary key as the only column to search in, it may not work properly
 
         $tokens->each(function ($token) use ($searchIn) {
             $this->query->where(function (Builder $query) use ($token, $searchIn) {
                 $searchIn->each(function ($column) use ($token, $query) {
-                    // FIXME try to find out how to customize this default behaviour
                     if ($this->model->getKeyName() === $column['column'] && $this->model->getTable() === $column['table']) {
                         if (is_numeric($token) && $token === strval(intval($token))) {
                             $query->orWhere($this->materializeColumnName($column, true), intval($token));

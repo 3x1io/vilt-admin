@@ -1,7 +1,7 @@
 <template>
     <!-- Desktop sidebar -->
     <aside
-        class="fixed inset-y-0 left-0 z-20 flex flex-col h-screen overflow-y-scroll transition-transform -translate-x-full shadow-2xl rtl:left-auto rtl:right-0 filament-sidebar lg:border-r w-80 lg:z-0 lg:translate-x-0 dark:bg-gray-800 dark:border-white rtl:lg:-translate-x-0 rtl:translate-x-full scrollbar-thin scrollbar-thumb-greenColor2 scrollbar-track-white dark:scrollbar-track-gray-500 hover:scrollbar-thumb-primary-700"
+        class="fixed inset-y-0 left-0 z-20 flex flex-col h-screen overflow-y-scroll transition-transform -translate-x-full rtl:left-auto rtl:right-0 lg:border-r w-80 lg:z-0 lg:translate-x-0 dark:bg-gray-800 dark:border-white rtl:lg:-translate-x-0 rtl:translate-x-full scrollbar-thin scrollbar-thumb-greenColor2 scrollbar-track-white dark:scrollbar-track-gray-500 hover:scrollbar-thumb-primary-700"
     >
         <div class="text-gray-500 dark:text-gray-400">
             <header

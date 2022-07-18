@@ -27,7 +27,7 @@ class Row
     private ?string $row = null;
     private ?string $placeholder = null;
     private ?string $className = null;
-    private ?string $validation = null;
+    private $validation = null;
     private ?bool $preview = false;
     private ?bool $url = false;
     private ?bool $over = false;

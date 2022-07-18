@@ -128,9 +128,12 @@ class RolesResource extends Resource
     public function afterUpdate(Request $request, $record)
     {
         if ($request->has('permissions')) {
+            $getPermArray = [];
             foreach ($request->get('permissions') as $permission) {
-                $record->givePermissionTo($permission['name']);
+                array_push($getPermArray, $permission['name']);
             }
+
+            $record->syncPermissions($getPermArray);
         }
     }
 }

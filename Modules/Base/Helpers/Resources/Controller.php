@@ -33,10 +33,10 @@ trait Controller
     {
         $data = $data->toArray();
         $rows = $this->schema();
-        for ($i = 0; $i < count($data['data']); $i++) {
+        foreach ($data['data'] as $i => $iValue) {
             foreach ($rows as $row) {
                 if ($row['type'] === 'trans') {
-                    if (isset($data['data'][$i][$row['field']][app()->getLocale()])) {
+                    if (isset($iValue[$row['field']][app()->getLocale()])) {
                         $data['data'][$i][$row['field']] = $data['data'][$i][$row['field']][app()->getLocale()];
                     } else {
                         $data['data'][$i][$row['field']] = "";
@@ -164,7 +164,13 @@ trait Controller
         foreach ($this->schema() as $item) {
             if ($item['validation']) {
                 $create[$item['field']] = $item['validation'];
-                $edit[$item['field']] = str_replace('required', 'sometimes', $item['validation']);
+                $edit[$item['field']] = $item['validation'];
+                if (is_array($item['validation'])) {
+                    if (isset($item['validation']['create']) && isset($item['validation']['update'])) {
+                        $create[$item['field']] = $item['validation']['create'];
+                        $create[$item['field']] = $item['validation']['update'];
+                    }
+                }
                 if ($item['unique']) {
                     $create[$item['field']] .= "|unique:" . $this->table . "," . $item['field'];
                     if ($id) {
@@ -443,7 +449,6 @@ trait Controller
 
         $__ = collect();
 
-        // FIXME maybe we can count how many times one translation is used and eventually display it to the user
 
         $file = File::get($file);
         if (preg_match_all("/$patternB/siU", $file, $matches)) {

@@ -111,7 +111,6 @@ class Scan
         $trans = collect();
         $__ = collect();
 
-        // FIXME maybe we can count how many times one translation is used and eventually display it to the user
 
         /** @var SplFileInfo $file */
         foreach ($this->disk->allFiles($this->scannedPaths->toArray()) as $file) {
