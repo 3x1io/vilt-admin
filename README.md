@@ -8,9 +8,9 @@ VILT stack admin panel
 
 you can join our discord server to get support [VILT Admin](https://discord.gg/HUNYbgKDdx)
 
-## Wiki
+## Docs
 
-looking for wiki to get docs & for projects to get new tasks and upcomming features
+look to the new docs of v4.00 on my website [Docs](https://vilt.3x1.io/docs/)
 
 ## Changelog
 
