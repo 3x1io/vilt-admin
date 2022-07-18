@@ -2,6 +2,7 @@
 
 namespace Modules\Base\Helpers\Resources;
 
+use JetBrains\PhpStorm\ArrayShape;
 use Modules\Base\Helpers\Traits\Configure;
 
 
@@ -30,14 +31,11 @@ class Action
         return $static;
     }
 
-
-
     public function url($url): ?static
     {
         $this->url = $url;
         return $this;
     }
-
 
     public function label($label): ?static
     {
@@ -69,7 +67,7 @@ class Action
         return $this;
     }
 
-    public function render()
+    public function render(): array
     {
         return [
             "name" => $this->name,
