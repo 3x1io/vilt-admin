@@ -7,25 +7,34 @@ use Illuminate\Support\Facades\Cookie;
 use Modules\Base\Helpers\Resources\Alert;
 use Modules\Base\Helpers\Resources\Row;
 use Modules\Base\Helpers\Resources\Resource;
+use Modules\Notifications\Entities\NotificationsLogs;
 use Modules\Notifications\Helpers\SendNotification;
 use Modules\Notifications\Entities\UserNotification;
-use Modules\Notifications\Entities\NotifiactionsTemplates;
 
-class NotificationsResource extends Resource
+class NotificationsLogsResource extends Resource
 {
-    public $model = UserNotification::class;
-    public $icon = "bx bxs-bell";
+    public $model = NotificationsLogs::class;
+    public $icon = "bx bx-history";
     public $group = "Notifications";
 
     public function rows()
     {
+        $this->canCreate = false;
+        $this->canEdit = false;
         return [
-            Row::make('id')->label(__('ID'))->create(false)->edit(false)->get(),
-            Row::make('template_id')->label(__('Template'))->type('hasOne')->options(NotifiactionsTemplates::all()->toArray())->track_by_name('name')->get(),
-            Row::make('privacy')->label(__('Privacy'))->create(false)->edit(false)->type('select')->options(["public", "private"])->get(),
-            Row::make('model_id')->label(__('User'))->create(false)->edit(false)->type('hasOne')->options([])->get(),
-            Row::make('model_type')->label(__('User'))->view(false)->list(false)->create(false)->edit(false)->type('hasOne')->options([])->get(),
-            Row::make('created_at')->label(__('Date'))->create(false)->edit(false)->type('datetime')->options([])->get()
+            Row::make('id')->label(__('Id '))->create(false)->edit(false)->get(),
+
+            Row::make('model_type')->list(false)->view(false)->label(__('Model Type '))->get(),
+
+            Row::make('model_id')->type('hasOne')->options([])->label(__('User'))->get(),
+
+            Row::make('title')->label(__('Title '))->get(),
+
+            Row::make('description')->list(false)->label(__('Description '))->get(),
+
+            Row::make('type')->list(false)->label(__('Type '))->get(),
+            Row::make('provider')->label(__('Provider'))->get(),
+            Row::make('created_at')->label(__('Date'))->type('datetime')->get(),
         ];
     }
 

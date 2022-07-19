@@ -12,7 +12,7 @@ class MenuGroupsResource extends Resource
 {
     public $model = MenusGroups::class;
     public $icon = "bx bx-bookmarks";
-    public $group = "Settings";
+    public $group = "Menus";
 
     public function rows()
     {

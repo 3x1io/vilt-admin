@@ -64,11 +64,13 @@
                         <span class="ml-1 rtl:mr-1" v-if="!menu.lang">{{ menu.title }}</span>
                         <span class="ml-1 rtl:mr-1" v-else>{{ trans(menu.lang) }}</span>
                     </a>
+
                 </li>
                 <div
                     class="mt-6 border-b dark:border-gray-700"
                     v-if="key !== $page.props.data.menu.length - 1"
                 ></div>
+                <br>
             </ul>
         </div>
     </aside>

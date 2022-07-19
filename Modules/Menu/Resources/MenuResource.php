@@ -16,7 +16,7 @@ class MenuResource extends Resource
 {
     public $model = Menus::class;
     public $icon = "bx bx-menu";
-    public $group = "Settings";
+    public $group = "Menus";
 
     public function rows()
     {

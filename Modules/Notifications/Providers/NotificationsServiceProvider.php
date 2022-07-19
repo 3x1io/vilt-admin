@@ -30,12 +30,12 @@ class NotificationsServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Core::registerResource(NotificationsResource::class);
-        Core::registerResource(TemplatesResource::class);
         $this->registerTranslations();
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
+
+        Core::loadResources($this->moduleName);
     }
 
     /**

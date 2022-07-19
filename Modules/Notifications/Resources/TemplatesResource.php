@@ -15,8 +15,8 @@ use Modules\Notifications\Entities\NotifiactionsTemplates;
 class TemplatesResource extends Resource
 {
     public $model = NotifiactionsTemplates::class;
-    public $icon = "bx bx-menu";
-    public $group = "Settings";
+    public $icon = "bx bxs-notification";
+    public $group = "Notifications";
 
     public function rows()
     {

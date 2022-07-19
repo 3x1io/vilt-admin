@@ -75,7 +75,6 @@ class SettingsController extends Controller
             "site_location" => "required|string",
             "site_currency" => "required|string",
             "site_language" => "required|string",
-            "sap_functionality" => "required",
         ];
         $validator = Validator::make($request->all(), $rules);
         $validator->validate();
