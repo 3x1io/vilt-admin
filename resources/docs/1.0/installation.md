@@ -94,6 +94,14 @@ php artisan config:cache
 
 <hr>
 
+<a name="select-modules"></a>
+
+## [Select Modules](#select-modules)
+
+now the app is ready to select modules to start your new project so go to `modules_statuses.json` and make your modules to `true` and then run migrations or selected Module commands
+
+<hr>
+
 <a name="run-migration"></a>
 
 ## [Run migration](#run-migration)
