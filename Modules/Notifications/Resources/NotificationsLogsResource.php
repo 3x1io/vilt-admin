@@ -40,42 +40,20 @@ class NotificationsLogsResource extends Resource
 
     public function afterLoad($data)
     {
-        foreach ($data['data'] as $item) {
+        $getData = $data['data'];
+        foreach ($getData as $i=>$item) {
             if ($item['model_id'] && $item['model_type']) {
-                $item['model_id'] = $item['model_type']::find($item['model_id']);
+                $getData[$i]['model_id'] = $item['model_type']::find($item['model_id']);
             } else {
-                $item['model_id'] = "";
+                $getData[$i]['model_id'] = [
+                    "name" => __('Public'),
+                    "id" => "public"
+                ];
             }
-            $item['template_id'] = NotifiactionsTemplates::find($item['template_id']);
         }
 
+        $data['data'] = $getData;
         return $data;
     }
 
-    public function beforeStore(Request $request)
-    {
-        $local = Cookie::get('lang');
-        if (empty($local)) {
-            $local = "en";
-        }
-        $getRequest = $request->all();
-        $getRequest['model_type'] = $getRequest['model_type']['id'];
-        if ($getRequest['model_id']) {
-            $getRequest['model_id'] = $getRequest['model_id']['id'];
-        } else {
-            $getRequest['model_id'] = null;
-        }
-
-        SendNotification::make($getRequest['template_id']['title'][$local])
-            ->template($getRequest['template_id']['key'])
-            ->database(true)
-            ->privacy($getRequest['privacy'])
-            ->model($getRequest['model_type'])
-            ->model_id($getRequest['model_id'])
-            ->provider([$request->get('provider')])
-            ->lang($local)
-            ->send();
-
-        return Alert::make(__());
-    }
 }

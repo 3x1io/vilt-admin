@@ -32,6 +32,12 @@ class NotifiactionsTemplates extends Model implements HasMedia
         'url',
         'icon',
         'type',
+        'providers',
+        'action'
+    ];
+
+    protected $casts = [
+        "providers" => "array"
     ];
 
 

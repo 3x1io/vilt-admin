@@ -1,12 +1,11 @@
 {
-    "Roles": false,
-    "Translations": false,
-    "Base": false,
-    "Settings": false,
-    "Browser": false,
-    "Artisan": false,
-    "Notifications": false,
-    "Payment": false,
-    "Menu": false,
-    "Customers": false
+    "Roles": true,
+    "Translations": true,
+    "Base": true,
+    "Settings": true,
+    "Browser": true,
+    "Artisan": true,
+    "Notifications": true,
+    "Payment": true,
+    "Menu": true
 }

@@ -11,7 +11,7 @@ class Render
 
     private ?string $path = null;
     private ?string $module = null;
-    private ?array $data = [];
+    private $data = [];
 
     public function __construct($path)
     {

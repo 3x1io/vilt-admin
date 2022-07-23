@@ -203,7 +203,7 @@ class Generator
                         $tableName .= $item;
                     } else {
                         if ($hasSpace) {
-                            $item = Str::ucfirst($item) . " ";
+                            $item = Str::ucfirst($item) . " Generator.php";
                         } else {
                             $item = Str::ucfirst($item);
                         }
@@ -213,7 +213,7 @@ class Generator
                     $x++;
                 } else {
                     if ($hasSpace) {
-                        $item = Str::ucfirst($item) . " ";
+                        $item = Str::ucfirst($item) . " Generator.php";
                     } else {
                         $item = Str::ucfirst($item);
                     }

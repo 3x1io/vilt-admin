@@ -2,25 +2,25 @@
 @endphp
 
 @php
-function getName($string){
-    $expload = explode('_', $string);
-    $tableName = "";
-    $count = 0;
-    foreach ($expload as $item) {
-        if($count === count($expload)){
-            $item = Str::ucfirst($item);
-            $tableName .= $item;
-        }
-        else {
-            $item = Str::ucfirst($item) . " ";
-            $tableName .= $item;
+    function getName($string){
+        $expload = explode('_', $string);
+        $tableName = "";
+        $count = 0;
+        foreach ($expload as $item) {
+            if($count === count($expload)){
+                $item = Str::ucfirst($item);
+                $tableName .= $item;
+            }
+            else {
+                $item = Str::ucfirst($item) . " controller.blade.php";
+                $tableName .= $item;
+            }
+
+            $count++;
         }
 
-        $count++;
+        return Str::ucfirst($tableName);
     }
-
-    return Str::ucfirst($tableName);
-}
 @endphp
 
 namespace Modules\{{ $module }}\Http\Controllers;
@@ -37,193 +37,193 @@ use Illuminate\Support\Facades\Validator;
 
 class {{ $model }}Controller extends Controller
 {
-    use Handler;
+use Handler;
 
-    public $url = "{{ $table }}";
+public $url = "{{ $table }}";
 
-    public function schema()
-    {
-        return [
-        @php $hasRel = false; $hasPassword = false; @endphp
-        @foreach($cols as $col)
-        @if($col['type'] === 'password')
+public function schema()
+{
+return [
+@php $hasRel = false; $hasPassword = false; @endphp
+@foreach($cols as $col)
+    @if($col['type'] === 'password')
         Row::make('{{ $col['name'] }}')->label(__('{{ getName($col['name']) }}'))->type('password')->list(false)->view(false)->get(),
         Row::make('password_confirmation')->label(__('Password Confirmation'))->type('password')->list(false)->view(false)->get(),
         @php $hasPassword = true; @endphp
-        @elseif($col['type'] === 'email')
+    @elseif($col['type'] === 'email')
         Row::make('{{ $col['name'] }}')->label(__('{{ getName($col['name']) }}'))->type('email')->get(),
-        @elseif($col['type'] === 'time')
+    @elseif($col['type'] === 'time')
         Row::make('{{ $col['name'] }}')->label(__('{{ getName($col['name']) }}'))->type('time')->get(),
-        @elseif($col['type'] === 'datetime')
+    @elseif($col['type'] === 'datetime')
         Row::make('{{ $col['name'] }}')->label(__('{{ getName($col['name']) }}'))->type('datetime')->get(),
-        @elseif($col['type'] === 'date')
+    @elseif($col['type'] === 'date')
         Row::make('{{ $col['name'] }}')->label(__('{{ getName($col['name']) }}'))->type('date')->get(),
-        @elseif($col['type'] === 'tel')
+    @elseif($col['type'] === 'tel')
         Row::make('{{ $col['name'] }}')->label(__('{{ getName($col['name']) }}'))->type('tel')->get(),
-        @elseif($col['type'] === 'integer')
+    @elseif($col['type'] === 'integer')
         Row::make('{{ $col['name'] }}')->label(__('{{ getName($col['name']) }}'))->type('number')->get(),
-        @elseif($col['type'] === 'textarea')
+    @elseif($col['type'] === 'textarea')
         Row::make('{{ $col['name'] }}')->label(__('{{ getName($col['name']) }}'))->type('textarea')->get(),
-        @elseif($col['type'] === 'relation')
+    @elseif($col['type'] === 'relation')
         Row::make('{{ $col['name'] }}')->label('{{ str_replace('_id', '', $col['name']) }}')->type('hasOne')->list(false)->options({{ $col['relation']['model'] }}::all()->toArray())->get(),
         @php $hasRel = true; @endphp
-        @elseif($col['type'] === 'boolean')
+    @elseif($col['type'] === 'boolean')
         Row::make('{{ $col['name'] }}')->label(__('{{ getName($col['name']) }}'))->type('switch')->get(),
-        @elseif($col['type'] === 'datetime' || $col['type'] === 'date')
+    @elseif($col['type'] === 'datetime' || $col['type'] === 'date')
         Row::make('{{ $col['name'] }}')->label(__('{{ getName($col['name']) }}'))->type('datetime')->get(),
-        @elseif($col['name'] === 'id')
+    @elseif($col['name'] === 'id')
         Row::make('{{ $col['name'] }}')->label(__('{{ getName($col['name']) }}'))->create(false)->edit(false)->get(),
-        @else
+    @else
         Row::make('{{ $col['name'] }}')->label(__('{{ getName($col['name']) }}'))->get(),
-        @endif
+    @endif
 
-        @endforeach
-        ];
+@endforeach
+];
+}
+
+/**
+* Display a listing of the resource.
+*
+* @return \Illuminate\Http\Response
+*/
+public function index(Request $request)
+{
+$this->roles($this->url);
+if(!$this->canView){
+return inertia('403');
+}
+
+// create and AdminListing instance for a specific model and
+$data = AdminListing::create({{ $model }}::class)
+->processRequestAndGet(
+// pass the request with params
+$request,
+
+// set columns to query
+$this->schemaFileds(),
+
+@php
+    $searching= "id";
+    foreach ($cols as $col) {
+        if($col['type'] === "string"){
+            $searching = $col['name'];
+            break;
+        }
     }
+@endphp
+// set columns to searchIn
+['{{ $searching }}'],
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Request $request)
-    {
-        $this->roles($this->url);
-        if(!$this->canView){
-            return inertia('403');
-        }
+);
 
-        // create and AdminListing instance for a specific model and
-        $data = AdminListing::create({{ $model }}::class)
-            ->processRequestAndGet(
-                // pass the request with params
-                $request,
+$this->loadMedia($data);
+$this->loadFilters($request);
 
-                // set columns to query
-                $this->schemaFileds(),
-
-                @php
-                    $searching= "id";
-                    foreach ($cols as $col) {
-                        if($col['type'] === "string"){
-                            $searching = $col['name'];
-                            break;
-                        }
-                    }
-                @endphp
-                // set columns to searchIn
-                ['{{ $searching }}'],
-
-            );
-
-        $this->loadMedia($data);
-        $this->loadFilters($request);
-
-        @if($hasRel || $hasPassword)
-        foreach($data as $item){
-            @foreach($cols as $col)
-                @if($col['type'] === 'relation')
-                    $item->{{ $col['name'] }} = {{ $col['relation']['model'] }}::find($item->{{ $col['name'] }});
-                @elseif($col['name'] === 'password')
-                    unset($item->password);
-                    unset($item->password_confirmation);
-                @endif
-            @endforeach
-        }
+@if($hasRel || $hasPassword)
+    foreach($data as $item){
+    @foreach($cols as $col)
+        @if($col['type'] === 'relation')
+            $item->{{ $col['name'] }} = {{ $col['relation']['model'] }}::find($item->{{ $col['name'] }});
+        @elseif($col['name'] === 'password')
+            unset($item->password);
+            unset($item->password_confirmation);
         @endif
-
-        return inertia('{{ $model }}/List',$this->response($data, $this->url));
+    @endforeach
     }
+@endif
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $this->roles($this->url);
-        if(!$this->canCreate){
-            return inertia('403');
+return inertia('{{ $model }}/List',$this->response($data, $this->url));
+}
+
+/**
+* Store a newly created resource in storage.
+*
+* @param  \Illuminate\Http\Request  $request
+* @return \Illuminate\Http\Response
+*/
+public function store(Request $request)
+{
+$this->roles($this->url);
+if(!$this->canCreate){
+return inertia('403');
+}
+
+$rules = [
+@foreach($cols as $col)
+    @php
+        if($col['required']){
+            $required = "required";
         }
-
-        $rules = [
-        @foreach($cols as $col)
-        @php
-            if($col['required']){
-                $required = "required";
-            }
-            else {
-                $required = "";
-            }
-            if($col['unique']){
-                $unique = "unique:".$table.",".$col['name'];
-            }
-            else {
-                $unique = "";
-            }
-            if($col['maxLength']){
-                $max = "max:" . $col['maxLength'];
-            }
-            else {
-                $max = "";
-            }
-        @endphp
-        @if($col['name'] === 'password')
+        else {
+            $required = "";
+        }
+        if($col['unique']){
+            $unique = "unique:".$table.",".$col['name'];
+        }
+        else {
+            $unique = "";
+        }
+        if($col['maxLength']){
+            $max = "max:" . $col['maxLength'];
+        }
+        else {
+            $max = "";
+        }
+    @endphp
+    @if($col['name'] === 'password')
         "password" => "{{ $required ? $required . "|" : "" }}{{ $max ? $max . "|" : "" }}string|min:8|confirmed",
-        @elseif($col['name'] === 'email')
+    @elseif($col['name'] === 'email')
         "email" => "{{ $required ? $required . "|" : "" }}{{ $max ? $max . "|" : "" }}{{ $unique ? $unique . "|" : "" }}email|string",
-        @elseif($col['type'] === 'relation')
+    @elseif($col['type'] === 'relation')
         "{{ $col['name'] }}" => "{{ $required ? $required . "|" : "" }}{{ $max ? $max . "|" : "" }}{{ $unique ? $unique . "|" : "" }}array",
-        @elseif($col['type'] === 'boolean')
+    @elseif($col['type'] === 'boolean')
         "{{ $col['name'] }}" => "{{ $required ? $required . "|" : "" }}{{ $max ? $max . "|" : "" }}{{ $unique ? $unique . "|" : "" }}bool",
-        @elseif($col['name'] === 'tel')
+    @elseif($col['name'] === 'tel')
         "{{ $col['name'] }}" => "{{ $required ? $required . "|" : "" }}{{ $max ? $max . "|" : "" }}{{ $unique ? $unique . "|" : "" }}string",
-        @elseif($col['name'] === 'id')
-        @else
+    @elseif($col['name'] === 'id')
+    @else
         "{{ $col['name'] }}" => "{{ $required ? $required . "|" : "" }}{{ $max ? $max . "|" : "" }}{{ $unique ? $unique . "|" : "" }}string",
-        @endif
-        @endforeach
-        ];
-        $validator = Validator::make($request->all(), $rules);
-        $validator->validate();
+    @endif
+@endforeach
+];
+$validator = Validator::make($request->all(), $rules);
+$validator->validate();
 
-        if (!$validator->fails()) {
-            $getRequest = $request->all();
-            @foreach($cols as $col)
-                @if($col['type'] === 'relation')
-                $getRequest['{{ $col['name'] }}'] = $getRequest['{{ $col['name'] }}']['id'];
-                @endif
-            @endforeach
-            $record = {{ $model }}::create($getRequest);
+if (!$validator->fails()) {
+$getRequest = $request->all();
+@foreach($cols as $col)
+    @if($col['type'] === 'relation')
+        $getRequest['{{ $col['name'] }}'] = $getRequest['{{ $col['name'] }}']['id'];
+    @endif
+@endforeach
+$record = {{ $model }}::create($getRequest);
 
-            $this->processCreateMedia($request, $record);
+$this->processCreateMedia($request, $record);
 
-            session(["message" =>__("{{ $sp }} Created Success")]);
-            return back();
-        }
-    }
+session(["message" =>__("{{ $sp }} Created Success")]);
+return back();
+}
+}
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        $this->roles($this->url);
-        if(!$this->canEdit){
-            return inertia('403');
-        }
+/**
+* Update the specified resource in storage.
+*
+* @param  \Illuminate\Http\Request  $request
+* @param  int  $id
+* @return \Illuminate\Http\Response
+*/
+public function update(Request $request, $id)
+{
+$this->roles($this->url);
+if(!$this->canEdit){
+return inertia('403');
+}
 
-        $record = {{ $model }}::find($id);
+$record = {{ $model }}::find($id);
 
-        $rules = [
-        @foreach($cols as $col)
-        @php
+$rules = [
+@foreach($cols as $col)
+    @php
         if($col['maxLength']){
             $max = "max:" . $col['maxLength'];
         }
@@ -236,95 +236,95 @@ class {{ $model }}Controller extends Controller
         else {
             $unique = "";
         }
-        @endphp
-        @if($col['name'] === 'password')
+    @endphp
+    @if($col['name'] === 'password')
         "password" => "sometimes|string|min:8|confirmed",
-        @elseif($col['name'] === 'email')
+    @elseif($col['name'] === 'email')
         "email" => "sometimes|string|email{{ $unique ? "|" . $unique  : "" }}"{{ $unique ? '.$id': ''}},
-        @elseif($col['type'] === 'integer')
+    @elseif($col['type'] === 'integer')
         "{{ $col['name'] }}" => "sometimes|integer{{ $unique ? "|" . $unique  : "" }}"{{ $unique ? '.$id': ''}},
-        @elseif($col['type'] === 'boolean')
+    @elseif($col['type'] === 'boolean')
         "{{ $col['name'] }}" => "sometimes|boolean{{ $unique ? "|" . $unique  : "" }}"{{ $unique ? '.$id': ''}},
-        @elseif($col['type'] === 'relation')
+    @elseif($col['type'] === 'relation')
         "{{ $col['name'] }}" => "sometimes|array{{ $unique ? "|" . $unique  : "" }}"{{ $unique ? '.$id': ''}},
-        @elseif($col['type'] === 'boolean')
+    @elseif($col['type'] === 'boolean')
         "{{ $col['name'] }}" => "sometimes|bool{{ $unique ? "|" . $unique  : "" }}"{{ $unique ? '.$id': ''}},
-        @elseif($col['type'] === 'datetime')
+    @elseif($col['type'] === 'datetime')
         "{{ $col['name'] }}" => "sometimes|date{{ $unique ? "|" . $unique  : "" }}"{{ $unique ? '.$id': ''}},
-        @elseif($col['name'] === 'id')
-        @else
+    @elseif($col['name'] === 'id')
+    @else
         "{{ $col['name'] }}" => "sometimes|string{{ $unique ? "|" . $unique  : "" }}"{{ $unique ? '.$id' : ''}},
-        @endif
-        @endforeach
-        ];
-        $validator = Validator::make($request->all(), $rules);
-        $validator->validate();
+    @endif
+@endforeach
+];
+$validator = Validator::make($request->all(), $rules);
+$validator->validate();
 
-        if (!$validator->fails()) {
-            $getRequest = $request->all();
-            @foreach($cols as $col)
-                @if($col['type'] === 'relation')
-                $getRequest['{{ $col['name'] }}'] = $getRequest['{{ $col['name'] }}']['id'];
-                @endif
-            @endforeach
-            $record->update($getRequest);
-            $this->processUpdateMedia($request, $record);
+if (!$validator->fails()) {
+$getRequest = $request->all();
+@foreach($cols as $col)
+    @if($col['type'] === 'relation')
+        $getRequest['{{ $col['name'] }}'] = $getRequest['{{ $col['name'] }}']['id'];
+    @endif
+@endforeach
+$record->update($getRequest);
+$this->processUpdateMedia($request, $record);
 
-            session(["message" => __("{{ $sp }} Updated Success")]);
-            return back();
-        }
-    }
+session(["message" => __("{{ $sp }} Updated Success")]);
+return back();
+}
+}
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        $this->roles($this->url);
-        if(!$this->canDelete){
-            return inertia('403');
-        }
+/**
+* Remove the specified resource from storage.
+*
+* @param  int  $id
+* @return \Illuminate\Http\Response
+*/
+public function destroy($id)
+{
+$this->roles($this->url);
+if(!$this->canDelete){
+return inertia('403');
+}
 
-        $record = {{ $model }}::find($id);
-        if ($record) {
-            $record->delete();
+$record = {{ $model }}::find($id);
+if ($record) {
+$record->delete();
 
-            session(["message" => __("{{ $sp }} Deleted Success")]);
-            return back();
-        }
-    }
+session(["message" => __("{{ $sp }} Deleted Success")]);
+return back();
+}
+}
 
 
-    public function bulk(Request $request)
-    {
+public function bulk(Request $request)
+{
 
-        $rules = [
-            "action" => "required",
-            "ids" => "required|array",
-        ];
-        $validator = Validator::make($request->all(), $rules);
-        $validator->validate();
+$rules = [
+"action" => "required",
+"ids" => "required|array",
+];
+$validator = Validator::make($request->all(), $rules);
+$validator->validate();
 
-        if (!$validator->fails()) {
-            foreach ($request->get('ids') as $key => $value) {
-                $this->roles($this->url);
-                if(!$this->canDeleteAny){
-                    return inertia('403');
-                }
+if (!$validator->fails()) {
+foreach ($request->get('ids') as $key => $value) {
+$this->roles($this->url);
+if(!$this->canDeleteAny){
+return inertia('403');
+}
 
-                $record = {{ $model }}::find($key);
-                if ($record) {
-                    if ($request->action === 'delete') {
-                        $record->delete();
-                    }
-                }
-            }
+$record = {{ $model }}::find($key);
+if ($record) {
+if ($request->action === 'delete') {
+$record->delete();
+}
+}
+}
 
-            session(["message" => __("{{ $sp }} Bulk Action Success")]);
-            return back();
-        }
-    }
+session(["message" => __("{{ $sp }} Bulk Action Success")]);
+return back();
+}
+}
 }

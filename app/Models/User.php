@@ -10,6 +10,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Jetstream\HasTeams;
 use Laravel\Sanctum\HasApiTokens;
+use Modules\Notifications\Traits\UseNotifications;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
@@ -21,6 +22,7 @@ class User extends Authenticatable
     use Notifiable;
     use TwoFactorAuthenticatable;
     use HasRoles;
+    use useNotifications;
 
     /**
      * The attributes that are mass assignable.
@@ -60,4 +62,9 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function routeNotificationForSlack($notisfication)
+    {
+        return config('notifications.slack.hook');
+    }
 }

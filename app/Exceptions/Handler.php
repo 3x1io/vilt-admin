@@ -2,7 +2,9 @@
 
 namespace App\Exceptions;
 
+use App\Models\User;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Modules\Notifications\Notifications\BugReporting;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -44,7 +46,12 @@ class Handler extends ExceptionHandler
     public function register()
     {
         $this->reportable(function (Throwable $e) {
-            //
+            if(config('notifications.slack.reporting')) {
+                $user = User::find(1);
+                if($user){
+                    $user->notify(new BugReporting($e));
+                }
+            }
         });
     }
 }

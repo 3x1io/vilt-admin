@@ -27,7 +27,7 @@ export default defineConfig({
             plugins: {
                 tailwindcss: {},
                 autoprefixer: {},
-              },
+            },
         },
     },
     server: detectServerConfig(host),

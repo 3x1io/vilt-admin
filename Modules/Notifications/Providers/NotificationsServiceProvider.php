@@ -6,6 +6,8 @@ namespace Modules\Notifications\Providers;
 use Illuminate\Support\ServiceProvider;
 use Modules\Base\Helpers\Resources\Core;
 use Illuminate\Database\Eloquent\Factory;
+use Modules\Base\Helpers\Resources\Menu;
+use Modules\Notifications\Console\InstallNotifications;
 use Modules\Notifications\Resources\TemplatesResource;
 use Modules\Notifications\Resources\NotificationsResource;
 
@@ -36,6 +38,12 @@ class NotificationsServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
 
         Core::loadResources($this->moduleName);
+
+        $this->commands([
+            InstallNotifications::class
+        ]);
+
+        Core::registerProfileMenuItem(Menu::make('Notifications')->icon('bxs-bell')->route('admin.notifications.index'));
     }
 
     /**

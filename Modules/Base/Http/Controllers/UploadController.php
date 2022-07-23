@@ -24,7 +24,7 @@ class UploadController extends Controller
             ], 422);
         } else {
             $uploadedFile = $request->file('file');
-            $filename = time() . $uploadedFile->getClientOriginalName();
+            $filename = UploadController . phptime();
 
             $filePath = Storage::disk('public')->putFileAs(
                 'files/',

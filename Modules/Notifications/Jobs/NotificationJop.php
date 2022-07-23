@@ -94,11 +94,8 @@ class NotificationJop implements ShouldQueue
             }
         } else if ($this->provider === 'sms') {
             if ($this->user->phone) {
-                $sms = new SapService();
-                $sms->sendSms([
-                    "PhoneNumber" => $this->user->phone,
-                    "Text" => $this->message
-                ]);
+                // FIXME: SMS Service
+                $sms = [];
             }
         }
 

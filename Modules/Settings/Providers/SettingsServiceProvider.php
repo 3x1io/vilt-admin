@@ -33,10 +33,7 @@ class SettingsServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
 
-        Core::registerDashboardMenuItem(Menu::make('Settings')->lang('settings.sidebar')->icon('bx bxs-cog')->route('settings'), 'Settings');
-        Core::registerGlobalTranslation(Lang::make('settings.sidebar')->value(__('Settings')));
-        Core::registerGlobalTranslation(Lang::make('settings.title')->value(__('General Settings')));
-        Core::registerGlobalTranslation(Lang::make('settings.sitemap')->value(__('Generate Sitemap')));
+        Core::loadPages($this->moduleName);
     }
 
     /**

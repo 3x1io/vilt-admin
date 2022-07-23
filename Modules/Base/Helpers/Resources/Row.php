@@ -27,6 +27,7 @@ class Row
     private ?string $row = null;
     private ?string $placeholder = null;
     private ?string $className = null;
+    private ?string $hint = null;
     private $validation = null;
     private ?bool $preview = false;
     private ?bool $url = false;
@@ -57,6 +58,12 @@ class Row
     public function url($url): ?static
     {
         $this->url = $url;
+        return $this;
+    }
+
+    public function hint($hint): ?static
+    {
+        $this->hint = $hint;
         return $this;
     }
 
@@ -219,6 +226,7 @@ class Row
             "search" => $this->search,
             "validation" => $this->validation,
             "unique" => $this->unique,
+            "hint" => $this->hint,
         ];
     }
 }

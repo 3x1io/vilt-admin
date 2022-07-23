@@ -3,13 +3,26 @@
 namespace Modules\Payment\Entities;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+/**
+ * @property integer $id
+ * @property boolean $status
+ * @property mixed $payload
+ * @property mixed $response
+ * @property string $created_at
+ * @property string $updated_at
+ */
 class PaymentLog extends Model
 {
-    use HasFactory;
+    /**
+     * The "type" of the auto-incrementing ID.
+     * 
+     * @var string
+     */
+    protected $keyType = 'integer';
 
-    protected $guarded = ['id'];
-    protected $fillable = ['status','response','payload'];
-    protected $table = 'payment_logs';
+    /**
+     * @var array
+     */
+    protected $fillable = ['status', 'payload', 'response', 'created_at', 'updated_at'];
 }

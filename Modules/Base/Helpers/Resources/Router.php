@@ -14,11 +14,11 @@ class Router
     private ?array $middleware = ["web"];
     private ?array $custom = null;
     private ?bool $api = false;
+    private ?bool $settings = false;
 
     public function __construct($table)
     {
         $this->table = $table;
-        return $this->get();
     }
 
     public static function make(string $table)
@@ -36,7 +36,8 @@ class Router
             "controller" => $this->controller,
             "middleware" => $this->middleware,
             "custom" => $this->custom,
-            "api" => $this->api
+            "api" => $this->api,
+            "settings" => $this->settings
         ];
     }
 
@@ -62,6 +63,12 @@ class Router
     public function custom($custom): ?static
     {
         $this->custom = $custom;
+        return $this;
+    }
+
+    public function settings($settings): ?static
+    {
+        $this->settings = $settings;
         return $this;
     }
 }

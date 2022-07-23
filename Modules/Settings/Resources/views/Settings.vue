@@ -1,18 +1,19 @@
 <template>
-    <app-layout :title="trans('settings.title')">
+    <app-layout :title="$attrs.lang.index">
           <div class="container px-6 mx-auto">
             <div class="flex justify-between my-6">
                 <div>
                     <h2
                     class="text-2xl font-semibold text-gray-700 dark:text-gray-200"
                     >
-                        {{ trans('settings.title') }}
+                        {{ $attrs.lang.index }}
                     </h2>
                 </div>
                 <div>
-                    <button class="inline-flex items-center justify-center px-4 font-medium tracking-tight text-white transition-colors border border-transparent rounded-lg shadow focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset filament-button dark:focus:ring-offset-0 h-9 focus:ring-white bg-primary-600 hover:bg-primary-500 focus:bg-primary-700 focus:ring-offset-primary-700 filament-page-button-action">
-                        {{ trans('settings.sitemap') }}
-                    </button>
+                    <a  v-for="(action, index) in $attrs.actions" :key="index"  :href="action.url ? action.url : '#'" @click.prevent="!action.url ? action.modal ? openModal(action.modal) : fireAction(action.action) : openUrl(action.url)" class="inline-flex items-center justify-center gap-1 px-4 mr-2 font-medium tracking-tight text-white transition-colors border border-transparent rounded-lg shadow rlt:ml-2 focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset filament-button dark:focus:ring-offset-0 h-9 focus:ring-white bg-primary-600 hover:bg-primary-500 focus:bg-primary-700 focus:ring-offset-primary-700 filament-page-button-action">
+                        <i :class="action.icon"></i>
+                        {{ action.label }}
+                    </a>
                 </div>
             </div>
             <form action="" @submit.prevent="onSubmit">
@@ -25,10 +26,10 @@
                 />
                 </div>
             </div>
-            <div class="flex justify-end">
+            <div class="flex justify-end my-5">
                 <div>
                     <button type="submit" class="inline-flex items-center justify-center px-4 my-2 font-medium tracking-tight text-white transition-colors border border-transparent rounded-lg shadow focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset filament-button dark:focus:ring-offset-0 h-9 focus:ring-white bg-primary-600 hover:bg-primary-500 focus:bg-primary-700 focus:ring-offset-primary-700 filament-page-button-action">
-                        Save
+                        {{ trans('global.save') }}
                     </button>
                 </div>
             </div>
@@ -80,18 +81,39 @@
         data(){
             return {
                 errors: {},
-                form: {}
+                form: {},
+                actionModal: {},
+                modalAction: {}
             }
         },
         mounted(){
             this.form = this.$inertia.form(this.formRows);
         },
         methods: {
+            openUrl(url){
+                window.open(url);
+            },
+            modalActionRun(modal , action){
+                this.$inertia.form(this.modalAction[modal]).submit("post",route(action) ,{
+                    preserveScroll: true,
+                    onSuccess: () => {
+                        this.modalAction[modal].reset();
+                        this.actionModal[modal] = false;
+                        this.success();
+                    },
+                });
+            },
+            fireAction(name){
+                this.$inertia.post(route(name), {});
+            },
+            openModal(name){
+                this.actionModal[name] = !this.actionModal[name];
+            },
             trans(key){
                 return this.lang[key] ? this.lang[key] : key
             },
             onSubmit(){
-                this.form.submit("post", route('settings.save'), {
+                this.form.submit("post", route('admin.settings.' + this.$attrs.table + '.store'), {
                     onSuccess: () => {
                         if (typeof this.getMessage === "object") {
                             if (this.getMessage.type === "error") {

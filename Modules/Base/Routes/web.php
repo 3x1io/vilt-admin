@@ -18,20 +18,34 @@ use Modules\Base\Http\Controllers\DashboardController;
 
 $routes = Core::loadRoutes();
 foreach ($routes as $route) {
-    Route::middleware($route['middleware'])->prefix('/admin/' . str_replace('_', '-', $route['table']))->name($route['table'] . ".")->group(function () use ($route) {
-        if ($route['custom']) {
-            foreach ($route['custom'] as $item) {
-                Route::{$item['type']}($item['path'], [$item['controller'], $item['method']])->name($item['name']);
+    if($route['settings']){
+        Route::middleware($route['middleware'])->prefix('/admin/settings/' . str_replace('_', '-', $route['table']))->name("admin.settings.".$route['table'] . ".")->group(function () use ($route) {
+            if ($route['custom']) {
+                foreach ($route['custom'] as $item) {
+                    Route::{$item['type']}($item['path'], [$item['controller'], $item['method']])->name($item['name']);
+                }
             }
-        }
-        Route::get("/", [$route['controller'], 'index'])->name('index');
-        Route::post("/", [$route['controller'], 'store'])->name('store');
-        Route::post("/bulk", [$route['controller'], 'bulk'])->name('bulk');
-        Route::get("/export", [$route['controller'], 'export'])->name('export');
-        Route::post("/import", [$route['controller'], 'import'])->name('import');
-        Route::post("/{id}", [$route['controller'], 'update'])->name('update');
-        Route::delete("/{id}", [$route['controller'], 'destory'])->name('destory');
-    });
+            Route::get("/", [$route['controller'], 'index'])->name('index');
+            Route::post("/", [$route['controller'], 'store'])->name('store');
+        });
+    }
+    else {
+        Route::middleware($route['middleware'])->prefix('/admin/' . str_replace('_', '-', $route['table']))->name($route['table'] . ".")->group(function () use ($route) {
+            if ($route['custom']) {
+                foreach ($route['custom'] as $item) {
+                    Route::{$item['type']}($item['path'], [$item['controller'], $item['method']])->name($item['name']);
+                }
+            }
+            Route::get("/", [$route['controller'], 'index'])->name('index');
+            Route::post("/", [$route['controller'], 'store'])->name('store');
+            Route::post("/bulk", [$route['controller'], 'bulk'])->name('bulk');
+            Route::get("/export", [$route['controller'], 'export'])->name('export');
+            Route::post("/import", [$route['controller'], 'import'])->name('import');
+            Route::post("/{id}", [$route['controller'], 'update'])->name('update');
+            Route::delete("/{id}", [$route['controller'], 'destory'])->name('destory');
+        });
+    }
+
 }
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {

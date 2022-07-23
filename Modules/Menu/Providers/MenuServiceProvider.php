@@ -5,6 +5,7 @@ namespace Modules\Menu\Providers;
 use Illuminate\Support\ServiceProvider;
 use Modules\Base\Helpers\Resources\Core;
 use Modules\Base\Helpers\Resources\Menu;
+use Modules\Menu\Console\InstallMenu;
 use Modules\Menu\Resources\MenuResource;
 use Illuminate\Database\Eloquent\Factory;
 use Modules\Menu\Resources\MenuGroupsResource;
@@ -28,20 +29,25 @@ class MenuServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Core::registerDashboardMenuItem(Menu::make('Dashboard')->icon('bx bxs-home')->route('dashboard')->sort(0));
+        Core::registerProfileMenuItem(Menu::make('Profile')->icon('bxs-user')->route('profile.show'));
+
+
         $this->registerTranslations();
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
 
+
         if (config('menu.database')) {
             include(base_path('Modules/Menu/Helpers/List.php'));
         }
 
-        Core::registerDashboardMenuItem(Menu::make('Dashboard')->icon('bx bxs-home')->route('dashboard')->sort(0));
-        Core::registerProfileMenuItem(Menu::make('Profile')->icon('bxs-user')->route('profile.show'));
-
-
         Core::loadResources($this->moduleName);
+
+        $this->commands([
+            InstallMenu::class
+        ]);
     }
 
     /**

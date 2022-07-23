@@ -122,12 +122,12 @@ trait Controller
                         $item = Str::singular(Str::ucfirst($item));
                         $tableName .= " " . $item;
                     } else {
-                        $item = Str::ucfirst($item) . " ";
+                        $item = Str::ucfirst($item);
                         $tableName .= " " . $item;
                     }
                     $x++;
                 } else {
-                    $item = Str::ucfirst($item) . " ";
+                    $item = Str::ucfirst($item);
                     $tableName .= " " . $item;
                 }
             } else {
@@ -165,12 +165,14 @@ trait Controller
             if ($item['validation']) {
                 $create[$item['field']] = $item['validation'];
                 $edit[$item['field']] = $item['validation'];
+
                 if (is_array($item['validation'])) {
                     if (isset($item['validation']['create']) && isset($item['validation']['update'])) {
                         $create[$item['field']] = $item['validation']['create'];
-                        $create[$item['field']] = $item['validation']['update'];
+                        $edit[$item['field']] = $item['validation']['update'];
                     }
                 }
+
                 if ($item['unique']) {
                     $create[$item['field']] .= "|unique:" . $this->table . "," . $item['field'];
                     if ($id) {
@@ -179,7 +181,6 @@ trait Controller
                 }
             }
         }
-
         if ($id) {
             return $edit;
         } else {
@@ -369,7 +370,7 @@ trait Controller
     public function proccessSelect($request)
     {
         foreach ($this->schema() as $field) {
-            if ($field['type'] === 'select-value' || $field['type'] === 'hasOne') {
+            if (($field['type'] === 'select-value' || $field['type'] === 'hasOne') && (!$field['multi'])) {
                 if ($request[$field['field']]) {
                     $request[$field['field']] = $request[$field['field']][$field['track_by_id']];
                 }

@@ -2,13 +2,13 @@
 
 namespace Modules\Translations\Providers;
 
-use Modules\Base\Helpers\Menu\Menu;
-use Modules\Base\Helpers\Vilt\Trans;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\ServiceProvider;
 use Modules\Base\Helpers\Resources\Core;
 use Illuminate\Database\Eloquent\Factory;
+use Modules\Menu\Console\InstallMenu;
+use Modules\Translations\Console\InstallTranslation;
 use Modules\Translations\Resources\TranslationsResource;
 
 class TranslationsServiceProvider extends ServiceProvider
@@ -33,6 +33,10 @@ class TranslationsServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
         Core::loadResources($this->moduleName);
+
+        $this->commands([
+            InstallTranslation::class
+        ]);
     }
 
     /**

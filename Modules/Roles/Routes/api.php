@@ -17,7 +17,14 @@ use Modules\Roles\Http\Controllers\AuthController;
 
 
 Route::post('/login', [AuthController::class, 'login'])->name('api.login');
+Route::post('/reset', [AuthController::class, 'reset'])->name('api.reset');
+Route::post('/password', [AuthController::class, 'password'])->name('api.password');
+Route::post('/active', [AuthController::class, 'active'])->name('api.active');
+Route::post('/resend', [AuthController::class, 'resend'])->name('api.resend');
+Route::post('/register', [AuthController::class, 'register'])->name('api.register');
 
-Route::middleware('auth:api')->get('/roles', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:sanctum')->prefix('profile')->name('api.profile.')->group(function() {
+    Route::get('/user', [\Modules\Roles\Http\Controllers\ProfileController::class, 'user'])->name('user');
+    Route::post('/user', [\Modules\Roles\Http\Controllers\ProfileController::class, 'update'])->name('update');
+    Route::post('/password', [\Modules\Roles\Http\Controllers\ProfileController::class, 'password'])->name('password');
 });

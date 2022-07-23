@@ -16,14 +16,15 @@ return new class extends Migration
         Schema::create('payment_method_integrations', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('payment_method_id')
-                ->constrained()
-                ->cascadeOnDelete()
-                ->cascadeOnUpdate();
+            $table->unsignedBigInteger('payment_method_id');
             $table->string('key');
             $table->string('value');
 
             $table->timestamps();
+        });
+
+        Schema::table('payment_method_integrations', function (Blueprint $table) {
+            $table->foreign('payment_method_id')->references('id')->on('payment_methods');
         });
     }
 

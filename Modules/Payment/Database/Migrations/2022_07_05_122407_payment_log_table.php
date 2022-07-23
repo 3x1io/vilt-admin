@@ -13,9 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        //
         Schema::create('payment_logs', function (Blueprint $table) {
-
             $table->id();
             $table->boolean('status')->default(0);
             $table->json('payload');

@@ -42,5 +42,10 @@ return [
 
     'models' => [
         User::class
+    ],
+
+    'slack' => [
+        "hook" => env('SLACK_HOOK', null),
+        "reporting" => env('SLACK_REPORTING', false),
     ]
 ];
