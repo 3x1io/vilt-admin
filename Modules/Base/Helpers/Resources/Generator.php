@@ -83,6 +83,14 @@ class Generator
                 if (Str::of($column->getName())->contains(['phone', 'tel'])) {
                     $componentData['type'] = "tel";
                 }
+
+                if (Str::of($column->getName())->contains(['color'])) {
+                    $componentData['type'] = "color";
+                }
+
+                if (Str::of($column->getName())->contains(['icon'])) {
+                    $componentData['type'] = "icon";
+                }
             }
 
             if (Str::of($column->getName())->endsWith([

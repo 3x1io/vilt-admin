@@ -28,7 +28,6 @@ export default defineComponent({
         BulkModal,
     },
     props: {
-        errors: Object,
         rows: Array,
         collection: Object,
         url: String,
@@ -69,17 +68,21 @@ export default defineComponent({
         this.filters = this.$attrs.filters;
         this.createModal = this.$attrs.create;
     },
-    computed:{
-        lang(){
+    computed: {
+        lang() {
             return this.$page.props.data.trans;
         },
-        getMessage(){
+        getMessage() {
             return this.$page.props.data.message;
         },
     },
     methods: {
         transItem(item, key) {
-            if(item[key] && item[key].hasOwnProperty('ar') && item[key].hasOwnProperty('en')){
+            if (
+                item[key] &&
+                item[key].hasOwnProperty("ar") &&
+                item[key].hasOwnProperty("en")
+            ) {
                 if (localStorage.getItem("lang")) {
                     let lang = JSON.parse(localStorage.getItem("lang"));
                     if (lang.id === "ar") {
@@ -88,8 +91,7 @@ export default defineComponent({
                         return item[key].ar;
                     }
                 }
-            }
-            else {
+            } else {
                 return item[key];
             }
         },
@@ -110,13 +112,18 @@ export default defineComponent({
             this.$inertia.get(route(this.url + ".index"), filter);
         },
         viewItem(item) {
-            this.form = this.$inertia.form(item);
-            this.viewModal = true;
+            axios.get(route(this.url + ".show", item.id)).then((response) => {
+                this.form = this.$inertia.form(response.data.data);
+                this.viewModal = true;
+            });
         },
         editItem(item) {
-            this.form = this.$inertia.form(item);
-            this.createModal = true;
-            this.edit = true;
+            this.form.reset();
+            axios.get(route(this.url + ".show", item.id)).then((response) => {
+                this.form = this.$inertia.form(response.data.data);
+                this.createModal = true;
+                this.edit = true;
+            });
         },
         deleteItem(item) {
             this.form = this.$inertia.form(item);
@@ -147,33 +154,31 @@ export default defineComponent({
             this.reload();
         },
         success() {
-            if(typeof this.getMessage === 'object'){
-                if(this.getMessage.type === 'error'){
+            if (typeof this.getMessage === "object") {
+                if (this.getMessage.type === "error") {
                     this.$toast.error(this.getMessage.message, {
                         position: "top",
-                        style:{
-                            'background': 'rgba(210, 45, 61, .8)',
-                            'border-radius': '0.25rem'
-                        }
+                        style: {
+                            background: "rgba(210, 45, 61, .8)",
+                            "border-radius": "0.25rem",
+                        },
                     });
-                }
-                else if(this.getMessage.type === 'success'){
+                } else if (this.getMessage.type === "success") {
                     this.$toast.success(this.getMessage.message, {
                         position: "top",
-                        style:{
-                            'background': '#7e3af2',
-                            'border-radius': '0.25rem'
-                        }
+                        style: {
+                            background: "#7e3af2",
+                            "border-radius": "0.25rem",
+                        },
                     });
                 }
-            }
-            else {
+            } else {
                 this.$toast.success(this.getMessage, {
                     position: "top",
-                        style:{
-                            'background': '#7e3af2',
-                            'border-radius': '0.25rem'
-                        }
+                    style: {
+                        background: "#7e3af2",
+                        "border-radius": "0.25rem",
+                    },
                 });
             }
 

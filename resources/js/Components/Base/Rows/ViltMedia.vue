@@ -17,10 +17,7 @@
 
             <!-- Current Profile Photo -->
             <div v-if="photoPreview.length && preview">
-                <div
-                    class="flex justify-center mt-2 space-x-2"
-                    v-if="multi && photoPreview.length"
-                >
+                <div v-if="multi" class="flex justify-center mt-2 space-x-2">
                     <div v-for="(item, key) in photoPreview" :key="key">
                         <img
                             :src="item"
@@ -36,8 +33,11 @@
                 </div>
             </div>
 
-            <div class="mt-2" v-else-if="preview">
-                <div v-if="modelValue && multi">
+            <div class="mt-2" v-else-if="modelValue && preview">
+                <div
+                    v-if="multi && modelValue.length"
+                    class="flex justify-center mt-2 space-x-2"
+                >
                     <div v-for="(item, key) in modelValue" :key="key">
                         <img
                             :src="item"
@@ -45,7 +45,7 @@
                         />
                     </div>
                 </div>
-                <div v-else-if="modelValue">
+                <div v-else-if="!multi">
                     <img
                         :src="modelValue"
                         class="object-cover w-20 h-20 mx-auto rounded-full"
@@ -64,19 +64,58 @@
         </div>
         <JetInputError :message="message" class="mt-2" />
     </div>
-    <div class="flex justify-between py-2 my-4 border-b-2 border-gray-100" v-if="view === 'view'">
+    <div
+        class="flex justify-between py-2 my-4 border-b-2 border-gray-100"
+        v-if="view === 'view'"
+    >
         <div>
             <p class="font-bold">{{ label }}</p>
         </div>
         <div>
-            <a :href="modelValue" target="_blank">
-                <img :src="modelValue" class="object-cover w-20 h-20 rounded-full" />
+            <a v-if="modelValue" :href="modelValue" target="_blank">
+                <div v-if="modelValue && multi">
+                    <div v-for="(item, key) in modelValue" :key="key">
+                        <img
+                            :src="item"
+                            class="object-cover w-20 h-20 mx-auto rounded-full"
+                        />
+                    </div>
+                </div>
+                <div v-else>
+                    <img
+                        :src="modelValue"
+                        class="object-cover w-20 h-20 rounded-full"
+                    />
+                </div>
+            </a>
+            <a href="#" v-else target="_blank">
+                <img
+                    :src="$page.props.data.appUrl + '/placeholder.webp'"
+                    class="object-cover w-20 h-20 rounded-full"
+                />
             </a>
         </div>
     </div>
     <div v-if="view === 'table'" class="p-4">
-        <a :href="modelValue"  target="_blank">
-            <img :src="modelValue" class="object-cover w-20 h-20 rounded-full" />
+        <a :href="modelValue" v-if="modelValue" target="_blank">
+            <div v-if="modelValue && multi && modelValue.length">
+                <img
+                    :src="modelValue[0]"
+                    class="object-cover w-20 h-20 mx-auto rounded-full"
+                />
+            </div>
+            <div v-else>
+                <img
+                    :src="$page.props.data.appUrl + '/placeholder.webp'"
+                    class="object-cover w-20 h-20 rounded-full"
+                />
+            </div>
+        </a>
+        <a href="#" v-else target="_blank">
+            <img
+                :src="$page.props.data.appUrl + '/placeholder.webp'"
+                class="object-cover w-20 h-20 rounded-full"
+            />
         </a>
     </div>
 </template>
@@ -121,7 +160,7 @@ export default defineComponent({
             Boolean,
             default: false,
         },
-        default: {}
+        default: {},
     },
     data() {
         return {
@@ -130,10 +169,7 @@ export default defineComponent({
         };
     },
     mounted() {
-        if (this.modelValue) {
-            this.photoPreview.push(this.modelValue);
-        }
-        if(this.default){
+        if (this.default) {
             this.photoPreview.push(this.default);
         }
     },

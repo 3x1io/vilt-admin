@@ -183,6 +183,7 @@ class Core
             "global.dashboard" => __('Dashboard'),
             "global.settings" => __('Settings'),
             "global.save" => __('Save'),
+            "global.home" => __('Home'),
             "global.close" => __('Close'),
             "global.update" => __('Update'),
             "global.next" => __('Next'),
@@ -193,6 +194,8 @@ class Core
             "global.create" => __('Create'),
             "global.search" => __('Search'),
             "global.pagination" => __('Pagination'),
+            "pagination.next" => __('Next'),
+            "pagination.previous" => __('Previous'),
             "global.pagination.from" => __('From'),
             "global.pagination.to" => __('To'),
             "global.pagination.results" => __('Results'),
@@ -208,6 +211,7 @@ class Core
             "global.results" => __('Results'),
             "global.per_page" => __('Per Page'),
             "global.new.item" => __('Add New Item'),
+            "global.empty" => __('Sorry No Records is here change filter or create new one'),
         ];
         return array_merge($global, self::$trans);
     }

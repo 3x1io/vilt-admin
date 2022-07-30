@@ -13,6 +13,12 @@ import '@vueform/toggle/themes/default.css';
 import "@suadelabs/vue3-multiselect/dist/vue3-multiselect.css";
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
 
+
+import VueLazyload from "vue-lazyload";
+const errorimage = "https://demofree.sirv.com/nope-not-here.jpg";
+const loadimage = "https://media3.giphy.com/media/3oEjI6SIIHBdRxXI40/200.gif";
+
+
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
     resolve: async (name) => {
@@ -42,6 +48,12 @@ createInertiaApp({
             { render: () => h(app, props) })
             .use(plugin)
             .use(Toaster)
+            .use(VueLazyload, {
+                preLoad: 1.3,
+                error: errorimage,
+                loading: loadimage,
+                attempt: 1,
+            })
             .use(ZiggyVue, Ziggy)
             .mount(el);
     },

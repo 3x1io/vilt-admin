@@ -1,9 +1,10 @@
 <template>
-    <table
-        class="w-full text-left divide-y table-auto xl:rtl:text-right filament-tables-table "
-        v-if="collection.total"
-    >
-        <thead>
+    <div v-if="type.type === 'table'">
+        <table
+            class="w-full text-left divide-y table-auto xl:rtl:text-right filament-tables-table "
+            v-if="collection.total"
+        >
+            <thead class="bg-gray-100 border-t border-b">
             <tr class="bg-tableHead text-main dark:bg-gray-800 dark:text-white">
                 <th
                     class="w-4 px-4 py-4 whitespace-nowrap filament-tables-checkbox-cell"
@@ -14,7 +15,7 @@
                         type="checkbox"
                     />
                 </th>
-                 <th class="px-2 filament-tables-header-cell" v-for="(item, key) in listRows" :key="key">
+                <th class="filament-tables-header-cell" v-for="(item, key) in listRows" :key="key">
                     <button
                         v-if="item.sorting"
                         @click.prevent="reload(1, 'orderBy', item.field)"
@@ -39,10 +40,10 @@
                     <span class="text-sm font-normal">{{trans('global.actions')}}</span>
                 </th>
             </tr>
-        </thead>
-        <tbody class="divide-y whitespace-nowrap">
+            </thead>
+            <tbody class="divide-y whitespace-nowrap">
             <tr
-                class="hover:bg-primary-500/5 dark:hover:bg-primary-500/5 filament-tables-row"
+                class="hover:bg-primary-500/5 dark:hover:bg-primary-500/5 filament-tables-row dark:text-white"
                 v-for="(item, key) in collection.data"
                 :key="key"
             >
@@ -57,179 +58,269 @@
                         type="checkbox"
                     />
                 </th>
-                <td class="px-2 rtl:text-right text-14" v-for="(field, index) in listRows" :key="index">
-                    <div v-if="field.type === 'relation'" class="grid grid-cols-3 gap-2">
-                        <div class="inline-flex mx-2 items-center justify-center space-x-1 min-h-6 px-2 py-0.5 text-sm font-normal tracking-tight rounded-xl whitespace-normal text-primary-700 bg-primary-500/10 dark:text-primary-500" v-for="(rel, relIndex) in item[field.field]" :key="relIndex">{{rel[field.track_by_name] ? rel[field.track_by_name] : ''}}</div>
-                    </div>
-                    <div v-else-if="field.url" >
-                        <a :href="item[field.field]" target="_blank" class="inline-flex mx-2 items-center justify-center space-x-1 min-h-6 px-2 py-0.5 text-sm font-normal tracking-tight rounded-xl whitespace-normal text-primary-700 bg-primary-500/10 dark:text-primary-500">
-                            Open URL
-                        </a>
-                    </div>
-                    <div v-else-if="field.type === 'image'">
-                        <ViltMedia v-model="item[field.field]" :multi="field.multi" view="table" />
-                    </div>
-                    <div v-else-if="field.type === 'color'">
-                        <div class="w-8 h-8 rounded-full" :style="'background-color: '+item[field.field]"></div>
-                    </div>
-                    <div v-else-if="field.type === 'hasOne'">
-                        <div class="inline-flex mx-2 items-center justify-center space-x-1 min-h-6 px-2 py-0.5 text-sm font-normal tracking-tight rounded-xl whitespace-normal text-primary-700 bg-primary-500/10 dark:text-primary-500">{{item[field.field] ? item[field.field][field.track_by_name] : ''}}</div>
-                    </div>
-                    <div v-else-if="field.type === 'select-value'">
-                        <div class="inline-flex mx-2 items-center justify-center space-x-1 min-h-6 px-2 py-0.5 text-sm font-normal tracking-tight rounded-xl whitespace-normal text-primary-700 bg-primary-500/10 dark:text-primary-500">{{item[field.field] ? item[field.field][field.track_by_name] : ''}}</div>
-                    </div>
-                    <div v-else-if="field.type === 'switch'">
-                        <div class="w-10 h-10 p-2 text-lg text-center text-white bg-green-500 rounded-full" v-if="item[field.field] == true"><i class="bx bx-check"></i></div>
-                        <div class="w-10 h-10 p-2 text-lg text-center text-white rounded-full bg-danger-500" v-else><i class="bx bx-x"></i></div>
-                    </div>
-                    <ViltDate v-else-if="field.type === 'date' || field.type === 'datetime' || field.type === 'time' " view="table" v-model="item[field.field]" :type="field.type" :label="field.label" />
-
-                    <div v-else-if="field.type === 'icon'">
-                        <div class="text-3xl"><i :class="item[field.field]"></i></div>
-                    </div>
-                    <div v-else-if="field.type === 'schema'" class="grid grid-cols-3 gap-2">
-                        <div v-for="(rel, relIndex) in field.options" :key="relIndex">
-                            <div v-if="item[field.field][rel.field]" class="inline-flex mx-2 items-center justify-center space-x-1 min-h-6 px-2 py-0.5 text-sm font-normal tracking-tight rounded-xl whitespace-normal text-primary-700 bg-primary-500/10 dark:text-primary-500" >
-                                <span>{{item[field.field][rel.field]}}</span>
+                    <td
+                        class="rtl:text-right text-14"
+                        v-for="(field, index) in listRows"
+                        :key="index"
+                    >
+                        <div
+                            v-if="field.type === 'relation'"
+                            class="grid grid-cols-3 gap-2"
+                        >
+                            <div
+                                class="inline-flex mx-2 items-center justify-center space-x-1 min-h-6 px-2 py-0.5 text-sm font-normal tracking-tight rounded-xl whitespace-normal text-primary-700 bg-primary-500/10 dark:text-primary-500"
+                                v-for="(rel, relIndex) in item[field.field]"
+                                :key="relIndex"
+                            >
+                                {{
+                                    rel[field.track_by_name]
+                                        ? rel[field.track_by_name]
+                                        : ""
+                                }}
                             </div>
                         </div>
-                    </div>
-                    <div v-else>
-                        {{ item[field.field] }}
-                    </div>
-                    <slot name="td"></slot>
-
-                </td>
-
-                <td
-                    class="px-4 py-3 whitespace-nowrap filament-tables-actions-cell"
-                >
-                    <div class="flex items-center justify-end gap-4 my-4">
-                        <slot name="actions"></slot>
-                        <div>
+                        <div v-else-if="field.url">
                             <a
-                                v-if="$attrs.canView || $attrs.canViewAny"
-                                @click.prevent="viewItem(item)"
-                                class="inline-flex items-center justify-center text-sm font-normal filament-tables-link text-main hover:text-greenColor3 filament-tables-link-action"
-                                href="#"
-                                title="Edit"
-                                role="button"
+                                :href="item[field.field]"
+                                target="_blank"
+                                class="inline-flex mx-2 items-center justify-center space-x-1 min-h-6 px-2 py-0.5 text-sm font-normal tracking-tight rounded-xl whitespace-normal text-primary-700 bg-primary-500/10 dark:text-primary-500"
                             >
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    class="w-4 h-4 mr-1 -ml-2 filament-button-icon rtl:ml-1 rtl:-mr-2"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                                    />
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                                    />
-                                </svg>
-                                {{ trans('global.view') }}
+                                Open URL
                             </a>
                         </div>
-                        <div>
-                            <a
-                                v-if="$attrs.canEdit"
-                                @click.prevent="editItem(item)"
-                                class="inline-flex items-center justify-center text-sm font-normal hover:underline focus:outline-none focus:underline filament-tables-link text-main hover:text-greenColor3 filament-tables-link-action"
-                                href="#"
-                                title="Edit"
-                                role="button"
+                        <div v-else-if="field.type === 'image'">
+                            <ViltMedia
+                                v-model="item[field.field]"
+                                :multi="field.multi"
+                                view="table"
+                            />
+                        </div>
+                        <div v-else-if="field.type === 'color'">
+                            <div
+                                class="w-8 h-8 rounded-full"
+                                :style="
+                                    'background-color: ' + item[field.field]
+                                "
+                            ></div>
+                        </div>
+                        <div v-else-if="field.type === 'hasOne'">
+                            <div
+                                class="inline-flex mx-2 items-center justify-center space-x-1 min-h-6 px-2 py-0.5 text-sm font-normal tracking-tight rounded-xl whitespace-normal text-primary-700 bg-primary-500/10 dark:text-primary-500"
+                                v-if="item[field.field] && item[field.field].hasOwnProperty('icon')"
+                                :style="item[field.field].hasOwnProperty('color') ? 'background-color: ' + item[field.field].color + ';color: #fff' : ''"
                             >
-                                <svg
-                                    class="w-4 h-4 mr-1 -ml-2 filament-button-icon rtl:ml-1 rtl:-mr-2"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke-width="2"
-                                    stroke="currentColor"
-                                    aria-hidden="true"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
-                                    ></path>
-                                </svg>
-                                {{ trans('global.edit') }}
+                                <i :class="item[field.field].icon" class="px-2"></i>
+                                {{
+                                    item[field.field]
+                                        ? item[field.field][field.track_by_name]
+                                        : ""
+                                }}
+                            </div>
+                            <div
+                                class="inline-flex mx-2 items-center justify-center space-x-1 min-h-6 px-2 py-0.5 text-sm font-normal tracking-tight rounded-xl whitespace-normal text-primary-700 bg-primary-500/10 dark:text-primary-500"
+                                v-else
+                            >
+                                {{
+                                    item[field.field]
+                                        ? item[field.field][field.track_by_name]
+                                        : ""
+                                }}
+                            </div>
+                        </div>
+                        <div v-else-if="field.type === 'select-value'">
+                            <div
+                                class="inline-flex mx-2 items-center justify-center space-x-1 min-h-6 px-2 py-0.5 text-sm font-normal tracking-tight rounded-xl whitespace-normal text-primary-700 bg-primary-500/10 dark:text-primary-500"
+                            >
+                                {{
+                                    item[field.field]
+                                        ? item[field.field][field.track_by_name]
+                                        : ""
+                                }}
+                            </div>
+                        </div>
+                        <div v-else-if="field.type === 'tel'">
+                            <a
+                                :href="'tel:' + item[field.field]"
+                                class="inline-flex mx-2 items-center justify-center space-x-1 min-h-6 px-2 py-0.5 text-sm font-normal tracking-tight rounded-xl whitespace-normal text-primary-700 bg-primary-500/10 dark:text-primary-500"
+                            >
+                                <i class="bx bx-phone px-2"></i>
+                                {{ item[field.field] }}
                             </a>
                         </div>
-                        <form>
-                            <button
-                                v-if="$attrs.canDelete || $attrs.canDeleteAny"
-                                @click.prevent="deleteItem(item)"
-                                type="submit"
-                                class="inline-flex items-center justify-center text-sm font-normal hover:underline focus:outline-none focus:underline filament-tables-link text-danger-600 hover:text-danger-500 filament-tables-link-action"
-                                title="Delete"
+                        <div
+                            v-else-if="field.type === 'switch'"
+                            @click="
+                                (item[field.field] = !item[field.field]),
+                                    updateData(item)
+                            "
+                        >
+                            <div
+                                class="w-10 h-10 p-2 text-lg text-center text-white bg-green-500 rounded-full"
+                                v-if="item[field.field] == true"
                             >
-                                <svg
-                                    class="w-4 h-4 mr-1 -ml-2 filament-button-icon rtl:ml-1 rtl:-mr-2"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke-width="2"
-                                    stroke="currentColor"
-                                    aria-hidden="true"
+                                <i class="bx bx-check"></i>
+                            </div>
+                            <div
+                                class="w-10 h-10 p-2 text-lg text-center text-white rounded-full bg-danger-500"
+                                v-else
+                            >
+                                <i class="bx bx-x"></i>
+                            </div>
+                        </div>
+                        <ViltDate
+                            v-else-if="
+                                field.type === 'date' ||
+                                field.type === 'datetime' ||
+                                field.type === 'time'
+                            "
+                            view="table"
+                            v-model="item[field.field]"
+                            :type="field.type"
+                            :label="field.label"
+                        />
+
+                        <div v-else-if="field.type === 'icon'">
+                            <div class="text-3xl">
+                                <i :class="item[field.field]"></i>
+                            </div>
+                        </div>
+                        <div
+                            v-else-if="field.type === 'schema'"
+                            class="grid grid-cols-3 gap-2"
+                        >
+                            <div
+                                v-for="(rel, relIndex) in field.options"
+                                :key="relIndex"
+                            >
+                                <div
+                                    v-if="item[field.field][rel.field]"
+                                    class="inline-flex mx-2 items-center justify-center space-x-1 min-h-6 px-2 py-0.5 text-sm font-normal tracking-tight rounded-xl whitespace-normal text-primary-700 bg-primary-500/10 dark:text-primary-500"
                                 >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                                    ></path>
-                                </svg>
-                                {{ trans('global.delete') }}
-                            </button>
-                        </form>
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <div class="relative overflow-y-auto" v-else>
-        <div class="flex items-center justify-center p-4">
-            <div
-                class="flex flex-col items-center justify-center flex-1 p-6 mx-auto space-y-6 text-center bg-white filament-tables-empty-state dark:bg-gray-900/70"
-            >
+                                    <span>{{
+                                        item[field.field][rel.field]
+                                    }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-else>
+                            {{ item[field.field] }}
+                        </div>
+                        <slot name="td"></slot>
+                    </td>
+
+                    <td
+                        v-if="
+                            $slots['actions'] ||
+                            $attrs.canView ||
+                            $attrs.canViewAny ||
+                            $attrs.canEdit ||
+                            $attrs.canDelete ||
+                            $attrs.canDeleteAny
+                        "
+                        class="px-4 py-3 whitespace-nowrap filament-tables-actions-cell"
+                        :class="{ sorting: orderBy == item.field }"
+                    >
+                        <div class="flex items-center justify-end gap-4 my-4">
+                            <slot name="actions" v-bind="item"></slot>
+                            <div>
+                                <a
+                                    v-if="$attrs.canView || $attrs.canViewAny"
+                                    @click.prevent="viewItem(item)"
+                                    class="inline-flex items-center justify-center text-sm font-normal filament-tables-link text-primary-700 hover:text-primary-500 filament-tables-link-action"
+                                    href="#"
+                                    role="button"
+                                >
+                                    <i class="bx bx-show text-[16px]"></i>
+                                    <div class="table_tooltip">
+                                        {{ trans("global.view") }}
+                                    </div>
+                                </a>
+                            </div>
+                            <div>
+                                <a
+                                    v-if="$attrs.canEdit"
+                                    @click.prevent="editItem(item)"
+                                    class="inline-flex items-center justify-center text-sm font-normal filament-tables-link text-warning-700 hover:text-warning-600 filament-tables-link-action"
+                                    href="#"
+                                    role="button"
+                                >
+                                    <i class="bx bx-edit text-[16px]"></i>
+                                    <div class="table_tooltip">
+                                        {{ trans("global.edit") }}
+                                    </div>
+                                </a>
+                            </div>
+                            <form>
+                                <button
+                                    v-if="
+                                        $attrs.canDelete || $attrs.canDeleteAny
+                                    "
+                                    @click.prevent="deleteItem(item)"
+                                    type="submit"
+                                    class="inline-flex items-center justify-center text-sm font-normal filament-tables-link text-danger-600 hover:text-danger-500 filament-tables-link-action"
+                                >
+                                    <svg
+                                        class="w-4 h-4"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke-width="2"
+                                        stroke="currentColor"
+                                        aria-hidden="true"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                        ></path>
+                                    </svg>
+                                    <i class="bx bx-delete text-[16px]"></i>
+                                    <div class="table_tooltip">
+                                        {{ trans("global.delete") }}
+                                    </div>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="relative overflow-y-auto" v-else>
+            <div class="flex items-center justify-center p-4">
                 <div
-                    class="flex items-center justify-center w-16 h-16 rounded-full text-primary-500 bg-tableHead"
+                    class="flex flex-col items-center justify-center flex-1 p-6 mx-auto space-y-6 text-center bg-white filament-tables-empty-state dark:bg-gray-900"
                 >
-                    <svg
-                        class="w-6 h-6"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="2"
-                        stroke="#3A9252"
-                        aria-hidden="true"
+                    <div
+                        class="flex items-center justify-center w-16 h-16 rounded-full bg-tableHead dark:bg-dark_bg"
                     >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M6 18L18 6M6 6l12 12"
-                        ></path>
-                    </svg>
-                </div>
+                        <svg
+                            class="w-6 h-6"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="2"
+                            stroke="#3A9252"
+                            aria-hidden="true"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M6 18L18 6M6 6l12 12"
+                            ></path>
+                        </svg>
+                    </div>
 
-                <div class="max-w-xs space-y-1">
-                    <h2
-                        class="font-normal tracking-tight text-md filament-tables-empty-state-heading"
-                    >
-                        {{ trans('global.empty') }}
-                    </h2>
+                    <div class="max-w-xs space-y-1">
+                        <h2
+                            class="font-normal tracking-tight text-md filament-tables-empty-state-heading"
+                        >
+                            {{ trans("global.empty") }}
+                        </h2>
 
-                    <p
-                        class="text-sm font-normal text-gray-500 filament-tables-empty-state-description"
-                    ></p>
+                        <p
+                            class="text-sm font-normal text-gray-500 filament-tables-empty-state-description"
+                        ></p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -255,6 +346,7 @@ export default defineComponent({
         bulk: Object,
         desc: Boolean,
         orderBy: String,
+        type: Object,
     },
     data() {
         return {};
@@ -273,29 +365,68 @@ export default defineComponent({
         lang() {
             return this.$page.props.data.trans;
         },
+        getMessage() {
+            return this.$page.props.data.message;
+        },
     },
     methods: {
         money(item) {
             if (localStorage.getItem("lang")) {
-                    let lang = JSON.parse(localStorage.getItem("lang"));
-                    if (lang.id === "ar") {
-                        return item.toLocaleString("en-US", {
-                            style: "currency",
-                            currency: "EGP",
-                        });
-                    } else if (lang.id === "en") {
-                        return item.toLocaleString("ar-EG", {
-                            style: "currency",
-                            currency: "EGP",
-                        });
-                    }
+                let lang = JSON.parse(localStorage.getItem("lang"));
+                if (lang.id === "ar") {
+                    return item.toLocaleString("en-US", {
+                        style: "currency",
+                        currency: "EGP",
+                    });
+                } else if (lang.id === "en") {
+                    return item.toLocaleString("ar-EG", {
+                        style: "currency",
+                        currency: "EGP",
+                    });
                 }
+            }
         },
         trans(key) {
             return this.lang[key] ? this.lang[key] : key;
         },
         bulkAll() {
             this.$emit("all");
+        },
+        updateData(item) {
+            let form = this.$inertia.form(item);
+            form.submit("post", this.route(this.url + ".update", item.id), {
+                preserveScroll: true,
+                forceFormData: true,
+                onSuccess: () => {
+                    if (typeof this.getMessage === "object") {
+                        if (this.getMessage.type === "error") {
+                            this.$toast.error(this.getMessage.message, {
+                                position: "top",
+                                style: {
+                                    background: "rgba(210, 45, 61, .8)",
+                                    "border-radius": "0.25rem",
+                                },
+                            });
+                        } else if (this.getMessage.type === "success") {
+                            this.$toast.success(this.getMessage.message, {
+                                position: "top",
+                                style: {
+                                    background: "#7e3af2",
+                                    "border-radius": "0.25rem",
+                                },
+                            });
+                        }
+                    } else {
+                        this.$toast.success(this.getMessage, {
+                            position: "top",
+                            style: {
+                                background: "#7e3af2",
+                                "border-radius": "0.25rem",
+                            },
+                        });
+                    }
+                },
+            });
         },
         reload(index = 1, type = "main", orderBy = null, dir = false) {
             let getDir = "";
@@ -328,7 +459,10 @@ export default defineComponent({
             this.$emit("delete", item);
         },
         transItem(item, key) {
-            if(item[key].hasOwnProperty('ar') && item[key].hasOwnProperty('en')){
+            if (
+                item[key].hasOwnProperty("ar") &&
+                item[key].hasOwnProperty("en")
+            ) {
                 if (localStorage.getItem("lang")) {
                     let lang = JSON.parse(localStorage.getItem("lang"));
                     if (lang.id === "ar") {
@@ -337,12 +471,10 @@ export default defineComponent({
                         return item[key].ar;
                     }
                 }
-            }
-            else {
+            } else {
                 return item[key];
             }
         },
     },
 });
 </script>
-

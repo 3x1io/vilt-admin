@@ -8,7 +8,7 @@
                 @on-change="$emit('update:modelValue', value)"
                 :config="date"
                 :placeholder="placeholder"
-                class="w-full p-3 pr-12 text-sm border-gray-200 rounded-lg shadow-sm"
+                class="w-full h-40 bg-white border border-gray-200 rounded-default text-14 dark:bg-dark_bg dark:border-dark_border"
                 :class="className"
                 :disabled="disabled"
             ></flat-pickr>
@@ -18,7 +18,7 @@
                 @on-change="$emit('update:modelValue', value)"
                 :config="datetime"
                 :placeholder="placeholder"
-                class="w-full p-3 pr-12 text-sm border-gray-200 rounded-lg shadow-sm"
+                class="w-full h-40 bg-white border border-gray-200 rounded-default text-14 dark:bg-dark_bg dark:border-dark_border"
                 :class="className"
                 :disabled="disabled"
             ></flat-pickr>
@@ -28,12 +28,12 @@
                 @on-change="$emit('update:modelValue', value)"
                 :config="time"
                 :placeholder="placeholder"
-                class="w-full p-3 pr-12 text-sm border-gray-200 rounded-lg shadow-sm"
+                class="w-full h-40 bg-white border border-gray-200 rounded-default text-14 dark:bg-dark_bg dark:border-dark_border"
                 :class="className"
                 :disabled="disabled"
             ></flat-pickr>
         </div>
-        <JetInputError :message="message" class="mt-2" />
+        <JetInputError :message="message" />
     </div>
     <div class="flex justify-between my-4" v-if="view === 'view'">
         <div>
@@ -44,12 +44,20 @@
                 <i class="mx-2 bx bxs-time"></i> {{ timefilter(modelValue) }}
             </p>
             <p v-else-if="type === 'date'">
-                <i class="mx-2 bx bxs-calendar"></i>
+                <i class="mx-2 bx bx-calendar"></i>
                 {{ datefilter(modelValue) }}
             </p>
             <p v-else-if="type === 'datetime'">
-                <i class="mx-2 bx bxs-calendar"></i>
+                <i class="mx-2 bx bx-calendar"></i>
                 {{ datetimefilter(modelValue) }}
+            </p>
+            <p v-else-if="type === 'dateHuman'">
+                <i class="mx-2 bx bx-calendar"></i>
+                <span> {{ dateHumanfilter(modelValue) }}</span>
+            </p>
+            <p v-else-if="type === 'dateHumanString'">
+                <i class="mx-2 bx bx-calendar"></i>
+                <span> {{ dateStringHumanfilter(modelValue) }}</span>
             </p>
         </div>
     </div>
@@ -59,12 +67,20 @@
             <span> {{ timefilter(modelValue) }}</span>
         </p>
         <p v-else-if="type === 'date'">
-            <i class="mx-2 bx bxs-calendar"></i>
+            <i class="mx-2 bx bx-calendar"></i>
             <span> {{ datefilter(modelValue) }}</span>
         </p>
         <p v-else-if="type === 'datetime'">
-            <i class="mx-2 bx bxs-calendar"></i>
+            <i class="mx-2 bx bx-calendar"></i>
             <span> {{ datetimefilter(modelValue) }}</span>
+        </p>
+        <p v-else-if="type === 'dateHuman'">
+            <i class="mx-2 bx bx-calendar"></i>
+            <span> {{ dateHumanfilter(modelValue) }}</span>
+        </p>
+        <p v-else-if="type === 'dateHumanString'">
+            <i class="mx-2 bx bx-calendar"></i>
+            <span> {{ dateStringHumanfilter(modelValue) }}</span>
         </p>
     </div>
 </template>
@@ -113,14 +129,14 @@ export default defineComponent({
             },
         };
     },
-    beforeUpdate(){
-        if(this.modelValue){
-            this.value = this.modelValue
+    beforeUpdate() {
+        if (this.modelValue) {
+            this.value = this.modelValue;
         }
     },
-    mounted(){
-        if(this.default){
-            this.value = this.default
+    mounted() {
+        if (this.default) {
+            this.value = this.default;
         }
     },
     props: {

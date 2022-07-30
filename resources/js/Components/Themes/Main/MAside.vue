@@ -76,8 +76,8 @@
                             >
                                 <Link
                                     v-if="menu.type === 'route'"
-                        class="flex justify-start gap-1 px-3 py-2 mt-2 font-normal transition rounded-lg hover:bg-gray-500 focus:bg-gray-500/5 dark:text-gray-300 dark:hover:bg-gray-700"
-                        :class="{'flex  justify-start gap-1 px-3 py-2 rounded-lg font-normal transition bg-primary-500 text-white': route().current(menu.route)}"
+                                    class="flex justify-start gap-1 px-3 py-2 mt-2 font-normal transition rounded-lg hover:bg-main hover:text-white dark:text-gray-300 dark:hover:bg-gray-700"
+                                    :class="{'flex justify-start gap-1 px-3 py-2 rounded-lg font-normal transition bg-main text-white': route().current(menu.route)}"
                                     :href="route(menu.route)"
                                     :active="route().current(menu.route)"
                                 >

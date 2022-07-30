@@ -11,8 +11,12 @@ function getName($string){
             $item = Str::ucfirst($item);
             $tableName .= $item;
         }
-        else {
+        else if(count($expload)) {
             $item = Str::ucfirst($item) . " ";
+            $tableName .= $item;
+        }
+        else {
+            $item = Str::ucfirst($item);
             $tableName .= $item;
         }
 
@@ -33,7 +37,7 @@ class {{ $model }}Resource extends Resource
     public $model = {{ $model }}::class;
     public $icon = "bx bxs-circle";
     public $group = "Content";
-    public $api = false;
+    public $api = true;
 
     public function rows()
     {
@@ -79,18 +83,18 @@ class {{ $model }}Resource extends Resource
         @elseif($col['type'] === 'textarea')
         Row::make('{{ $col['name'] }}')@if($unique)->@endif{{ $unique ? "unique(true)" : "" }}->label(__('{{ getName($col['name']) }}'))->type('textarea')->get(),
         @elseif($col['type'] === 'relation')
-        Row::make('{{ $col['name'] }}')@if($unique)->@endif{{ $unique ? "unique(true)" : "" }}->validation("{{ $required ? $required . "|" : "" }}{{ $max ? $max . "|" : "" }}array")->label('{{ str_replace('_id', '', $col['name']) }}')->type('hasOne')->list(false)->options({{ $col['relation']['model'] }}::all()->toArray())->get(),
+        Row::make('{{ $col['name'] }}')@if($unique)->@endif{{ $unique ? "unique(true)" : "" }}->validation("{{ $required ? $required . "|" : "" }}{{ $max ? $max : "" }}array")->label('{{ str_replace('_id', '', $col['name']) }}')->type('hasOne')->list(false)->model({{ $col['relation']['model'] }}::class)->get(),
         @php $hasRel = true; @endphp
         @elseif($col['type'] === 'boolean')
-        Row::make('{{ $col['name'] }}')@if($unique)->@endif{{ $unique ? "unique(true)" : "" }}->validation("{{ $required ? $required . "|" : "" }}{{ $max ? $max . "|" : "" }}bool")->label(__('{{ getName($col['name']) }}'))->type('switch')->get(),
+        Row::make('{{ $col['name'] }}')@if($unique)->@endif{{ $unique ? "unique(true)" : "" }}->validation("{{ $required ? $required . "|" : "" }}{{ $max ? $max : "" }}bool")->label(__('{{ getName($col['name']) }}'))->type('switch')->get(),
         @elseif($col['type'] === 'datetime' || $col['type'] === 'date')
         Row::make('{{ $col['name'] }}')@if($unique)->@endif{{ $unique ? "unique(true)" : "" }}->label(__('{{ getName($col['name']) }}'))->type('datetime')->get(),
         @elseif($col['name'] === 'id')
         Row::make('{{ $col['name'] }}')@if($unique)->@endif{{ $unique ? "unique(true)" : "" }}->label(__('{{ getName($col['name']) }}'))->create(false)->edit(false)->get(),
         @elseif($col['type'] === 'json')
-        Row::make('{{ $col['name'] }}')@if($unique)->@endif{{ $unique ? "unique(true)" : "" }}->label(__('{{ getName($col['name']) }}'))->type('trans')->get(),
+        Row::make('{{ $col['name'] }}')@if($unique)->@endif{{ $unique ? "unique(true)" : "" }}->label(__('{{ getName($col['name']) }}'))->type('schema')->options([])->get(),
         @else
-        Row::make('{{ $col['name'] }}')@if($unique)->@endif{{ $unique ? "unique(true)" : "" }}->validation("{{ $required ? $required . "|" : "" }}{{ $max ? $max . "|" : "" }}")->label(__('{{ getName($col['name']) }}'))->get(),
+        Row::make('{{ $col['name'] }}')@if($unique)->@endif{{ $unique ? "unique(true)" : "" }}->validation("{{ $required ? $required . "|" : "" }}{{ $max ? $max : "" }}")->label(__('{{ getName($col['name']) }}'))->get(),
         @endif
 
         @endforeach

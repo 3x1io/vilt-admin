@@ -7,7 +7,7 @@
             <div
                 class="flex justify-start gap-2"
             >
-               <slot></slot>
+                <slot></slot>
             </div>
         </div>
     </div>
@@ -16,7 +16,6 @@
 <script>
 import { defineComponent } from "vue";
 import { Link } from "@inertiajs/inertia-vue3";
-
 export default defineComponent({
     components: {
         Link,

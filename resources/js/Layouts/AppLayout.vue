@@ -1,6 +1,7 @@
 <template>
     <div
-        class="flex h-screen dark:bg-gray-900 font-main"
+        style="min-height: 1024px"
+        class="flex h-full dark:bg-gray-900 font-main bg-gray-100"
         :class="{ 'overflow-hidden': isSideMenuOpen }"
     >
         <Aside :user="this.$page.props.user"></Aside>
@@ -8,7 +9,7 @@
         <MAside :open="isSideMenuOpen" @close="closeSidebar()"></MAside>
 
         <div
-            class="flex flex-col flex-1 w-screen space-y-6 lg:pl-80 rtl:lg:pl-0 rtl:lg:pr-80 filament-main"
+            class="flex flex-col flex-1 w-screen  space-y-6 lg:pl-80 rtl:lg:pl-0 rtl:lg:pr-80"
         >
             <Header
                 :isDark="dark"

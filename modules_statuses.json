@@ -7,6 +7,7 @@
     "Artisan": true,
     "Notifications": true,
     "Payment": false,
-    "Locations" : true,
-    "Menu": true
+    "Locations": true,
+    "Menu": true,
+    "Customers": true
 }
