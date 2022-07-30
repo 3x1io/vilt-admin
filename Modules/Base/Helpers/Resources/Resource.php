@@ -66,7 +66,6 @@ class Resource
         return [];
     }
 
-
     public function modals()
     {
         return [];
@@ -194,7 +193,6 @@ class Resource
         return $request->all();
     }
 
-
     public function validStore(Request $request)
     {
 
@@ -204,7 +202,6 @@ class Resource
 
         return $validator;
     }
-
 
     public function store(Request $request)
     {
@@ -361,7 +358,6 @@ class Resource
     {
     }
 
-
     public function beforeDestory($record)
     {
         return $record;
@@ -467,7 +463,6 @@ class Resource
             }
         }
     }
-
 
     public function afterBulk(Request $request, $record)
     {

@@ -14,6 +14,8 @@
     - [Create Modal](/{{route}}/{{version}}/modal)
     - [Create Menu Item](/{{route}}/{{version}}/menus)
     - [Render Views](/{{route}}/{{version}}/render)
+    - [Form](/{{route}}/{{version}}/form)
+    - [Table](/{{route}}/{{version}}/table)
 - ## Plugins
     - [Roles](/{{route}}/{{version}}/roles-plugin)
     - [Translations](/{{route}}/{{version}}/translations-plugin)

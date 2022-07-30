@@ -36,6 +36,7 @@ let's know more about methods first
 13. `search(bool)` use to set the row as a searchable row
 14. `unique(bool)` use to set unique validation to the create and edit with auto skip
 15. `url(bool)` use to convert the the view and table row to be clickable url
+16. `validation(bool)` use to set the validation for the row can be direct for store, update or array `["create" => "", "update" =>""]`
 
 that's the main method but we have some custom methods with a selected type of the row so let's speak about types
 <hr>
@@ -66,18 +67,6 @@ we use [multiselect vue3](https://github.com/SuadeLabs/vue3-multiselect) compone
 ]
 ```
 
-or
-
-```php
-App\Models\User::all()->toArray()
-```
-
-In this case you must use 2 methods other `track_by_name(string)` and `track_by_id(string)` takes the name of the name prop and the id prop
-
-and the last for this type you can use method `multi(bool)` to select if it's multi-select or not
-
-we are using this type as 2 more types `relation` & `hasOne` to build relations on the database
-
 EX:
 
 ```php
@@ -92,6 +81,26 @@ Row::make('options')->type('select')->options([
     ]
 ])->track_by_name('name')->track_by_id('id')->multi(true)
 ```
+
+
+In this case you must use 2 methods other `track_by_name(string)` and `track_by_id(string)` takes the name of the name prop and the id prop
+
+and the last for this type you can use method `multi(bool)` to select if it's multi-select or not
+
+we are using this type as 2 more types `relation` & `hasOne` to build relations on the database
+
+for `relation` and `hasOne` you must set a `model()` to the class of model and `relation()` to the name of the relation to get the relation form API not load it on the same view
+
+```php
+    Row::make('customer_group_id')
+        ->relation('customersGroup')
+        ->validation("required|array")
+        ->label(__('Customer Group'))
+        ->type('hasOne')
+        ->model(CustomersGroup::class)
+        ->get(),
+```
+
 
 <hr>
 
