@@ -65,7 +65,6 @@ class Table
             "filters" => $this->filters,
             "actions" => $this->actions,
             "bulks" => $this->bulks,
-            "icon" => $this->icon,
             "search" => $this->search,
             "bulk" => $this->bulk,
         ];

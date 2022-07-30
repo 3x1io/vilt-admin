@@ -41,6 +41,7 @@ foreach ($routes as $route) {
                 Route::post("/bulk", [$route['controller'], 'bulk'])->name('bulk');
                 Route::get("/export", [$route['controller'], 'export'])->name('export');
                 Route::post("/import", [$route['controller'], 'import'])->name('import');
+                Route::get("/{id}", [$route['controller'], 'show'])->name('show');
                 Route::post("/{id}", [$route['controller'], 'update'])->name('update');
                 Route::delete("/{id}", [$route['controller'], 'destory'])->name('destory');
             });

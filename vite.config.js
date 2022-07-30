@@ -5,7 +5,7 @@ import {homedir} from 'os'
 import {resolve} from 'path'
 import fs from 'fs';
 
-let host = 'vilt-v2.test'
+let host = 'vilt-admin.test'
 
 export default defineConfig({
     plugins: [

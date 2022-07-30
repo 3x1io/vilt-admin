@@ -25,7 +25,7 @@ class NotificationsResource extends Resource
     {
         return [
             Row::make('id')->label(__('ID'))->create(false)->edit(false)->get(),
-            Row::make('template_id')->label(__('Template'))->validation("required|array")->type('hasOne')->options(NotifiactionsTemplates::where('action', 'manual')->get()->toArray())->track_by_name('name')->get(),
+            Row::make('template_id')->label(__('Template'))->validation("required|array")->type('select-value')->options(NotifiactionsTemplates::where('action', 'manual')->get()->toArray())->track_by_name('name')->get(),
             Row::make('privacy')->label(__('Privacy'))->validation("required|string")->type('select')->options(["public", "private"])->get(),
             Row::make('model_type')->label(__('Type'))->validation("required|array")->view(false)->list(false)->type('hasOne')->options([
                 [
@@ -33,7 +33,7 @@ class NotificationsResource extends Resource
                     "id" => User::class
                 ]
             ])->get(),
-            Row::make('model_id')->label(__('User'))->validation("nullable|array")->reactive("private")->row('privacy')->type('hasOne')->options(User::all()->toArray())->get(),
+            Row::make('model_id')->label(__('User'))->validation("nullable|array")->reactive("private")->row('privacy')->type('hasOne')->model(User::class)->relation('model')->get(),
             Row::make('created_at')->label(__('Date'))->create(false)->edit(false)->type('datetime')->options([])->get()
         ];
     }

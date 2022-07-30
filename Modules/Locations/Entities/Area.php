@@ -4,29 +4,39 @@ namespace Modules\Locations\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property integer $id
+ * @property string $name
+ * @property integer $city_id
+ * @property string $lat
+ * @property string $lang
+ * @property string $created_at
+ * @property string $updated_at
+ * @property Project[] $projects
+ */
 class Area extends Model
 {
-    protected $fillable = [
-        'city_id',
-        'lang',
-        'lat',
-        'name',
+    /**
+     * The "type" of the auto-incrementing ID.
+     *
+     * @var string
+     */
+    protected $keyType = 'integer';
 
-    ];
+    /**
+     * @var array
+     */
+    protected $fillable = ['name', 'city_id', 'lat', 'lang', 'created_at', 'updated_at'];
 
-
-    protected $dates = [
-        'created_at',
-        'updated_at',
-
-    ];
-
-    protected $appends = ['resource_url'];
-
-    /* ************************ ACCESSOR ************************* */
-
-    public function getResourceUrlAttribute()
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function projects()
     {
-        return url('/admin/areas/'.$this->getKey());
+        return $this->hasMany('Modules\Locations\Entities\Project');
+    }
+
+    public  function city(){
+        return $this->belongsTo(City::class, 'city_id', 'id');
     }
 }

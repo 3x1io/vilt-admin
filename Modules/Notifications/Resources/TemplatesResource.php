@@ -58,7 +58,7 @@ class TemplatesResource extends Resource
                     "id" => "sms"
                 ]
             ])->track_by_name('name')->track_by_id('id')->get(),
-            Row::make('roles')->label(__('Roles'))->validation("nullable|array")->list(false)->type('relation')->multi(true)->options(Role::all()->toArray())->get(),
+            Row::make('roles')->label(__('Roles'))->validation("nullable|array")->list(false)->type('relation')->multi(true)->model(Role::class)->relation('roles')->get(),
         ];
     }
 

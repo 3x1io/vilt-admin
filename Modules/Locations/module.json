@@ -3,7 +3,7 @@
     "alias": "locations",
     "description": "",
     "keywords": [],
-    "priority": 0,
+    "priority": 1,
     "providers": [
         "Modules\\Locations\\Providers\\LocationsServiceProvider"
     ],

@@ -8,16 +8,17 @@ class Share
 {
     use Configure;
 
-    private ?array $data = [];
+    private  $data = [];
+    private ?string $key =null;
 
-    public function __construct($data)
+    public function __construct($key)
     {
-        $this->data = $data;
+        $this->key = $key;
     }
 
-    public static function make(string $data)
+    public static function make(string $key)
     {
-        $static = app(static::class, ['data' => $data]);
+        $static = app(static::class, ['key' => $key]);
         $static->setUp();
 
         return $static;
@@ -29,5 +30,18 @@ class Share
             "data" => $this->data
         ]);
         return back();
+    }
+
+    public function data($data): ?static
+    {
+        $this->data = $data;
+        return $this;
+    }
+
+    public  function get(){
+        return [
+            "key" => $this->key,
+            "data" => $this->data
+        ];
     }
 }

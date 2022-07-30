@@ -3,6 +3,7 @@
 namespace Modules\Payment\Entities;
 
 use Illuminate\Database\Eloquent\Model;
+use Modules\Payment\Entities\PaymentMethod;
 
 /**
  * @property integer $id
@@ -28,7 +29,7 @@ class Plan extends Model
 {
     /**
      * The "type" of the auto-incrementing ID.
-     * 
+     *
      * @var string
      */
     protected $keyType = 'integer';
@@ -36,7 +37,7 @@ class Plan extends Model
     /**
      * @var array
      */
-    protected $fillable = ['payment_method', 'name', 'icons', 'plan_user_type', 'descriptions', 'price_monthly', 'price_yearly', 'is_public', 'is_recurring', 'is_default', 'is_active', 'created_at', 'updated_at'];
+    protected $fillable = ['payment_method', 'name', 'icons', 'plan_user_type', 'descriptions', 'price_monthly', 'price_yearly', 'is_public', 'is_recurring', 'is_default', 'is_active', 'created_at', 'updated_at', 'order'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -68,5 +69,17 @@ class Plan extends Model
     public function features()
     {
         return $this->belongsToMany('Modules\Payment\Entities\Feature', 'plan_has_features');
+    }
+
+    public function payment_methods()
+    {
+        return $this->belongsToMany(PaymentMethod::class)->withTimestamps();
+    }
+
+    protected static function booted()
+    {
+        static::deleting(function ($record) {
+            $record->payment_methods()->detach();
+        });
     }
 }

@@ -20,7 +20,7 @@ class PaymentMethod extends Model
 {
     /**
      * The "type" of the auto-incrementing ID.
-     * 
+     *
      * @var string
      */
     protected $keyType = 'integer';
@@ -33,10 +33,10 @@ class PaymentMethod extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function paymentMethodIntegrations()
-    {
-        return $this->hasMany('Modules\Payment\Entities\PaymentMethodIntegration');
-    }
+//    public function paymentMethodIntegrations()
+//    {
+//        return $this->hasMany('Modules\Payment\Entities\PaymentMethodIntegration');
+//    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

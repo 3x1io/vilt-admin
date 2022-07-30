@@ -5,6 +5,7 @@ namespace Modules\Payment\Providers;
 use App\Models\PaymentMethod;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Factory;
+use Modules\Base\Helpers\Resources\Core;
 use Modules\Payment\Http\Factories\PaymentFactory;
 use Modules\Payment\Http\Services\FawryPlusPaymentService;
 
@@ -31,6 +32,8 @@ class PaymentServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
+
+        Core::loadResources($this->moduleName);
     }
 
     /**

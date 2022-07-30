@@ -48,12 +48,12 @@ class Resource
 
     public function table()
     {
-        return [];
+        return Table::make('table')->render();
     }
 
     public function form()
     {
-        return [];
+        return Form::make('modal')->get();
     }
 
     public function relations()
@@ -91,6 +91,12 @@ class Resource
         return $data;
     }
 
+    public  function loadAPIData($data, $request){
+        return $data;
+    }
+
+    public  function setFilters($query, $request){}
+
     public function index(Request $request)
     {
         $isAPI = str_contains($request->route()->getPrefix(), 'api');
@@ -103,10 +109,21 @@ class Resource
 
         $rows = $this->schema();
         $data = Query::create(app($this->model))
-            ->modifyQuery(function ($q) use ($request, $rows) {
+            ->modifyQuery(function ($q) use ($request, $rows, $isAPI) {
                 foreach ($rows as $row) {
-                    if ($row['type'] === 'relation') {
+                    if (($row['type'] === 'relation') && ($row['list'] === true)) {
                         $q->with($row['field']);
+                    }
+                    if (($row['type'] === 'hasOne') && ($row['list'] === true)) {
+                        $q->with($row['relation']);
+                    }
+                    if ($isAPI && $this->api) {
+                        if (($row['type'] === 'relation') ) {
+                            $q->with($row['field']);
+                        }
+                        if (($row['type'] === 'hasOne')) {
+                            $q->with($row['relation']);
+                        }
                     }
                 }
                 $this->customQuery($q, $request, $rows);
@@ -119,8 +136,30 @@ class Resource
                 $this->schemaFileds(),
 
                 // set columns to searchIn
-                $this->searchFileds()
+                $this->searchFileds(),
+
+                function ($query) use ($request) {
+                    $this->setFilters($query, $request);
+                }
             );
+
+        foreach ($rows as $row) {
+            if (($row['type'] === 'hasOne') && ($row['list'] === true) && $row['relation']) {
+                foreach($data as $i=>$item){
+                    $item->{$row['field']} = $item->{$row['relation']};
+                    unset($item->{$row['relation']});
+                }
+            }
+            else {
+                if ($isAPI && $this->api) {
+                    if (($row['type'] === 'hasOne') && $row['relation']) {
+                        foreach($data as $i=>$item){
+                            unset($item->{$row['field']});
+                        }
+                    }
+                }
+            }
+        }
 
         $this->loadMedia($data);
         $this->loadSelect($data);
@@ -129,11 +168,22 @@ class Resource
         $data = $this->afterLoad($data);
 
         if ($isAPI && $this->api) {
-            return response()->json([
-                "success" => true,
-                "message" => __($this->generateName(true, true) . ' Loaded Success'),
-                "data" => $data
-            ]);
+            $data = $this->loadAPIData($data, $request);
+            if(is_array($data) && count($data)){
+                return response()->json([
+                    "success" => true,
+                    "message" => __($this->generateName(true, true) . ' Loaded Success'),
+                    "data" => $data
+                ]);
+            }
+            else {
+                return response()->json([
+                    "success" => false,
+                    "message" => __('Sorry Record Not Found!'),
+                    "data" => []
+                ], 404);
+            }
+
         } else {
             return inertia($this->view, $this->response($data, app($this->model)->getTable()));
         }
@@ -154,6 +204,7 @@ class Resource
 
         return $validator;
     }
+
 
     public function store(Request $request)
     {
@@ -194,6 +245,63 @@ class Resource
 
     public function afterStore(Request $request, $record)
     {
+    }
+
+    public  function loadAPIShow($record){
+        return $record;
+    }
+
+    public  function loadShowQuery($query){
+        return $query->first();
+    }
+
+    public  function loadAPIShowRecord($record){
+        unset($record->media);
+        return $record;
+    }
+
+    public  function show(Request $request, $id){
+        $isAPI = str_contains($request->route()->getPrefix(), 'api');
+        if (!$isAPI) {
+            $this->roles($this->url);
+            if (!$this->canEdit) {
+                return inertia('403');
+            }
+        }
+
+        $query = $this->model::query();
+        $query->find($id);
+        foreach($this->rows() as $row){
+            if($row['type'] === 'relation' || $row['type'] === 'hasOne'){
+                if(!empty($row['relation'])){
+                    $query->with($row['relation']);
+                }
+                else {
+                    $query->with($row['field']);
+                }
+            }
+        }
+
+        $record = $this->loadShowQuery($query);
+        $record = $this->loadAPIShow($record);
+
+        $this->loadMedia([$record]);
+        $this->loadSelect([$record]);
+        $this->loadTranslations([$record]);
+
+        foreach($this->rows() as $row) {
+            if ($row['type'] === 'hasOne' && !empty($row['relation'])) {
+                $record->{$row['field']} = $record->{$row['relation']};
+                unset($record->{$row['relation']});
+            }
+        }
+
+        return response()->json([
+            "success" => true,
+            "message" => __($this->generateName(true, true) . " Loaded Success"),
+            "data" => $this->loadAPIShowRecord($record)
+        ]);
+
     }
 
     public function beforeUpdate(Request $request, $record)
@@ -272,6 +380,11 @@ class Resource
         $record = $this->model::find($id);
         if ($record) {
             $record = $this->beforeDestory($record);
+            foreach($this->rows() as $row){
+                if($row['type'] === 'relation'){
+                    $record->{$row['field']}()->sync([]);
+                }
+            }
             $record->delete();
             $this->afterDestory($record);
 
@@ -329,6 +442,11 @@ class Resource
                             $this->roles($this->url);
                             if (!$this->canDeleteAny) {
                                 return inertia('403');
+                            }
+                        }
+                        foreach($this->rows() as $row){
+                            if($row['type'] === 'relation'){
+                                $record->{$row['field']}()->sync([]);
                             }
                         }
                         $record->delete();

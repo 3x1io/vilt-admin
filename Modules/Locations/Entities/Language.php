@@ -4,28 +4,25 @@ namespace Modules\Locations\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property integer $id
+ * @property string $iso
+ * @property string $name
+ * @property string $arabic
+ * @property string $created_at
+ * @property string $updated_at
+ */
 class Language extends Model
 {
-    protected $fillable = [
-        'arabic',
-        'iso',
-        'name',
+    /**
+     * The "type" of the auto-incrementing ID.
+     * 
+     * @var string
+     */
+    protected $keyType = 'integer';
 
-    ];
-
-
-    protected $dates = [
-        'created_at',
-        'updated_at',
-
-    ];
-
-    protected $appends = ['resource_url'];
-
-    /* ************************ ACCESSOR ************************* */
-
-    public function getResourceUrlAttribute()
-    {
-        return url('/admin/languages/'.$this->getKey());
-    }
+    /**
+     * @var array
+     */
+    protected $fillable = ['iso', 'name', 'arabic', 'created_at', 'updated_at'];
 }

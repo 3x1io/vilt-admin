@@ -23,8 +23,10 @@ use Modules\Notifications\Http\Controllers\NotificationsController;
      Route::post('admin/notifications/bulk', [NotificationsController::class, 'userBulk'])->name('notifications.bulk');
      Route::delete('admin/notifications/{id}/delete', [NotificationsController::class, 'userDestroy'])->name('notifications.destory');
      Route::post('admin/notifications/clear', [NotificationsController::class, 'clearUser'])->name('notifications.clear');
-     Route::post('token', [NotificationsController::class, 'token'])->name('notifications.token');
 
  });
+
+Route::post('token', [NotificationsController::class, 'token'])->name('admin.notifications.token');
+
 
 

@@ -46,7 +46,7 @@ class MenuResource extends Resource
 
         return [
             Row::make('id')->label(__('Id'))->create(false)->edit(false)->get(),
-            Row::make('group_id')->label('group')->type('hasOne')->track_by_name('title')->options(MenusGroups::all()->toArray())->get(),
+            Row::make('group_id')->label('group')->type('hasOne')->relation('group')->track_by_name('title')->model(MenusGroups::class)->get(),
             Row::make('title')->label(__('Title'))->type('trans')->get(),
             Row::make('description')->label(__('Description'))->type('trans')->list(false)->get(),
             Row::make('icon')->type('icon')->label(__('Icon'))->get(),

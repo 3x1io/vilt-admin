@@ -3,10 +3,13 @@
 namespace Modules\Notifications\Providers;
 
 
+use App\Models\User;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;
 use Modules\Base\Helpers\Resources\Core;
 use Illuminate\Database\Eloquent\Factory;
 use Modules\Base\Helpers\Resources\Menu;
+use Modules\Base\Helpers\Resources\Share;
 use Modules\Notifications\Console\InstallNotifications;
 use Modules\Notifications\Resources\TemplatesResource;
 use Modules\Notifications\Resources\NotificationsResource;
@@ -44,6 +47,17 @@ class NotificationsServiceProvider extends ServiceProvider
         ]);
 
         Core::registerProfileMenuItem(Menu::make('Notifications')->icon('bxs-bell')->route('admin.notifications.index'));
+
+        $path = str_replace("storage/", "", setting('google_firebase_config'));
+
+        if(File::exists(storage_path('app/public/' . $path))) {
+            $json = File::get(storage_path('app/public/' . $path));
+            Core::registerShareData(Share::make('fcm')->data([
+                "config" => json_decode($json),
+                "vapidKey" => setting('google_firebase_vapid')
+            ]));
+        }
+
     }
 
     /**

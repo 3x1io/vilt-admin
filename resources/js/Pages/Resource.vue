@@ -234,6 +234,33 @@ export default defineComponent({
             this.$inertia.form(this.modalAction[modal]).submit("post",route(action) ,{
                 preserveScroll: true,
                 onSuccess: () => {
+                    if (typeof this.getMessage === "object") {
+                        if (this.getMessage.type === "error") {
+                            this.$toast.error(this.getMessage.message, {
+                                position: "top",
+                                style: {
+                                    background: "rgba(210, 45, 61, .8)",
+                                    "border-radius": "0.25rem",
+                                },
+                            });
+                        } else if (this.getMessage.type === "success") {
+                            this.$toast.success(this.getMessage.message, {
+                                position: "top",
+                                style: {
+                                    background: "#7e3af2",
+                                    "border-radius": "0.25rem",
+                                },
+                            });
+                        }
+                    } else {
+                        this.$toast.success(this.getMessage, {
+                            position: "top",
+                            style: {
+                                background: "#7e3af2",
+                                "border-radius": "0.25rem",
+                            },
+                        });
+                    }
                     this.modalAction[modal].reset();
                     this.actionModal[modal] = false;
                     this.success();
@@ -241,7 +268,37 @@ export default defineComponent({
             });
         },
         fireAction(name){
-            this.$inertia.post(route(name), {});
+            this.$inertia.post(route(name), {}, {
+                onSuccess: () => {
+                    if (typeof this.getMessage === "object") {
+                        if (this.getMessage.type === "error") {
+                            this.$toast.error(this.getMessage.message, {
+                                position: "top",
+                                style: {
+                                    background: "rgba(210, 45, 61, .8)",
+                                    "border-radius": "0.25rem",
+                                },
+                            });
+                        } else if (this.getMessage.type === "success") {
+                            this.$toast.success(this.getMessage.message, {
+                                position: "top",
+                                style: {
+                                    background: "#7e3af2",
+                                    "border-radius": "0.25rem",
+                                },
+                            });
+                        }
+                    } else {
+                        this.$toast.success(this.getMessage, {
+                            position: "top",
+                            style: {
+                                background: "#7e3af2",
+                                "border-radius": "0.25rem",
+                            },
+                        });
+                    }
+                },
+            });
         },
         openModal(name){
             this.actionModal[name] = !this.actionModal[name];

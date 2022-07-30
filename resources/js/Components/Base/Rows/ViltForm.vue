@@ -2,7 +2,7 @@
     <div>
         <div v-if="!edit">
             <div v-for="(field, key) in rows" :key="key">
-                <div v-if="field.type === 'image' && field.create">
+                <div v-if="(field.type === 'image' || field.type === 'file') && field.create">
                     <div
                         v-if="
                             (field.reactive && form[field.row]) ||
@@ -235,7 +235,7 @@
         </div>
         <div v-else>
             <div v-for="(field, key) in rows" :key="key">
-                <div v-if="field.type === 'image' && field.edit">
+                <div v-if="(field.type === 'image' || field.type === 'file') && field.edit">
                     <div
                         v-if="
                             (field.reactive && form[field.row]) ||

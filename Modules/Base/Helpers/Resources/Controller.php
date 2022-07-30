@@ -31,7 +31,13 @@ trait Controller
 
     public function loadTranslations($data)
     {
-        $data = $data->toArray();
+        if(!is_array($data)){
+            $data = $data->toArray();
+        }
+        else {
+            $data['data'] = $data;
+        }
+
         $rows = $this->schema();
         foreach ($data['data'] as $i => $iValue) {
             foreach ($rows as $row) {
@@ -190,12 +196,23 @@ trait Controller
 
     public function roles($auth = "web")
     {
-        $this->canView = auth($auth)->user()->can('view_' . $this->table);
-        $this->canViewAny = auth($auth)->user()->can('view_any_' . $this->table);
-        $this->canCreate = auth($auth)->user()->can('create_' . $this->table);
-        $this->canEdit = auth($auth)->user()->can('update_' . $this->table);
-        $this->canDelete = auth('web')->user()->can('delete_' . $this->table);
-        $this->canDeleteAny = auth('web')->user()->can('delete_any_' . $this->table);
+        if(auth($auth)->user()){
+            $this->canView = auth($auth)->user()->can('view_' . $this->table);
+            $this->canViewAny = auth($auth)->user()->can('view_any_' . $this->table);
+            $this->canCreate = auth($auth)->user()->can('create_' . $this->table);
+            $this->canEdit = auth($auth)->user()->can('update_' . $this->table);
+            $this->canDelete = auth('web')->user()->can('delete_' . $this->table);
+            $this->canDeleteAny = auth('web')->user()->can('delete_any_' . $this->table);
+        }
+        else {
+            $this->canView = false;
+            $this->canViewAny = false;
+            $this->canCreate = false;
+            $this->canEdit = false;
+            $this->canDelete = false;
+            $this->canDeleteAny = false;
+        }
+
     }
 
     public function loadLang()
@@ -242,6 +259,9 @@ trait Controller
             "lang" => $this->loadLang(),
             "actions" => $this->actions(),
             "modals" => $this->modals(),
+            "model" => $this->model,
+            "form" => $this->form(),
+            "table" => $this->table(),
         ];
         return array_merge($response, $extra);
     }
@@ -259,6 +279,7 @@ trait Controller
                             }
                             $item->{$field['field']} = $arrayImages;
                         } else {
+
                             $item->{$field['field']} = $item->getMedia($field['field'])->first()->getUrl();
                         }
                     } else {

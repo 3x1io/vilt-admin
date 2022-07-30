@@ -4,34 +4,41 @@ namespace Modules\Locations\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property integer $id
+ * @property string $name
+ * @property float $price
+ * @property string $shipping
+ * @property integer $country_id
+ * @property string $lat
+ * @property string $lang
+ * @property string $created_at
+ * @property string $updated_at
+ * @property Project[] $projects
+ */
 class City extends Model
 {
-    protected $fillable = [
-        'country_id',
-        'lang',
-        'lat',
-        'name',
-        'price',
-        'shipping',
-    ];
+    /**
+     * The "type" of the auto-incrementing ID.
+     *
+     * @var string
+     */
+    protected $keyType = 'integer';
 
+    /**
+     * @var array
+     */
+    protected $fillable = ['name', 'price', 'shipping', 'country_id', 'lat', 'lang', 'created_at', 'updated_at'];
 
-    protected $dates = [
-        'created_at',
-        'updated_at',
-
-    ];
-
-    protected $appends = ['resource_url'];
-
-    /* ************************ ACCESSOR ************************* */
-
-    public function getResourceUrlAttribute()
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function projects()
     {
-        return url('/admin/cities/'.$this->getKey());
+        return $this->hasMany('Modules\Locations\Entities\Project');
     }
 
-    public function areas(){
-        return $this->hasMany(Area::class, 'city_id', 'id');
+    public  function  country(){
+        return $this->belongsTo(Country::class, 'country_id', 'id');
     }
 }

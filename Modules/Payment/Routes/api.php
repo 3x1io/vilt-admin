@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::post("/payment", 'PaymentController@paymentMethod');
-});
-Route::post("callback/payment/{method}", 'PaymentController@paymentCallback');
+//Route::middleware('auth:sanctum')->group(function () {
+//    Route::post("/payment", 'PaymentController@paymentMethod');
+//});
+//Route::post("callback/payment/{method}", 'PaymentController@paymentCallback');

@@ -8,8 +8,11 @@ class Filter
 {
     use Configure;
 
-    private ?string $name = "name";
-    private ?array $row = [];
+    private ?string $name = null;
+    private ?string $label = null;
+    private ?string $type = "action";
+    private ?string $model = null;
+    private ?array $rows = [];
     private ?string $action = null;
 
     public function __construct($name)
@@ -25,15 +28,33 @@ class Filter
         return $static;
     }
 
+    public function model($model): ?static
+    {
+        $this->model = $model;
+        return $this;
+    }
+
+    public function type($type): ?static
+    {
+        $this->type = $type;
+        return $this;
+    }
+
+    public function label($label): ?static
+    {
+        $this->label = $label;
+        return $this;
+    }
+
     public function action($action): ?static
     {
         $this->action = $action;
         return $this;
     }
 
-    public function row($row): ?static
+    public function rows($row): ?static
     {
-        $this->row = $row;
+        $this->rows = $row;
         return $this;
     }
 
@@ -42,7 +63,10 @@ class Filter
         return [
             "name" => $this->name,
             "action" => $this->action,
-            "row" => $this->row,
+            "rows" => $this->rows,
+            "label" => $this->label,
+            "type" => $this->type,
+            "model" => $this->model,
         ];
     }
 }

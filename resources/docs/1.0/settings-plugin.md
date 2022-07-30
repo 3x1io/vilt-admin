@@ -4,15 +4,14 @@
   - [Generate Migration for setting](#generate-migration-for-setting)
   - [Build Your setting migration schema](#build-your-setting-migration-schema)
   - [Build a settings page](#build-a-settings-page)
-  - [Generate a controller for settings](#generate-a-controller-for-settings)
-  - [Generate a view for settings](#generate-a-view-for-settings)
-  - [Build a store controller method](#build-a-store-controller-method)
   - [Use settings method](#use-settings-method)
 
 # Settings Plugin
 
 we are build a settings plugin using [spatie-laravel-settings](https://github.com/spatie/laravel-settings) so you can use full package feature by creating the setting class and migration and we will help you to generate a page for it
 
+<hr>
+<a name="create-setting-page"></a>
 ## [Create Setting Page](#create-setting-page)
 
 to create a setting page you must create setting class first, go to `app` folder and create a new folder `Settings`
@@ -33,6 +32,8 @@ class GeneralSettings extends Settings
 }
 ```
 
+<hr>
+<a name="add-setting-to-config"></a>
 ## [Add Setting to config](#add-setting-to-config)
 
 Now, you will have to add this settings class to the settings.php config file in the settings array so it can be loaded by Laravel:
@@ -47,6 +48,8 @@ Now, you will have to add this settings class to the settings.php config file in
     ],
 ```
 
+<hr>
+<a name="generate-migration-for-setting"></a>
 ## [Generate Migration for setting](#generate-migration-for-setting)
 
 
@@ -56,6 +59,8 @@ Each property in a settings class needs a default value that should be set in it
 php artisan make:settings-migration CreateGeneralSettings
 ```
 
+<hr>
+<a name="build-your-setting-migration-schema"></a>
 ## [Build Your setting migration schema](#build-your-setting-migration-schema)
 
 This command will create a new file in `database/settings` where you can add the properties and their default values:
@@ -84,165 +89,51 @@ php artisan migrate
 
 now you are ready for a settings page
 
+<hr>
+<a name="build-a-settings-page"></a>
 ## [Build a settings page](#build-a-settings-page)
 
-to build a settings page you need:
-
-1. Settings Controller
-2. Settings Route
-3. Settings View
-
-
-## [Generate a controller for settings](#generate-a-controller-for-settings)
-
-first of all create a settings controller 
-
-```bash
-php artisan make:controller SettingsController
-```
-
-you will get a new controller on your app, let's add an index to return the view, and the settings to the view
+it's very easy to generate a new settings page just inside your module create a folder with name `Pages` inside this folder create a new class with your settings name, use this template to extend the settings page
 
 ```php
-    public function index(){
-        $settings = new GeneralSettings();
+<?php
 
-        $form = [
-            Row::make('site_name')->label('Site Name')->default($settings->site_name)->type('text')->get(),
-            Row::make('site_active')->label('Site Active')->default($settings->site_active)->type('switch')->get(),
+namespace Modules\Settings\Pages;
+
+use Illuminate\Support\Str;
+use Modules\Base\Helpers\Resources\Menu;
+use Modules\Base\Helpers\Resources\Row;
+use Modules\Base\Helpers\Resources\Setting;
+use Modules\Settings\Settings\GoogleSettings;
+use Modules\Settings\Settings\SitesSettings;
+
+class GoogleSettingsPage extends Setting {
+
+    public ?string $setting = GoogleSettings::class;
+    public ?bool $api = true;
+    public ?string $path = "google_settings";
+    public ?string $group = "Settings";
+    public ?string $icon = "bx bxl-google";
+
+    public  function rows(){
+        return [
+            Row::make('google_api_key')->label(__('Google API key'))->get(),
+            Row::make('google_firebase_cr')->label(__('Firebase CREDENTIALS'))->type('file')->get(),
+            Row::make('google_firebase_database_url')->label(__('Firebase Database URL'))->get(),
+            Row::make('google_firebase_vapid')->label(__('Firebase VAPID KEY'))->type('textarea')->get(),
+            Row::make('google_recaptcha_key')->label(__('Recaptcha Key'))->get(),
+            Row::make('google_recaptcha_secret')->label(__('Recaptcha Secret'))->get(),
         ];
-
-        return Inertia::render('Settings/Index', [
-            "rows" => $form
-        ]);
     }
+}
 ```
 
-## [Generate a view for settings](#generate-a-view-for-settings)
+it will generate a full settings page for you.
 
-now let's go to path `resources/js/Pages/` and create a new folder if not exists `Settings` and inside it create a vuejs component `Index.vue`
+you can use `Actions::class`, `Modal::class` inside the page like the `Resource`
 
-inside this Index.vue you will add next code
-
-```js
-<template>
-    <app-layout title="Dashboard">
-          <div class="px-6 mx-auto">
-            <div class="flex justify-between my-6">
-                <div>
-                    <h2
-                    class="text-2xl font-semibold text-gray-700 dark:text-gray-200"
-                    >
-                        General Settings
-                    </h2>
-                </div>
-            </div>
-            <form action="" @submit.prevent="onSubmit">
-                <div class="bg-white border border-gray-300 shadow-sm dark:bg-gray-700 dark:text-white dark:border-gray-800 rounded-xl filament-tables-container">
-                <div class="p-4">
-                    <ViltForm
-                    v-model="form"
-                    :rows = "$attrs.rows"
-                    :errors = "form.errors"
-                />
-                </div>
-            </div>
-            <div class="flex justify-end">
-                <div>
-                    <button type="submit" class="inline-flex items-center justify-center px-4 my-2 font-medium tracking-tight text-white transition-colors border border-transparent rounded-lg shadow focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset filament-button dark:focus:ring-offset-0 h-9 focus:ring-white bg-primary-600 hover:bg-primary-500 focus:bg-primary-700 focus:ring-offset-primary-700 filament-page-button-action">
-                        Save
-                    </button>
-                </div>
-            </div>
-            </form>
-
-          </div>
-    </app-layout>
-</template>
-
-<script>
-    import { defineComponent } from 'vue'
-    import AppLayout from '@/Layouts/AppLayout.vue'
-    import JetDialogModal from "@/Jetstream/DialogModal.vue";
-    import JetSecondaryButton from "@/Jetstream/SecondaryButton.vue";
-    import JetButton from "@/Jetstream/Button.vue";
-    import JetInput from "@/Jetstream/Input.vue";
-    import JetInputError from "@/Jetstream/InputError.vue";
-    import JetLabel from "@/Jetstream/Label.vue";
-    import ViltForm from "@/Components/Base/Rows/ViltForm.vue";
-
-    export default defineComponent({
-        components: {
-            AppLayout,
-            JetDialogModal,
-            JetSecondaryButton,
-            JetButton,
-            JetInput,
-            JetInputError,
-            JetLabel,
-            ViltForm,
-        },
-        computed:{
-            formRows(){
-                let rows = this.$attrs.rows;
-                let getRows = {};
-                for(let i=0; i<rows.length; i++){
-                    getRows[rows[i].field] = rows[i].default;
-                }
-
-                return getRows;
-            }
-        },
-        data(){
-            return {
-                errors: {},
-                form: {}
-            }
-        },
-        mounted(){
-            this.form = this.$inertia.form(this.formRows);
-        },
-        methods: {
-            onSubmit(){
-                this.form.submit("post", route('settings.save'))
-            },
-        }
-    })
-</script>
-
-```
-
-This page will take all inputs and convert it to a form
-
-## [Build a store controller method](#build-a-store-controller-method)
-
-on the same `SettingsController` we need to add a new function `store()` to save the data comming form the request like this
-
-```php 
-  public function settingsSave(Request $request)
-    {
-        $rules = [
-            "site_name" => "required|string",
-            "site_active" => "required|boolean",
-        ];
-        $validator = Validator::make($request->all(), $rules);
-        $validator->validate();
-
-        if (!$validator->fails()) {
-            $settings = new SitesSettings();
-            $settings->site_name = $request->get('site_name');
-            $settings->site_active = $request->get('site_active');
-            $settings->save();
-
-            session(["message" => "Settings Updated Success!"]);
-            return back();
-        }
-    }
-```
-
-and it will update the setting for you and flush the cache of it
-
-
+<hr>
+<a name="use-settings-method"></a>
 ## [Use settings method](#use-settings-method)
 
 we build a helper function for settings you can use it very simple

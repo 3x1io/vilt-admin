@@ -117,9 +117,6 @@
                     </button>
                     <div v-if="isNotificationsMenuOpen && notifications.length">
                         <ul
-                            x-transition:leave="transition ease-in duration-150"
-                            x-transition:leave-start="opacity-100"
-                            x-transition:leave-end="opacity-0"
                             @click="closeNotificationsMenu"
                             @keydown.escape="closeNotificationsMenu"
                             class="absolute right-0 p-2 mt-2 space-y-2 text-gray-600 bg-white border border-gray-100 rounded-md shadow-md w-80 dark:text-gray-300 dark:border-gray-700 dark:bg-gray-700"
@@ -197,6 +194,8 @@
                                     :key="key"
                                 >
                                     <Link
+                                        preserve-scroll
+                                        preserve-state
                                         class="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-200"
                                         :href="route(item.route)"
                                     >
@@ -230,6 +229,8 @@
 import { defineComponent } from "vue";
 import { Link } from "@inertiajs/inertia-vue3";
 import JetDropdownLink from "@/Jetstream/DropdownLink.vue";
+import { initializeApp } from 'firebase/app';
+import {getMessaging, onMessage, getToken} from "firebase/messaging";
 
 export default defineComponent({
     components: {
@@ -245,9 +246,12 @@ export default defineComponent({
             notifications: []
         };
     },
+    mounted() {
+        this.notifications = this.notification;
+    },
     computed: {
         notification(){
-            return this.$page.props.notifications
+            return this.$page.props.data.notifications
         }
     },
     methods: {
@@ -337,5 +341,104 @@ export default defineComponent({
             this.$inertia.post(route("logout"));
         },
     },
+    created(){
+        let _this = this;
+        if (this.$page.props.user && this.$page.props.data.fcm) {
+            const firebaseConfig = this.$page.props.data.fcm.config;
+
+            const app = initializeApp(firebaseConfig);
+            const messaging = getMessaging(app);
+            Notification.requestPermission().then((permission) => {
+                if (permission === "granted") {
+                    getToken(messaging, {
+                        vapidKey:this.$page.props.data.fcm.vapidKey})
+                        .then((currentToken) => {
+                            if (currentToken) {
+                                // Send the token to your server and update the UI if necessary
+                                // ...
+                                console.log(currentToken);
+                                _this.$inertia.post(
+                                    route("admin.notifications.token"),
+                                    {
+                                        token: currentToken,
+                                        provider: "fcm-web",
+                                        modsel: "App\\Models\\User",
+                                        model_id: this.$page.props.user.id,
+                                    },
+                                    {
+                                        onSuccess: () => {
+                                            console.log(
+                                                "Registration successful"
+                                            );
+                                        },
+                                    }
+                                );
+                            } else {
+                                // Show permission request UI
+                                console.log(
+                                    "No registration token available. Request permission to generate one."
+                                );
+                                // ...
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(
+                                "An error occurred while retrieving token. ",
+                                err
+                            );
+                            // ...
+                        });
+                    console.log("Notification permission granted.");
+                    if ("serviceWorker" in navigator) {
+                        navigator.serviceWorker
+                            .register("/firebase-messaging-sw.js")
+                            .then(function (registration) {
+                                console.log(
+                                    "Registration successful, scope is:",
+                                    registration.scope
+                                );
+                            })
+                            .catch(function (err) {
+                                console.log(
+                                    "Service worker registration failed, error:",
+                                    err
+                                );
+                            });
+                    }
+                    navigator.serviceWorker.getRegistration().then((reg) => {
+                        onMessage(messaging, (payload) => {
+                            console.log("message: ", payload);
+                            let audio = new Audio('https://devsuez.emalleg.net/storage/sound/notifications.mp3');
+                            audio.play();
+                            _this.notifications.unshift({
+                                title: payload.data.title,
+                                url: payload.data.url,
+                                icon: payload.data.icon,
+                                image: payload.data.image,
+                                description: payload.data.message,
+                                type: payload.data.type,
+                                date: moment().fromNow(),
+                            });
+                            // push notification can send event.data.json() as well
+                            const options = {
+                                body: payload.data.message,
+                                icon: payload.data.image,
+                                tag: "alert",
+                            };
+                            let notification = reg.showNotification(
+                                payload.data.title,
+                                options
+                            );
+                            // link to page on clicking the notification
+                            notification.onclick = (payload) => {
+                                window.open(payload.data.url);
+                            };
+                        });
+                    });
+                }
+
+            });
+        }
+    }
 });
 </script>

@@ -1,13 +1,14 @@
 <template>
     <!-- Desktop sidebar -->
     <aside
-        class="fixed inset-y-0 left-0 z-20 flex flex-col h-screen overflow-y-scroll transition-transform -translate-x-full rtl:left-auto rtl:right-0 lg:border-r w-80 lg:z-0 lg:translate-x-0 dark:bg-gray-800 dark:border-white rtl:lg:-translate-x-0 rtl:translate-x-full scrollbar-thin scrollbar-thumb-greenColor2 scrollbar-track-white dark:scrollbar-track-gray-500 hover:scrollbar-thumb-primary-700"
-    >
+
+        class="fixed inset-y-0 left-0 z-20 flex flex-col h-screen overflow-y-scroll transition-transform -translate-x-full rtl:left-auto rtl:right-0 lg:border-r  w-80 lg:z-0 lg:translate-x-0 dark:bg-gray-800 dark:border-white rtl:lg:border-l rtl:lg:-translate-x-0 rtl:translate-x-full scrollbar-thin scrollbar-thumb-greenColor2 scrollbar-track-white dark:scrollbar-track-gray-500 hover:scrollbar-thumb-primary-700"
+        scroll-region>
         <div class="text-gray-500 dark:text-gray-400">
             <header
                 class="border-b h-[4.4rem] shrink-0 px-6 flex items-center filament-sidebar-header dark:border-gray-700"
             >
-                <Link :href="route('dashboard')">
+                <Link :href="route('dashboard')" preserve-scroll>
                     <div
                         class="text-xl font-bold tracking-tight filament-brand dark:text-white"
                     >
@@ -42,13 +43,9 @@
                     :key="index"
                     class="relative px-4"
                 >
-                    <!-- <span
-                        v-if="menu.type === 'route'"
-                        v-show="route().current(menu.route)"
-                        class="absolute inset-y-0 left-0 w-1 bg-gray-100 rounded-tr-lg rounded-br-lg"
-                        aria-hidden="true"
-                    ></span> -->
                     <Link
+                        preserve-scroll
+                        preserve-state
                         v-if="menu.type === 'route'"
                         class="flex justify-start gap-1 px-3 py-2 mt-2 font-normal transition rounded-lg hover:bg-main hover:text-white dark:text-gray-300 dark:hover:bg-gray-700"
                         :class="{'flex justify-start gap-1 px-3 py-2 rounded-lg font-normal transition bg-main text-white': route().current(menu.route)}"
@@ -59,7 +56,7 @@
                         <span class="ml-1 rtl:mr-1" v-if="!menu.lang">{{ menu.title }}</span>
                         <span class="ml-1 rtl:mr-1" v-else>{{ trans(menu.lang) }}</span>
                     </Link>
-                    <a  v-else :href="menu.url" target="_blank" class="flex justify-start gap-1 px-3 py-2 mt-2 font-normal transition rounded-lg hover:bg-main hover:text-white dark:text-gray-300 dark:hover:bg-gray-700">
+                    <a  v-else  :href="menu.url" target="_blank" class="flex justify-start gap-1 px-3 py-2 mt-2 font-normal transition rounded-lg hover:bg-main hover:text-white dark:text-gray-300 dark:hover:bg-gray-700">
                         <i :class="menu.icon + ' bx-xs mt-1'"></i>
                         <span class="ml-1 rtl:mr-1" v-if="!menu.lang">{{ menu.title }}</span>
                         <span class="ml-1 rtl:mr-1" v-else>{{ trans(menu.lang) }}</span>

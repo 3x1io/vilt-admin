@@ -21,7 +21,7 @@ trait UseNotifications
 
     public function getFcmAttribute()
     {
-        return 'fcm';
+        return 'fcm-web';
     }
 
     public function setFcmIdAttribute($value)

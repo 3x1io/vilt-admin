@@ -26,7 +26,7 @@ class NotificationsLogsResource extends Resource
 
             Row::make('model_type')->list(false)->view(false)->label(__('Model Type '))->get(),
 
-            Row::make('model_id')->type('hasOne')->options([])->label(__('User'))->get(),
+            Row::make('model_id')->type('select-value')->options([])->label(__('User'))->get(),
 
             Row::make('title')->label(__('Title '))->get(),
 

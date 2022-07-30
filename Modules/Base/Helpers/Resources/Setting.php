@@ -184,12 +184,6 @@ class Setting
 
             $settings->save();
 
-            $settings->site_description = $request->get('site_description');
-            $settings->site_keywords = $request->get('site_keywords');
-            if ($request->hasFile('site_profile')) {
-                $settings->site_profile = str_replace('public/', 'storage/', $request->file('site_profile')->store('public/settings'));
-            }
-
             $this->afterStore($request, $settings);
 
             return Alert::make(__("Settings Updated Success!"))->fire();

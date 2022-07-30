@@ -2,11 +2,12 @@
 
 namespace Modules\Base\Helpers\Resources;
 
+use App\Models\User;
+use Modules\Base\Helpers\Resources\Share;
 use PhpParser\Node\Expr\FuncCall;
 use Illuminate\Support\Facades\File;
 use Modules\Base\Helpers\Resources\Lang;
 use Modules\Base\Helpers\Resources\Menu;
-use Modules\Base\Helpers\Resources\Share;
 
 class Core
 {
@@ -17,6 +18,18 @@ class Core
     private static ?array $share = [];
     private static ?array $routes = [];
 
+
+    public static function registerShareData(Share $item)
+    {
+        $shareData = $item->get();
+        self::$share[$shareData['key']] = $shareData['data'];
+    }
+
+    public static function loadShareData()
+    {
+        return self::$share;
+    }
+
     public static function get()
     {
         $data = [
@@ -25,10 +38,22 @@ class Core
             "trans" => self::loadLanguage(),
             "appName" => config('app.name'),
             "appUrl" => url('/'),
-            "message" => session()->get('message')
+            "message" => session()->get('message'),
         ];
 
         $share = self::loadShareData();
+
+
+        if(auth('web')->user()){
+            if(\Module::collections()->has('Notifications')){
+                $share['notifications'] = get_notifications(10, User::class, auth('web')->user()->id);
+
+                $share['token'] = auth('web')->user()->userTokensFcm ? auth('web')->user()->userTokensFcm->provider_token : false;
+            }
+        }
+
+
+
 
         return array_merge($data, $share);
     }
@@ -122,11 +147,7 @@ class Core
         array_push(self::$routes, app($item)->routes());
     }
 
-    public static function registerShareData(Share $item)
-    {
-        $key = array_keys($item->get())[0];
-        self::$share[$key] = $item->get()[$key];
-    }
+
 
     public static function loadDashboardMenu()
     {
@@ -161,6 +182,11 @@ class Core
         $global = [
             "global.dashboard" => __('Dashboard'),
             "global.settings" => __('Settings'),
+            "global.save" => __('Save'),
+            "global.close" => __('Close'),
+            "global.update" => __('Update'),
+            "global.next" => __('Next'),
+            "global.error.message" => __('Some Inputs is required'),
             "global.view" => __('View'),
             "global.edit" => __('Edit'),
             "global.delete" => __('Delete'),
@@ -186,10 +212,6 @@ class Core
         return array_merge($global, self::$trans);
     }
 
-    public static function loadShareData()
-    {
-        return self::$share;
-    }
 
     public static function loadRoutes()
     {

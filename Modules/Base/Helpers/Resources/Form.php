@@ -43,4 +43,13 @@ class Form
         $this->title = $title;
         return $this;
     }
+
+    public function get(){
+        return [
+            "type" => $this->type,
+            "actions" => $this->actions,
+            "tabs" => $this->tabs,
+            "title" => $this->title,
+        ];
+    }
 }

@@ -6,6 +6,7 @@
     "Browser": true,
     "Artisan": true,
     "Notifications": true,
-    "Payment": true,
+    "Payment": false,
+    "Locations" : true,
     "Menu": true
 }

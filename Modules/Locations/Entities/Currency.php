@@ -4,28 +4,25 @@ namespace Modules\Locations\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property integer $id
+ * @property string $arabic
+ * @property string $name
+ * @property string $iso
+ * @property string $created_at
+ * @property string $updated_at
+ */
 class Currency extends Model
 {
-    protected $fillable = [
-        'arabic',
-        'iso',
-        'name',
+    /**
+     * The "type" of the auto-incrementing ID.
+     * 
+     * @var string
+     */
+    protected $keyType = 'integer';
 
-    ];
-
-
-    protected $dates = [
-        'created_at',
-        'updated_at',
-
-    ];
-
-    protected $appends = ['resource_url'];
-
-    /* ************************ ACCESSOR ************************* */
-
-    public function getResourceUrlAttribute()
-    {
-        return url('/admin/currencies/'.$this->getKey());
-    }
+    /**
+     * @var array
+     */
+    protected $fillable = ['arabic', 'name', 'iso', 'created_at', 'updated_at'];
 }

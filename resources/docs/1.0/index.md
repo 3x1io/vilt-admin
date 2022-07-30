@@ -19,8 +19,7 @@
     - [Translations](/{{route}}/{{version}}/translations-plugin)
     - [Settings](/{{route}}/{{version}}/settings-plugin)
     - [Menus](/{{route}}/{{version}}/menus-plugin)
-    - [Browser](/{{route}}/{{version}}/browser-plugin)
-    - [Artisan](/{{route}}/{{version}}/artisan-plugin)
+    - [Notifications](/{{route}}/{{version}}/notifications-plugin)
     - [Build Plugins](/{{route}}/{{version}}/build-plugins)
 - ## Learning
     - [Task To Get Start](/{{route}}/{{version}}/task)

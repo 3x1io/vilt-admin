@@ -17,6 +17,7 @@ class Action
     private ?string $action = null;
     private ?string $modal = null;
     private ?string $url = null;
+    private ?bool $can = true;
 
     public function __construct($name)
     {
@@ -67,6 +68,12 @@ class Action
         return $this;
     }
 
+    public function can($can): ?static
+    {
+        $this->can = $can;
+        return $this;
+    }
+
     public function render(): array
     {
         return [
@@ -77,6 +84,7 @@ class Action
             "action" => $this->action,
             "modal" => $this->modal,
             "url" => $this->url,
+            "can" => $this->can,
         ];
     }
 }

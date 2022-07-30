@@ -30,6 +30,7 @@ class LocationsServiceProvider extends ServiceProvider
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
         Core::loadResources($this->moduleName);
+        Core::loadPages($this->moduleName);
     }
 
     /**

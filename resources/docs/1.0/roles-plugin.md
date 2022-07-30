@@ -7,6 +7,22 @@
 we build a plugin for user ACL build in [spatie/laravel-permission](https://spatie.be/docs/laravel-permission) so you can use the full package feature
 
 <hr>
+<a name="install-roles-plugin"></a>
+## [Install Roles Plugin](#install-roles-plugin)
+
+you can install roles plugin by run this command
+
+```bash
+php artisan roles:install
+```
+
+this command will install default roles and permissions for admin user and seed a user for you the use will be
+
+email: `admin@admin.com`
+
+password: `3x1@2021`
+
+<hr>
 <a name="roles-methods"></a>
 ## [Roles Methods](#roles-methods)
 
@@ -24,6 +40,17 @@ canDeleteAny //= delete_any_TABLE on permission table
 so you can use it to handle what the end-user sees when he has selected permission.
 
 and for menus you can handle permission using `->can()` with the permission name init
+
+on the `Resource.vue` the base view of the generator you can use this way to set your permission
+
+```php
+public function rows(){
+    $this->canView = false;
+    return [];
+}
+```
+
+by this way you can control what the end-user sees.
 
 <hr>
 <a name="generate-permission"></a>
