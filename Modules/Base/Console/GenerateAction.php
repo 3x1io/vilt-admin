@@ -8,14 +8,14 @@ use Illuminate\Support\Facades\Artisan;
 use Nwidart\Modules\Facades\Module;
 use Modules\Base\Helpers\Resources\Generator;
 
-class GenerateResource extends Command
+class GenerateAction extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'vilt:resource {table} {module}';
+    protected $signature = 'vilt:action {name} {resource} {module}';
 
     /**
      * The console command description.
@@ -31,15 +31,15 @@ class GenerateResource extends Command
      */
     public function handle()
     {
-        $table = $this->argument('table');
+        $name = $this->argument('name');
         $module = $this->argument('module');
+        $resource = $this->argument('resource');
 
         $check = Module::find($module);
 
         if (!$check) {
-            $this->info('Module not exists we will create it for you');
-            Artisan::call('module:make ' . $module);
-            $this->info('Module Created Success');
+            $this->error('Module not exists we will create it for you');
+            exit;
         }
 
         try {

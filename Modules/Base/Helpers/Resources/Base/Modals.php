@@ -1,13 +1,10 @@
 <?php
 
-namespace Modules\Base\Helpers\Resources;
+namespace Modules\Base\Helpers\Resources\Base;
 
-use Modules\Base\Helpers\Traits\Configure;
+use Modules\Base\Helpers\Resources\Modal;
 
-
-class Modal
-{
-    use Configure;
+class Modals {
 
     private ?string $name = null;
     private ?string $title = null;
@@ -16,18 +13,28 @@ class Modal
     private ?array $buttons = [];
     private ?array $rows = [];
 
-    public function __construct($name)
+    public function __construct()
     {
-        $this->name = $name;
+        $this->setup();
     }
 
+    public function setup(): void {}
 
-    public static function make(string $name)
+    public function get(): array
     {
-        $static = app(static::class, ['name' => $name]);
-        $static->setUp();
+        return Modal::make($this->name)
+            ->title($this->title)
+            ->type($this->type)
+            ->icon($this->icon)
+            ->buttons($this->buttons)
+            ->rows($this->rows)
+            ->render();
+    }
 
-        return $static;
+    public function name($name): ?static
+    {
+        $this->name = $name;
+        return $this;
     }
 
     public function title($title): ?static
@@ -58,17 +65,5 @@ class Modal
     {
         $this->type = $type;
         return $this;
-    }
-
-    public function render(): ?array
-    {
-        return [
-            "name" => $this->name,
-            "title" => $this->title,
-            "type" => $this->type,
-            "icon" => $this->icon,
-            "rows" => $this->rows,
-            "buttons" => $this->buttons,
-        ];
     }
 }

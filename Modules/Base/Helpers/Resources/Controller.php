@@ -238,6 +238,15 @@ trait Controller
     public function response($data, $url, $extra = [])
     {
         $rows = $this->schema();
+        $actions = [];
+        foreach($this->actions() as $action){
+            array_push($actions, (new $action())->get());
+        }
+
+        $modals = [];
+        foreach($this->modals() as $modal){
+            array_push($modals, (new $modal())->get());
+        }
 
         $response = [
             "success" => true,
@@ -257,8 +266,8 @@ trait Controller
             "canDelete" => $this->canDelete,
             "canDeleteAny" => $this->canDeleteAny,
             "lang" => $this->loadLang(),
-            "actions" => $this->actions(),
-            "modals" => $this->modals(),
+            "actions" => $actions ,
+            "modals" => $modals,
             "model" => $this->model,
             "form" => $this->form(),
             "table" => $this->table(),

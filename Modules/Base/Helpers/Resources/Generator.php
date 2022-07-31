@@ -263,6 +263,8 @@ class Generator
     }
 
 
+
+
     public function generate()
     {
         $this->generateModel();
