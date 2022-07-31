@@ -50,14 +50,15 @@ class NotificationsServiceProvider extends ServiceProvider
 
         $path = str_replace("storage/", "", setting('google_firebase_config'));
 
-        if(File::exists(storage_path('app/public/' . $path))) {
-            $json = File::get(storage_path('app/public/' . $path));
-            Core::registerShareData(Share::make('fcm')->data([
-                "config" => json_decode($json),
-                "vapidKey" => setting('google_firebase_vapid')
-            ]));
+        if ($path) {
+            if (File::exists(storage_path('app/public/' . $path))) {
+                $json = File::get(storage_path('app/public/' . $path));
+                Core::registerShareData(Share::make('fcm')->data([
+                    "config" => json_decode($json),
+                    "vapidKey" => setting('google_firebase_vapid')
+                ]));
+            }
         }
-
     }
 
     /**
