@@ -1,8 +1,8 @@
 {
     "Roles": false,
     "Translations": false,
-    "Base": true,
-    "Settings": true,
+    "Base": false,
+    "Settings": false,
     "Browser": false,
     "Artisan": false,
     "Notifications": false,
