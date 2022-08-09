@@ -12,8 +12,8 @@ use Modules\Customers\Vilt\Resources\Customer\Modals\CustomerGroupModal;
 class CustomerResource extends Resource
 {
     public $model = Customer::class;
-    public $icon = "bx bxs-circle";
-    public $group = "Content";
+    public $icon = "bx bxs-user";
+    public $group = "CRM";
     public $api = true;
 
     public function rows()

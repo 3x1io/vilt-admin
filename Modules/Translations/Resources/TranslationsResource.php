@@ -47,7 +47,6 @@ class TranslationsResource extends Resource
             Row::make('text')->label(__('Text'))->sorting(false)->type('schema')->list('false')->options($loadLocals)->get(),
         ];
     }
-
     public function actions()
     {
         return [
@@ -57,7 +56,6 @@ class TranslationsResource extends Resource
             Action::make('export')->label(__('Export'))->icon('bx bxs-spreadsheet')->url(url('admin/language-lines/export'))->render(),
         ];
     }
-
     public function modals()
     {
         return [
@@ -75,12 +73,10 @@ class TranslationsResource extends Resource
             AddRoute::make('translate')->path('translate')->method('translate')->type('post')->controller(static::class)->get(),
         ];
     }
-
-    public function export()
+    public function export(Request $request)
     {
         return Excel::download(new TranslationsExport, 'translations.xlsx');
     }
-
     public function import(Request $request)
     {
         $rules = [
@@ -95,7 +91,6 @@ class TranslationsResource extends Resource
             return Alert::make(__('Import Success'))->fire();
         }
     }
-
     public function translate()
     {
         $data = Translation::all();
@@ -140,7 +135,6 @@ class TranslationsResource extends Resource
 
         return Alert::make(__('All Languages Has Been Translate Success'))->fire();
     }
-
     public function scan()
     {
         $scan = new SaveScan();
@@ -148,7 +142,6 @@ class TranslationsResource extends Resource
 
         return Alert::make(__('Your Languages Has Been Scan Success'))->fire();
     }
-
     public function change(Request $request)
     {
         $rules = [

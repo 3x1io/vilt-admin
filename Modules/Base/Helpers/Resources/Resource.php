@@ -4,10 +4,15 @@ namespace Modules\Base\Helpers\Resources;
 
 
 use Closure;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
+use Modules\Base\Exports\BaseExport;
 use Modules\Base\Helpers\Resources\Controller;
+use Modules\Base\Imports\BaseImport;
+use Modules\Translations\Imports\TranslationsImport;
 
 class Resource
 {
@@ -63,12 +68,21 @@ class Resource
 
     public function actions()
     {
-        return [];
+        return [
+            Action::make('import')->label(__('Import'))->icon('bx bx-import mr-1')->modal('import')->render()
+        ];
     }
+
 
     public function modals()
     {
-        return [];
+        return [
+            Modal::make('import')->rows([
+                Row::make('excel')->label(__('Please Input Excel File'))->type('image')->get()
+            ])->buttons([
+                Action::make('import')->label(__('Import'))->icon('bx bx-circle')->action($this->table.'.import')->render()
+            ])->render()
+        ];
     }
 
     public function menu()
@@ -128,7 +142,7 @@ class Resource
                 $this->customQuery($q, $request, $rows);
             })
             ->processRequestAndGet(
-                // pass the request with params
+            // pass the request with params
                 $request,
 
                 // set columns to query
@@ -193,6 +207,7 @@ class Resource
         return $request->all();
     }
 
+
     public function validStore(Request $request)
     {
 
@@ -202,6 +217,7 @@ class Resource
 
         return $validator;
     }
+
 
     public function store(Request $request)
     {
@@ -358,6 +374,7 @@ class Resource
     {
     }
 
+
     public function beforeDestory($record)
     {
         return $record;
@@ -464,16 +481,79 @@ class Resource
         }
     }
 
+
     public function afterBulk(Request $request, $record)
     {
     }
 
-    public function export()
+    public function export(Request $request)
     {
+        $cols = $_COOKIE[$this->table . '-cols'];
+        if($cols){
+            $cols = json_decode($cols);
+            $q = $this->model::query();
+
+            $select = [];
+            $hide = [];
+            foreach ($this->schema() as $row) {
+                if (($row['type'] === 'relation') && $row['list'] && $cols->{$row['field']}) {
+                    $q->with($row['field']);
+                }
+                if (($row['type'] === 'hasOne') && $row['list'] && $cols->{$row['field']}) {
+                    $q->with($row['relation']);
+                    array_push($hide,  $row['field']);
+                }
+                if($row['list'] && $cols->{$row['field']} && (!$row['over']) && ($row['type'] !== 'image')) {
+                    array_push($select, $row['field']);
+                }
+                else {
+                    array_push($hide,  $row['field']);
+                }
+            }
+            $q->select($select);
+
+            $data = $q->get()->makeHidden(array_merge($hide, ['fcm', 'fcmID', 'media']))->toArray();
+            foreach($data as $item){
+                foreach ($this->schema() as $row) {
+                    if ($row['list'] && ($row['type'] === 'relation') && $cols->{$row['field']}) {
+                        if($item[$row['field']]){
+                            $item[$row['field']] = $item[$row['field']][$row['track_by_name']];
+                        }
+                    }
+                    if ($row['list'] && ($row['type'] === 'hasOne') && $cols->{$row['field']}) {
+                        if($item[$row['relation']]){
+                            $item[$row['field']] = $item[$row['relation']][$row['track_by_name']];
+                        }
+                        unset($item[$row['relation']]);
+                    }
+                }
+            }
+            return Excel::download(new BaseExport($data, $this->schema(), $cols), $this->table .'.xlsx');
+
+        }
     }
 
     public function import(Request $request)
     {
+        $rules = [
+            "excel" => "required",
+        ];
+        $validator = Validator::make($request->all(), $rules);
+        $validator->validate();
+
+        if (!$validator->fails()) {
+            $cols = $_COOKIE[$this->table . '-cols'];
+            if($cols) {
+                $cols = json_decode($cols);
+                Excel::import(new BaseImport($this->schema(), $this->model, $cols), $request->file('excel'));
+
+                return Alert::make(__('Import Success'))->fire();
+            }
+            else {
+                return Alert::make(__('Something is error!'))->type('danger')->fire();
+            }
+
+        }
     }
 
     public function routes()
