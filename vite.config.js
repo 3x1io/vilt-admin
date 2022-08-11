@@ -8,6 +8,11 @@ import fs from 'fs';
 let host = 'vilt-admin.test'
 
 export default defineConfig({
+    resolve:{
+        alias:{
+            '$$' : resolve(__dirname, './Modules/Base/Services/Render/')
+        },
+    },
     plugins: [
         laravel([
             'resources/js/app.js',

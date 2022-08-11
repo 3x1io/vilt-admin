@@ -146,7 +146,7 @@ Row::make('password')->type('password')->reactive(true)->row('activated')
 now you can create a repeater with a very easy way just use the type of `repeater` like this
 
 ```php
-Row::make('repeater')->type('repeater')->label('Repeater')->options([
+Row::make('repeater')->type('repeater')->label('Repeater.php')->options([
     Row::make('title')->type('text')->get()
     Row::make('activated')->type('switch')->get()
 ])->get()
