@@ -1088,7 +1088,7 @@ core-js@3.6.5:
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.6.5.tgz#7395dc273af37fb2e50e9bd3d9fe841285231d1a"
   integrity sha512-vZVEEwZoIsI+vPEuoF9Iqf5H7/M3eeQqWlQnYa8FSKKePuYTf5MWnxb5SDAzCa60b3JBRS5g9b+Dq7b1y/RCrA==
 
-core-js@^3.14.0:
+core-js@^3.14.0, core-js@^3.6.5:
   version "3.24.1"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.24.1.tgz#cf7724d41724154010a6576b7b57d94c5d66e64f"
   integrity sha512-0QTBSYSUZ6Gq21utGzkfITDylE8jWC9Ne1D2MrhvlsZBI1x39OdDIVbzSqtgMndIy6BlHxBXpMGqzZmnztg2rg==
@@ -2986,6 +2986,11 @@ urix@^0.1.0:
   resolved "https://registry.yarnpkg.com/urix/-/urix-0.1.0.tgz#da937f7a62e21fec1fd18d49b35c2935067a6c72"
   integrity sha512-Am1ousAhSLBeB9cG/7k7r2R0zj50uDRlZHPGbazid5s9rlF1F/QKYObEKSIunSjIOkJZqwRRLpvewjEkM7pSqg==
 
+user@^0.0.0:
+  version "0.0.0"
+  resolved "https://registry.yarnpkg.com/user/-/user-0.0.0.tgz#f27f1b23fc511f2a8efa40db55cfba123824e02a"
+  integrity sha512-eRNM5isOvr6aEFAGi1CqAkmLkYxW2NJ5ThhbD+6IJXYKM1mo7Gtxx4mQIveHz/5K3p/SVnlW9k17ETn+QAu8IQ==
+
 util-deprecate@^1.0.1, util-deprecate@^1.0.2, util-deprecate@~1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/util-deprecate/-/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
@@ -3044,10 +3049,25 @@ vue-tel-input@^5.11.0:
     libphonenumber-js "^1.9.6"
     vue "^2.6.14"
 
+vue3-swatches@^1.0.10:
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/vue3-swatches/-/vue3-swatches-1.0.10.tgz#4934ec1928deff7ae23fb3a65ce4d0ecea850512"
+  integrity sha512-rbuSClhK4sOFVtgRAtFhPcrtZwDy/5IvVOLT14Jge71oe8d8OB7cUD46CDKAwquYPCUhVwRDvTLkfgwXJQnB9Q==
+
 vue3-tabs-component@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/vue3-tabs-component/-/vue3-tabs-component-1.1.0.tgz#a04203753c0f7d259177f7fc3b472c994bcba643"
   integrity sha512-QDg4uuApnp1NoVSSgZa9LRsDS4urBwMaKV3I5SNsgODUZiDqzOxEfyYJiN/0LeIJAv12d8sIU4e87hID3VXoAQ==
+
+vue3-tel-input@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/vue3-tel-input/-/vue3-tel-input-1.0.4.tgz#ed26cb808d124aebb5073d03f366b23e686804d6"
+  integrity sha512-C60OyAq5ORDErSJ4x7UmJJbF95CDncMswnySmAUtbuBP0pcVcJBu6DOTxKquykvTbJEh9I73DXyqMtDxtLrwJg==
+  dependencies:
+    core-js "^3.6.5"
+    libphonenumber-js "^1.9.6"
+    user "^0.0.0"
+    vue "^3.0.0-beta.1"
 
 vue@^2.6.14:
   version "2.7.8"
@@ -3057,7 +3077,7 @@ vue@^2.6.14:
     "@vue/compiler-sfc" "2.7.8"
     csstype "^3.1.0"
 
-vue@^3.0.7, vue@^3.2.31:
+vue@^3.0.0-beta.1, vue@^3.0.7, vue@^3.2.31:
   version "3.2.37"
   resolved "https://registry.yarnpkg.com/vue/-/vue-3.2.37.tgz#da220ccb618d78579d25b06c7c21498ca4e5452e"
   integrity sha512-bOKEZxrm8Eh+fveCqS1/NkG/n6aMidsI6hahas7pa0w/l7jkbssJVsRhVDs07IdDq7h9KHswZOgItnwJAgtVtQ==

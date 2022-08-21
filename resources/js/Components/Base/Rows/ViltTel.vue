@@ -33,8 +33,8 @@
 <script>
 import { defineComponent } from "vue";
 import JetInputError from "@/Jetstream/InputError.vue";
-import { VueTelInput } from "vue-tel-input";
-import "vue-tel-input/dist/vue-tel-input.css";
+import VueTelInput from 'vue3-tel-input'
+import 'vue3-tel-input/dist/vue3-tel-input.css'
 
 export default defineComponent({
     components: {

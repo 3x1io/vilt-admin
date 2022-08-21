@@ -11,13 +11,14 @@ use Modules\Base\Services\Concerns\HasRoles;
 use Modules\Base\Services\Concerns\HasTab;
 use Modules\Base\Services\Concerns\HasType;
 use Modules\Base\Services\Concerns\IsDisabled;
+use Modules\Base\Services\Concerns\IsMulti;
 use Modules\Base\Services\Concerns\IsReactive;
 use Modules\Base\Services\Concerns\IsRequired;
 use Modules\Base\Services\Concerns\IsSearchable;
 use Modules\Base\Services\Concerns\IsSortable;
 use Modules\Base\Services\Concerns\IsUnique;
 
-class Color
+class Time
 {
     use HasName;
     use HasLabel;
@@ -27,6 +28,7 @@ class Color
     use HasHint;
     use HasTab;
     use HasType;
+    use IsMulti;
     use IsDisabled;
     use IsRequired;
     use IsUnique;
@@ -34,7 +36,7 @@ class Color
     use IsSearchable;
     use IsSortable;
 
-    public string $vue = 'ViltColor.vue';
+    public string $vue = 'ViltTime.vue';
 
     /**
      * @param string $name
@@ -44,4 +46,5 @@ class Color
     {
         return (new self)->name($name);
     }
+
 }

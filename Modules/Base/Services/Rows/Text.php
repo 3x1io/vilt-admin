@@ -34,7 +34,7 @@ class Text
     use IsSearchable;
     use IsSortable;
 
-    public string $vue = 'Text.vue';
+    public string $vue = 'ViltText.vue';
 
     /**
      * @param string $name

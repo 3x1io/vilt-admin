@@ -2,6 +2,7 @@
 
 namespace Modules\Base\Services\Rows;
 
+use Modules\Base\Services\Concerns\HasColor;
 use Modules\Base\Services\Concerns\HasDefault;
 use Modules\Base\Services\Concerns\HasHint;
 use Modules\Base\Services\Concerns\HasLabel;
@@ -17,7 +18,7 @@ use Modules\Base\Services\Concerns\IsSearchable;
 use Modules\Base\Services\Concerns\IsSortable;
 use Modules\Base\Services\Concerns\IsUnique;
 
-class Color
+class Toggle
 {
     use HasName;
     use HasLabel;
@@ -27,6 +28,7 @@ class Color
     use HasHint;
     use HasTab;
     use HasType;
+    use HasColor;
     use IsDisabled;
     use IsRequired;
     use IsUnique;
@@ -34,7 +36,7 @@ class Color
     use IsSearchable;
     use IsSortable;
 
-    public string $vue = 'ViltColor.vue';
+    public string $vue = 'ViltSwitch.vue';
 
     /**
      * @param string $name

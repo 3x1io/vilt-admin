@@ -8,13 +8,13 @@ trait HasTrack
      * @var ?string
      * @example 'name'
      */
-    public ?string $trackByName = null;
+    public ?string $trackByName = "name";
 
     /**
      * @var ?string
      * @example '1'
      */
-    public ?string $trackById = null;
+    public ?string $trackById = "id";
 
     /**
      * @param string $trackByName

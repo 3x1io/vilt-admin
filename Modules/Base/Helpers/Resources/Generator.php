@@ -262,9 +262,6 @@ class Generator
         $this->render($view, module_path($this->module) .  '/Resources/' . $model . 'Resource.php');
     }
 
-
-
-
     public function generate()
     {
         $this->generateModel();

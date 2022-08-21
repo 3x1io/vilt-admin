@@ -76,7 +76,7 @@ class CustomerResource extends Resource
     }
 
 //    public function table(): array
-//    {
+//    {~
 //        return [
 //            CustomerGroupAction::class
 //        ];

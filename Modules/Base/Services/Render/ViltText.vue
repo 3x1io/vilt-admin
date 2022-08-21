@@ -10,7 +10,7 @@
             :name="row.name"
             :id="row.name"
             :disabled="row.disabled"
-            :value="modelValue"
+            :value="value ? value : modelValue"
             v-model="value"
             :placeholder="row.placeholder"
             @input="$emit('update:modelValue', value)"
@@ -58,11 +58,11 @@ export default defineComponent({
         }
     },
     mounted(){
+        if(this.row.default){
+            this.value = this.row.default
+        }
         if(this.modelValue){
             this.value = this.modelValue
-        }
-        if(this.default){
-            this.value = this.default
         }
     },
 });
